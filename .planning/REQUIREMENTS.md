@@ -63,20 +63,20 @@ Deferred to future release. Tracked but not in current roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PLAN-01 | — | Pending |
-| PLAN-02 | — | Pending |
-| PLAN-03 | — | Pending |
-| PLAN-04 | — | Pending |
-| EXEC-01 | — | Pending |
-| EXEC-02 | — | Pending |
-| INTG-01 | — | Pending |
-| INTG-02 | — | Pending |
-| INTG-03 | — | Pending |
+| PLAN-01 | Phase 1 | Pending |
+| PLAN-02 | Phase 1 | Pending |
+| PLAN-04 | Phase 1 | Pending |
+| PLAN-03 | Phase 2 | Pending |
+| EXEC-01 | Phase 3 | Pending |
+| EXEC-02 | Phase 3 | Pending |
+| INTG-02 | Phase 4 | Pending |
+| INTG-01 | Phase 5 | Pending |
+| INTG-03 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 9 total
-- Mapped to phases: 0
-- Unmapped: 9 ⚠️
+- Mapped to phases: 9
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2025-04-27*
