@@ -46,6 +46,12 @@ public:
         tf_buffer_(this->get_clock()),
         tf_listener_(tf_buffer_)
     {
+        // Real initialization deferred to init() — TRAC-IK construction calls
+        // shared_from_this(), which only becomes valid AFTER make_shared returns.
+    }
+
+    void init()
+    {
         // Parameterization
         this->declare_parameter("trajectory_time_step", 0.05);
         this->declare_parameter("planning_timeout", 1.0);
@@ -683,7 +689,9 @@ private:
 int main(int argc, char** argv)
 {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<IKFCLPlannerNode>());
+    auto node = std::make_shared<IKFCLPlannerNode>();
+    node->init();
+    rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
 }
