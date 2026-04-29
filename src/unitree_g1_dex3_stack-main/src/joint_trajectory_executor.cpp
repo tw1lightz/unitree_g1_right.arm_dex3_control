@@ -240,6 +240,21 @@ private:
       double value = (1.0 - t) * 1.0 + t * 0.0; // Linear interpolation
       unitree_hg::msg::LowCmd final_cmd;
       final_cmd.motor_cmd[JointIndex::kNotUsedJoint].q = static_cast<float>(value);
+      // Plan 01-07: hold every joint at its current actual position with the
+      // same kp/kd as the trajectory-following frames, so arm_sdk never sees
+      // the default kp=0+q=0 fields and never jerks toward the q=0 reference.
+      for (const auto& pair : joint_name_to_index) {
+        size_t idx = pair.second;
+        if (latest_joint_positions_.size() > idx) {
+          final_cmd.motor_cmd[idx].q = latest_joint_positions_[idx];
+        } else {
+          final_cmd.motor_cmd[idx].q = 0.0f;
+        }
+        final_cmd.motor_cmd[idx].dq = 0.f;
+        final_cmd.motor_cmd[idx].kp = 60.0f;
+        final_cmd.motor_cmd[idx].kd = 1.5f;
+        final_cmd.motor_cmd[idx].tau = 0.f;
+      }
       cmd_pub_->publish(final_cmd);
       rclcpp::sleep_for(sleep_ns);
     }
