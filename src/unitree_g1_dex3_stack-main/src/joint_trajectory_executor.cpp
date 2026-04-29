@@ -198,6 +198,9 @@ private:
       // Fill all joints with latest state first
       for (const auto& pair : joint_name_to_index) {
         size_t idx = pair.second;
+        // Plan 01-10: enable PD control mode (was implicitly mode=0 before,
+        // which caused arm_sdk to ignore q/kp/kd; reference: right_arm_mode.py).
+        cmd_msg.motor_cmd[idx].mode = 1;
         if (latest_joint_positions_.size() > idx) {
           cmd_msg.motor_cmd[idx].q = latest_joint_positions_[idx];
         } else {
@@ -268,6 +271,9 @@ private:
       // Master switch then hands off to body controller with arm already there.
       for (const auto& pair : joint_name_to_index) {
         size_t idx = pair.second;
+        // Plan 01-10: enable PD control mode here too, so the q-interpolation
+        // computed below is actually tracked stiffly by the motor controllers.
+        final_cmd.motor_cmd[idx].mode = 1;
         if (ramp_start_positions.size() > idx && standing_pose.size() > idx) {
           final_cmd.motor_cmd[idx].q = static_cast<float>(
             (1.0 - t) * ramp_start_positions[idx] + t * standing_pose[idx]);
