@@ -13,7 +13,6 @@ def launch_setup(context, *args, **kwargs):
     planning_timeout = float(LaunchConfiguration('planning_timeout').perform(context))
     base_link = str(LaunchConfiguration('base_link').perform(context))
     right_tip = str(LaunchConfiguration('right_tip').perform(context))
-    left_tip = str(LaunchConfiguration('left_tip').perform(context))
     detection_topic = str(LaunchConfiguration('detection_topic').perform(context))
     selected_class_topic = str(LaunchConfiguration('selected_class_topic').perform(context))
     planner_type = str(LaunchConfiguration('planner_type').perform(context))
@@ -29,7 +28,6 @@ def launch_setup(context, *args, **kwargs):
                 'planning_timeout': planning_timeout,
                 'base_link': base_link,
                 'right_tip': right_tip,
-                'left_tip': left_tip,
                 'detection_topic': detection_topic,
                 'selected_class_topic': selected_class_topic,
                 'planner_type': planner_type,
@@ -49,7 +47,6 @@ def generate_launch_description():
         DeclareLaunchArgument('planning_timeout', default_value='1.0'),
         DeclareLaunchArgument('base_link', default_value='torso_link'),
         DeclareLaunchArgument('right_tip', default_value='right_wrist_yaw_link'),
-        DeclareLaunchArgument('left_tip', default_value='left_wrist_yaw_link'),
         DeclareLaunchArgument('detection_topic', default_value='/detections'),
         DeclareLaunchArgument('selected_class_topic', default_value='/selected_detection_class'),
         DeclareLaunchArgument('planner_type', default_value='RRTConnect'),
