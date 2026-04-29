@@ -232,8 +232,11 @@ private:
     RCLCPP_INFO(this->get_logger(), "Trajectory execution complete, returning to default pose.");
 
     // Smoothly interpolate final_cmd.motor_cmd[JointIndex::kNotUsedJoint].q from 1.0 to 0.0
-    const double interp_duration = 1.0; // seconds
-    const int interp_steps = 50;
+    // Plan 01-08: 1s -> 3s; kp/kd also fade to 0 over the ramp so the body
+    // controller's standing-pose pull can take effect during the ramp
+    // instead of snapping in at the end.
+    const double interp_duration = 3.0; // seconds
+    const int interp_steps = 150;
     auto sleep_ns = std::chrono::nanoseconds(static_cast<int64_t>((interp_duration / interp_steps) * 1e9));
     for (int step = 0; step <= interp_steps; ++step) {
       double t = static_cast<double>(step) / interp_steps;
@@ -251,8 +254,8 @@ private:
           final_cmd.motor_cmd[idx].q = 0.0f;
         }
         final_cmd.motor_cmd[idx].dq = 0.f;
-        final_cmd.motor_cmd[idx].kp = 60.0f;
-        final_cmd.motor_cmd[idx].kd = 1.5f;
+        final_cmd.motor_cmd[idx].kp = static_cast<float>((1.0 - t) * 60.0);
+        final_cmd.motor_cmd[idx].kd = static_cast<float>((1.0 - t) * 1.5);
         final_cmd.motor_cmd[idx].tau = 0.f;
       }
       cmd_pub_->publish(final_cmd);
