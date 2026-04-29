@@ -51,7 +51,6 @@ public:
         this->declare_parameter("planning_timeout", 1.0);
         this->declare_parameter("base_link", "torso_link");
         this->declare_parameter("right_tip", "right_wrist_yaw_link");
-        this->declare_parameter("left_tip", "left_wrist_yaw_link");
         this->declare_parameter("goal_pose_topic", "/goal_pose");
         this->declare_parameter("planner_type", "RRTConnect");
         this->declare_parameter("collision_skip_pairs", std::vector<std::string>{});
@@ -89,7 +88,6 @@ public:
         this->get_parameter("planning_timeout", planning_timeout_);
         this->get_parameter("base_link", base_link_);
         this->get_parameter("right_tip", right_tip_);
-        this->get_parameter("left_tip", left_tip_);
         this->get_parameter("goal_pose_topic", goal_pose_topic_);
         this->get_parameter("planner_type", planner_type_);
         this->get_parameter("collision_skip_pairs", collision_skip_pairs_);
@@ -112,13 +110,6 @@ public:
         }
         printKDLChainInfo(kdl_chain_right, "right", this->get_logger());
 
-        if (!kdl_tree.getChain(base_link_, left_tip_, kdl_chain_left)) {
-            RCLCPP_FATAL(this->get_logger(), "Failed to extract KDL chain for left arm");
-            rclcpp::shutdown();
-            return;
-        }
-        printKDLChainInfo(kdl_chain_left, "left", this->get_logger());
-
         // Parse joint limits from URDF for OMPL bounds
         for (const auto& joint_pair : urdf_model.joints_) {
             const auto& joint = joint_pair.second;
@@ -127,9 +118,8 @@ public:
             joint_limits_[joint->name] = std::make_pair(joint->limits->lower, joint->limits->upper);
         }
 
-        // Build joint limits arrays for right and left arms
+        // Build joint limits array for right arm
         KDL::JntArray right_lower(kdl_chain_right.getNrOfJoints()), right_upper(kdl_chain_right.getNrOfJoints());
-        KDL::JntArray left_lower(kdl_chain_left.getNrOfJoints()), left_upper(kdl_chain_left.getNrOfJoints());
         size_t idx = 0;
         for (unsigned int i = 0; i < kdl_chain_right.getNrOfSegments(); ++i) {
             const auto& joint = kdl_chain_right.getSegment(i).getJoint();
@@ -141,21 +131,6 @@ public:
                 } else {
                     right_lower(idx) = -3.14;
                     right_upper(idx) = 3.14;
-                }
-                ++idx;
-            }
-        }
-        idx = 0;
-        for (unsigned int i = 0; i < kdl_chain_left.getNrOfSegments(); ++i) {
-            const auto& joint = kdl_chain_left.getSegment(i).getJoint();
-            if (joint.getType() != KDL::Joint::None) {
-                auto lim = joint_limits_.find(joint.getName());
-                if (lim != joint_limits_.end()) {
-                    left_lower(idx) = lim->second.first;
-                    left_upper(idx) = lim->second.second;
-                } else {
-                    left_lower(idx) = -3.14;
-                    left_upper(idx) = 3.14;
                 }
                 ++idx;
             }
@@ -175,36 +150,17 @@ public:
             }
         }
         RCLCPP_INFO(this->get_logger(), "%s", right_chain_oss.str().c_str());
-        // Debug: Print left arm KDL chain joint names and limits
-        std::ostringstream left_chain_oss;
-        left_chain_oss << "Left arm KDL chain joints and limits:";
-        idx = 0;
-        for (unsigned int i = 0; i < kdl_chain_left.getNrOfSegments(); ++i) {
-            const auto& joint = kdl_chain_left.getSegment(i).getJoint();
-            if (joint.getType() != KDL::Joint::None) {
-                left_chain_oss << "\n  " << joint.getName() << ": [" << left_lower(idx) << ", " << left_upper(idx) << "]";
-                ++idx;
-            } else {
-                left_chain_oss << "\n  " << joint.getName() << ": [None]";
-            }
-        }
-        RCLCPP_INFO(this->get_logger(), "%s", left_chain_oss.str().c_str());
 
         // Use longer timeout and error tolerance for TRAC-IK
         double ik_timeout = 1.0; // seconds
         double ik_tol = 1e-5;  // Tolerance for IK solutions
         TRAC_IK::SolveType solve_type = TRAC_IK::Distance;  // Distance, Manip1, Manip2, Speed
         ik_right = std::make_shared<TRAC_IK::TRAC_IK>(shared_from_this(), kdl_chain_right, right_lower, right_upper, ik_timeout, ik_tol, solve_type);
-        ik_left = std::make_shared<TRAC_IK::TRAC_IK>(shared_from_this(), kdl_chain_left, left_lower, left_upper, ik_timeout, ik_tol, solve_type);
 
         assert(right_lower.rows() == kdl_chain_right.getNrOfJoints());
         assert(right_upper.rows() == kdl_chain_right.getNrOfJoints());
 
-        assert(left_lower.rows() == kdl_chain_left.getNrOfJoints());
-        assert(left_upper.rows() == kdl_chain_left.getNrOfJoints());
-
         fk_right_solver = std::make_shared<KDL::ChainFkSolverPos_recursive>(kdl_chain_right);
-        fk_left_solver = std::make_shared<KDL::ChainFkSolverPos_recursive>(kdl_chain_left);
 
         buildCollisionObjects();
 
@@ -215,8 +171,8 @@ public:
             "/joint_states", 10, std::bind(&IKFCLPlannerNode::jointStateCallback, this, _1));
 
         RCLCPP_INFO(this->get_logger(), "IKFCLPlannerNode initialized with %zu joints", joint_limits_.size());
-        RCLCPP_INFO(this->get_logger(), "Using base link: %s, right tip: %s, left tip: %s",
-                    base_link_.c_str(), right_tip_.c_str(), left_tip_.c_str());
+        RCLCPP_INFO(this->get_logger(), "Using base link: %s, right tip: %s",
+                    base_link_.c_str(), right_tip_.c_str());
         RCLCPP_INFO(this->get_logger(), "Planning timeout: %.2f seconds, time step: %.2f seconds",
                     planning_timeout_, time_step_);
         RCLCPP_INFO(this->get_logger(), "Collision skip pairs: %zu", collision_skip_pairs_.size());
@@ -225,11 +181,8 @@ public:
         }
         RCLCPP_INFO(this->get_logger(), "Planner type: %s", planner_type_.c_str());
         RCLCPP_INFO(this->get_logger(), "Right arm: base_link = %s, tip_link = %s", base_link_.c_str(), right_tip_.c_str());
-        RCLCPP_INFO(this->get_logger(), "Left arm: base_link = %s, tip_link = %s", base_link_.c_str(), left_tip_.c_str());
         RCLCPP_INFO(this->get_logger(), "Right arm KDL chain segments: %d", kdl_chain_right.getNrOfSegments());
-        RCLCPP_INFO(this->get_logger(), "Left arm KDL chain segments: %d", kdl_chain_left.getNrOfSegments());
         RCLCPP_INFO(this->get_logger(), "Right arm KDL chain joints: %d", kdl_chain_right.getNrOfJoints());
-        RCLCPP_INFO(this->get_logger(), "Left arm KDL chain joints: %d", kdl_chain_left.getNrOfJoints());
 
         // --- DEBUG: Print all URDF link names ---
         std::ostringstream urdf_links_oss;
@@ -262,29 +215,6 @@ public:
         }
         RCLCPP_INFO(this->get_logger(), "%s", kdl_right_oss.str().c_str());
 
-        // --- DEBUG: Print KDL chain link and joint sequence for left arm ---
-        std::ostringstream kdl_left_oss;
-        kdl_left_oss << "Left arm KDL chain: ";
-        for (unsigned int i = 0; i < kdl_chain_left.getNrOfSegments(); ++i) {
-            const auto& seg = kdl_chain_left.getSegment(i);
-            kdl_left_oss << "[" << seg.getName() << ": ";
-            const auto& joint = seg.getJoint();
-            switch (joint.getType()) {
-                case KDL::Joint::None: kdl_left_oss << "None"; break;
-                case KDL::Joint::RotAxis: kdl_left_oss << "RotAxis"; break;
-                case KDL::Joint::TransAxis: kdl_left_oss << "TransAxis"; break;
-                case KDL::Joint::RotX: kdl_left_oss << "RotX"; break;
-                case KDL::Joint::RotY: kdl_left_oss << "RotY"; break;
-                case KDL::Joint::RotZ: kdl_left_oss << "RotZ"; break;
-                case KDL::Joint::TransX: kdl_left_oss << "TransX"; break;
-                case KDL::Joint::TransY: kdl_left_oss << "TransY"; break;
-                case KDL::Joint::TransZ: kdl_left_oss << "TransZ"; break;
-                default: kdl_left_oss << "Unknown"; break;
-            }
-            kdl_left_oss << ", joint='" << joint.getName() << "'], ";
-        }
-        RCLCPP_INFO(this->get_logger(), "%s", kdl_left_oss.str().c_str());
-
         // Debug: Print joint limits
         for (const auto& lim : joint_limits_) {
             RCLCPP_INFO(this->get_logger(), "Joint %s limits: [%.3f, %.3f]", lim.first.c_str(), lim.second.first, lim.second.second);
@@ -294,9 +224,9 @@ public:
 private:
     urdf::Model urdf_model;
     KDL::Tree kdl_tree;
-    KDL::Chain kdl_chain_right, kdl_chain_left;
-    std::shared_ptr<TRAC_IK::TRAC_IK> ik_right, ik_left;
-    std::shared_ptr<KDL::ChainFkSolverPos_recursive> fk_right_solver, fk_left_solver;
+    KDL::Chain kdl_chain_right;
+    std::shared_ptr<TRAC_IK::TRAC_IK> ik_right;
+    std::shared_ptr<KDL::ChainFkSolverPos_recursive> fk_right_solver;
     rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr goal_pose_sub_;
     rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr traj_pub_;
     rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_state_sub_;
@@ -320,7 +250,6 @@ private:
     double planning_timeout_ = 1.0;
     std::string base_link_ = "pelvis";
     std::string right_tip_ = "right_hand_palm_link";
-    std::string left_tip_ = "left_hand_palm_link";
     std::string goal_pose_topic_ = "/goal_pose";
     std::string planner_type_ = "RRTConnect";
     std::vector<std::string> collision_skip_pairs_;
@@ -437,9 +366,8 @@ private:
             }
         }
 
-        bool use_right = pose_in_base.pose.position.y < 0.0;
         // Dynamically generate planning_joints from KDL chain
-        const KDL::Chain& chain = use_right ? kdl_chain_right : kdl_chain_left;
+        const KDL::Chain& chain = kdl_chain_right;
         std::vector<std::string> planning_joints;
         std::set<std::string> planning_links; // <-- collect relevant links
         std::ostringstream seg_oss;
@@ -530,7 +458,7 @@ private:
         for (const auto& j : planning_joints) joint_oss << j << ", ";
         RCLCPP_INFO(this->get_logger(), "%s", joint_oss.str().c_str());
         // Print base and tip link names
-        RCLCPP_INFO(this->get_logger(), "KDL/TRAC-IK base link: %s, tip link: %s", base_link_.c_str(), use_right ? right_tip_.c_str() : left_tip_.c_str());
+        RCLCPP_INFO(this->get_logger(), "KDL/TRAC-IK base link: %s, tip link: %s", base_link_.c_str(), right_tip_.c_str());
         // Print joint limits
         for (const auto& j : planning_joints) {
             auto lim_it = joint_limits_.find(j);
@@ -543,7 +471,7 @@ private:
         // Try IK with current state as seed
         KDL::JntArray seed(planning_joints.size());
         for (size_t i = 0; i < planning_joints.size(); ++i) seed(i) = planning_positions[i];
-        auto& solver = use_right ? ik_right : ik_left;
+        auto& solver = ik_right;
         KDL::JntArray goal(planning_joints.size());
         int ik_result = solver->CartToJnt(seed, target_frame, goal);
         
@@ -596,7 +524,7 @@ private:
         KDL::JntArray current_jnt(planning_joints.size());
         for (size_t i = 0; i < planning_joints.size(); ++i) current_jnt(i) = planning_positions[i];
         KDL::Frame current_ee;
-        auto& fk_solver = use_right ? fk_right_solver : fk_left_solver;
+        auto& fk_solver = fk_right_solver;
         if (fk_solver->JntToCart(current_jnt, current_ee) >= 0) {
             double x = current_ee.p.x(), y = current_ee.p.y(), z = current_ee.p.z();
             double qx, qy, qz, qw;
@@ -713,7 +641,7 @@ private:
         space->setBounds(bounds);
         auto ss = std::make_shared<og::SimpleSetup>(space);
         // Pass planning_links to the state validity checker
-        ss->setStateValidityChecker([this, use_right, planning_joints, planning_links](const ob::State* state) {
+        ss->setStateValidityChecker([this, planning_joints, planning_links](const ob::State* state) {
             const double* values = state->as<ob::RealVectorStateSpace::StateType>()->values;
             KDL::JntArray joints(planning_joints.size());
             std::ostringstream state_oss;
@@ -724,7 +652,7 @@ private:
                 if (i + 1 < planning_joints.size()) state_oss << ", ";
             }
             state_oss << " ]";
-            bool is_in_collision = isInCollision(joints, use_right, this->collision_skip_pairs_, planning_links);
+            bool is_in_collision = isInCollision(joints, this->collision_skip_pairs_, planning_links);
             RCLCPP_DEBUG(this->get_logger(), "Checking collision for state %s, result: %s", state_oss.str().c_str(), is_in_collision ? "Collision" : "Free");
             return !is_in_collision;
         });
@@ -800,10 +728,10 @@ private:
     }
 
     // Restrict collision checking to only pairs where at least one link is in planning_links
-    bool isInCollision(const KDL::JntArray& joints, bool use_right, const std::vector<std::string>& skip_pairs = {}, const std::set<std::string>& planning_links = {})
+    bool isInCollision(const KDL::JntArray& joints, const std::vector<std::string>& skip_pairs = {}, const std::set<std::string>& planning_links = {})
     {
-        auto& fk_solver = use_right ? fk_right_solver : fk_left_solver;
-        auto& kdl_chain = use_right ? kdl_chain_right : kdl_chain_left;
+        auto& fk_solver = fk_right_solver;
+        auto& kdl_chain = kdl_chain_right;
         std::map<std::string, KDL::Frame> segment_frames;
         KDL::Frame out;
         for (size_t i = 0; i < kdl_chain.getNrOfSegments(); ++i) {
