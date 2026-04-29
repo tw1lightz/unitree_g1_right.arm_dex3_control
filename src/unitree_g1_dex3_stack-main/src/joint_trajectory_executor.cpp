@@ -17,9 +17,20 @@
 #include <string>
 #include <urdf/model.h>
 
+#include <atomic>
+#include <csignal>
+
 #include <g1_dex3_joint_defs.hpp>
 
 using namespace std::chrono_literals;
+
+// Set by SIGINT/SIGTERM handler so main() can perform a graceful arm-control
+// release (3-second ramp of kNotUsedJoint.q from 1.0 -> 0.0) BEFORE
+// rclcpp::shutdown() invalidates the publisher. See Plan 01-04.
+static std::atomic<bool> g_shutdown_requested{false};
+static void executor_signal_handler(int /*sig*/) {
+  g_shutdown_requested.store(true);
+}
 
 // Struct to hold joint limits
 struct JointLimits {
@@ -103,10 +114,38 @@ public:
   ~JointTrajectoryExecutor() override {
     RCLCPP_INFO(this->get_logger(), "Shutting down Joint Trajectory Executor Node");
 
-    // Final command to stop arm control
+    // Last-resort: instant release. Normal SIGINT/SIGTERM path goes through
+    // gracefulRelease() in main() before this destructor runs, so this only
+    // fires when the process exits without our signal handler getting to run
+    // (e.g. SIGKILL, std::terminate from another thread).
     unitree_hg::msg::LowCmd final_cmd;
     final_cmd.motor_cmd[JointIndex::kNotUsedJoint].q = 0.0f;
     cmd_pub_->publish(final_cmd);
+  }
+
+  // Smoothly hand arm control back to the robot body controller over 3 s.
+  // Called from main() after the spin loop returns and BEFORE rclcpp::shutdown,
+  // while cmd_pub_ is still valid. The robot body resumes the standing pose
+  // automatically once kNotUsedJoint.q reaches 0.0.
+  void gracefulRelease() {
+    if (!rclcpp::ok()) return;
+    RCLCPP_INFO(this->get_logger(),
+      "Graceful release: smoothly transferring arm control to robot body (3s).");
+    const double duration_s = 3.0;
+    const int steps = 150;
+    auto sleep_ns = std::chrono::nanoseconds(
+      static_cast<int64_t>((duration_s / steps) * 1e9));
+    for (int step = 0; step <= steps && rclcpp::ok(); ++step) {
+      const double t = static_cast<double>(step) / steps;
+      const double value = (1.0 - t) * 1.0;  // linear 1.0 -> 0.0
+      unitree_hg::msg::LowCmd release_cmd;
+      release_cmd.motor_cmd[JointIndex::kNotUsedJoint].q =
+        static_cast<float>(value);
+      cmd_pub_->publish(release_cmd);
+      rclcpp::sleep_for(sleep_ns);
+    }
+    RCLCPP_INFO(this->get_logger(),
+      "Graceful release complete; arm control returned to robot body.");
   }
 
 private:
@@ -224,7 +263,23 @@ private:
 
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<JointTrajectoryExecutor>());
+
+  // Replace rclcpp's default SIGINT handler so we can perform a graceful
+  // arm-control release before the publisher is torn down. See Plan 01-04.
+  rclcpp::uninstall_signal_handlers();
+  std::signal(SIGINT, executor_signal_handler);
+  std::signal(SIGTERM, executor_signal_handler);
+
+  auto node = std::make_shared<JointTrajectoryExecutor>();
+  rclcpp::executors::SingleThreadedExecutor exec;
+  exec.add_node(node);
+  while (rclcpp::ok() && !g_shutdown_requested.load()) {
+    exec.spin_some(std::chrono::milliseconds(50));
+  }
+
+  // SIGINT/SIGTERM received (or rclcpp::ok went false). Smoothly release
+  // arm authority while the publisher is still valid.
+  node->gracefulRelease();
   rclcpp::shutdown();
   return 0;
 }
