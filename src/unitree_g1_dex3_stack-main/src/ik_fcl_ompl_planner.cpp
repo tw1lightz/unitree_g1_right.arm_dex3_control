@@ -141,6 +141,20 @@ public:
             }
         }
 
+        // Auto-derive adjacent-link skip pairs from the KDL chain so that
+        // physically-connected (and therefore geometrically-overlapping)
+        // links are not flagged as self-collisions. Order in the pair string
+        // does not matter -- isInCollision matches both "a:b" and "b:a".
+        // See Plan 01-05.
+        {
+            std::string prev = base_link_;
+            for (unsigned int i = 0; i < kdl_chain_right.getNrOfSegments(); ++i) {
+                const std::string& cur = kdl_chain_right.getSegment(i).getName();
+                collision_skip_pairs_.push_back(prev + ":" + cur);
+                prev = cur;
+            }
+        }
+
         // Use longer timeout and error tolerance for TRAC-IK
         double ik_timeout = 1.0; // seconds
         double ik_tol = 1e-5;  // Tolerance for IK solutions
@@ -372,34 +386,10 @@ private:
                 tf_lookup_failures);
         }
 
-        // Joint-order sanity check: planning_joints must appear in joint_names_
-        // in non-decreasing order. On mismatch, emit a single ERROR; do not abort.
-        bool order_ok = true;
-        size_t last_found = 0;
-        std::ostringstream order_warn_oss;
-        for (size_t i = 0; i < planning_joints.size(); ++i) {
-            auto it = std::find(joint_names_.begin(), joint_names_.end(),
-                                planning_joints[i]);
-            if (it == joint_names_.end()) {
-                order_warn_oss << "joint '" << planning_joints[i]
-                               << "' missing from /joint_states; ";
-                order_ok = false;
-            } else {
-                size_t idx = std::distance(joint_names_.begin(), it);
-                if (idx < last_found) {
-                    order_warn_oss << "joint '" << planning_joints[i]
-                                   << "' out of order at idx " << idx << "; ";
-                    order_ok = false;
-                }
-                last_found = idx;
-            }
-        }
-        if (!order_ok) {
-            RCLCPP_ERROR(this->get_logger(),
-                "Joint-order mismatch between KDL chain and /joint_states: %s",
-                order_warn_oss.str().c_str());
-        }
-
+        // Note: KDL chain joint order does NOT need to match /joint_states
+        // ordering -- the planning_positions lookup below is by-name. The
+        // pre-existing joint-order ERROR check that lived here was removed
+        // in Plan 01-05 because it was a false-positive on every goal.
         std::vector<double> planning_positions;
         for (const auto& jname : planning_joints) {
             auto it = std::find(joint_names_.begin(), joint_names_.end(), jname);
