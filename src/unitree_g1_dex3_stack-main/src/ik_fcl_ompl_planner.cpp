@@ -383,6 +383,40 @@ private:
         }
         RCLCPP_INFO(this->get_logger(), "%s", seg_oss.str().c_str());
 
+        // Snapshot world-frame transforms of all non-planning links from the TF tree.
+        // Right-arm chain segments will have their transforms updated per OMPL state
+        // inside isInCollision(); everything else (torso, legs, left arm, head, hands)
+        // is static during planning, so we look it up once and reuse.
+        size_t tf_lookup_failures = 0;
+        for (auto& [link_name, lc] : link_collisions) {
+            if (planning_links.find(link_name) != planning_links.end()) {
+                continue; // arm-chain links are handled per-state in isInCollision
+            }
+            try {
+                auto tf_msg = tf_buffer_.lookupTransform(
+                    base_link_, link_name, tf2::TimePointZero,
+                    tf2::durationFromSec(0.2));
+                const auto& t = tf_msg.transform.translation;
+                const auto& q = tf_msg.transform.rotation;
+                Eigen::Isometry3d world_tf = Eigen::Isometry3d::Identity();
+                world_tf.linear() = Eigen::Quaterniond(q.w, q.x, q.y, q.z).toRotationMatrix();
+                world_tf.translation() = Eigen::Vector3d(t.x, t.y, t.z);
+                Eigen::Isometry3d final_tf = world_tf * lc.local_transform;
+                lc.object->setTransform(fcl::Transform3d(final_tf.matrix()));
+            } catch (const tf2::TransformException& ex) {
+                ++tf_lookup_failures;
+                RCLCPP_WARN(this->get_logger(),
+                    "TF lookup failed for non-planning link '%s' (base='%s'): %s. "
+                    "Using previous transform; collision check may be inaccurate.",
+                    link_name.c_str(), base_link_.c_str(), ex.what());
+            }
+        }
+        if (tf_lookup_failures > 0) {
+            RCLCPP_WARN(this->get_logger(),
+                "Body-link TF snapshot completed with %zu failures.",
+                tf_lookup_failures);
+        }
+
         // --- Joint order check: compare planning_joints to expected URDF joint order ---
         std::ostringstream expected_oss, actual_oss, warn_oss;
         expected_oss << "URDF joint_names_: ";
