@@ -231,17 +231,42 @@ private:
       cmd_pub_->publish(cmd_msg);
     }
 
-    RCLCPP_INFO(this->get_logger(), "Trajectory point %zu executed, sleeping for %d seconds", msg->points.size(), 2);
-    rclcpp::sleep_for(1s);  // Wait for the last command to take effect
+    RCLCPP_INFO(this->get_logger(), "Trajectory point %zu executed; holding stiff at end-point while hand closes.", msg->points.size());
 
-    // After executing the trajectory, close the hand
-    hand_cmd.data = true; // Close hand command
-    hand_cmd_pub->publish(hand_cmd); // Close hand command
-    // Wait for the hand to close
-    rclcpp::sleep_for(1s);  // Wait for the hand to close
-    RCLCPP_INFO(this->get_logger(), "Hand closed after trajectory execution");
+    // Plan 01-11: close the publish gap. The two prior sleep_for(1s) calls
+    // (one to settle the last waypoint, one to wait for hand close) left the
+    // executor silent for 2 s right when smoothness mattered most -- firmware
+    // had no master/q from us during that window and started dragging the arm
+    // toward standing on its own. Replace with a single 1 s hold-publish loop
+    // that keeps publishing master=0.5 + q=latest + mode=1 + kp/kd at 250 Hz.
+    // Hand close runs in parallel (separate publisher) starting at frame 0.
+    hand_cmd.data = true;
+    hand_cmd_pub->publish(hand_cmd);
 
-    RCLCPP_INFO(this->get_logger(), "Trajectory execution complete, returning to default pose.");
+    {
+      const int hold_steps = 250;                            // 1.0 s @ 250 Hz
+      const auto hold_sleep_ns = std::chrono::nanoseconds(4'000'000); // 4 ms
+      for (int s = 0; s < hold_steps; ++s) {
+        unitree_hg::msg::LowCmd hold_cmd;
+        hold_cmd.motor_cmd[JointIndex::kNotUsedJoint].q = 0.5f; // full planner authority
+        for (const auto& pair : joint_name_to_index) {
+          size_t idx = pair.second;
+          hold_cmd.motor_cmd[idx].mode = 1;
+          if (latest_joint_positions_.size() > idx) {
+            hold_cmd.motor_cmd[idx].q = latest_joint_positions_[idx];
+          } else {
+            hold_cmd.motor_cmd[idx].q = 0.0f;
+          }
+          hold_cmd.motor_cmd[idx].dq = 0.f;
+          hold_cmd.motor_cmd[idx].kp = 60.0f;
+          hold_cmd.motor_cmd[idx].kd = 1.5f;
+          hold_cmd.motor_cmd[idx].tau = 0.f;
+        }
+        cmd_pub_->publish(hold_cmd);
+        rclcpp::sleep_for(hold_sleep_ns);
+      }
+    }
+    RCLCPP_INFO(this->get_logger(), "Hand closed; trajectory execution complete, returning to default pose.");
 
     // Plan 01-09: snapshot the trajectory end-point as the ramp's starting
     // pose. We interpolate from this fixed start (not the live, drifting
@@ -253,11 +278,12 @@ private:
     }
 
     // Smoothly interpolate final_cmd.motor_cmd[JointIndex::kNotUsedJoint].q from 1.0 to 0.0
-    // Plan 01-08: 3 s / 150 step ramp duration preserved. Plan 01-09 reverted
-    // Plan 01-08's kp/kd fade and instead drives the arm along an explicit
-    // q interpolation from the trajectory end-point to the standing snapshot.
+    // Plan 01-08: 3 s ramp duration preserved. Plan 01-09 drives an explicit
+    // q interpolation from trajectory end-point to standing snapshot.
+    // Plan 01-11: bump steps 150 -> 750 so ramp publishes at 250 Hz (was 50 Hz),
+    // matching reference smooth_exit cadence so firmware cannot wedge between frames.
     const double interp_duration = 3.0; // seconds
-    const int interp_steps = 150;
+    const int interp_steps = 750;
     auto sleep_ns = std::chrono::nanoseconds(static_cast<int64_t>((interp_duration / interp_steps) * 1e9));
     for (int step = 0; step <= interp_steps; ++step) {
       double t = static_cast<double>(step) / interp_steps;
