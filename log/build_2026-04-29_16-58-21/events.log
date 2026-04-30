@@ -1,0 +1,727 @@
+[0.000000] (-) TimerEvent: {}
+[0.000267] (-) JobUnselected: {'identifier': 'bboxes_ex_msgs'}
+[0.007928] (-) JobUnselected: {'identifier': 'fcl'}
+[0.008062] (-) JobUnselected: {'identifier': 'trac_ik'}
+[0.008104] (-) JobUnselected: {'identifier': 'trac_ik_lib'}
+[0.008146] (unitree_g1_dex3_stack) JobQueued: {'identifier': 'unitree_g1_dex3_stack', 'dependencies': OrderedDict([('bboxes_ex_msgs', '/home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs'), ('fcl', '/home/unitree/Desktop/unitree_dex3/install/fcl'), ('trac_ik_lib', '/home/unitree/Desktop/unitree_dex3/install/trac_ik_lib')])}
+[0.008209] (unitree_g1_dex3_stack) JobStarted: {'identifier': 'unitree_g1_dex3_stack'}
+[0.086202] (unitree_g1_dex3_stack) JobProgress: {'identifier': 'unitree_g1_dex3_stack', 'progress': 'cmake'}
+[0.091759] (unitree_g1_dex3_stack) JobProgress: {'identifier': 'unitree_g1_dex3_stack', 'progress': 'build'}
+[0.093439] (unitree_g1_dex3_stack) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/unitree/Desktop/unitree_dex3/build/unitree_g1_dex3_stack', '--', '-j8', '-l8'], 'cwd': '/home/unitree/Desktop/unitree_dex3/build/unitree_g1_dex3_stack', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('CONDA_PROMPT_MODIFIER', '(base)'), ('USER', 'unitree'), ('SSH_CLIENT', '192.168.100.20 59806 22'), ('XDG_SESSION_TYPE', 'tty'), ('GIT_ASKPASS', '/home/unitree/.windsurf-server/bin/08b5de9bae1728a5ad46386c9b8903192a125c51/extensions/git/dist/askpass.sh'), ('SHLVL', '0'), ('LD_LIBRARY_PATH', '/home/unitree/Desktop/unitree_dex3/install/trac_ik_lib/lib:/home/unitree/Desktop/unitree_dex3/install/fcl/lib:/home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib:/usr/local/cuda-11.4/lib64:/usr/local/lib:/usr/local/cuda-11.4/lib64:/usr/local/lib:/home/unitree/unitree_ros2/cyclonedds_ws/install/lib:/home/unitree/cyclonedds_ws/install/rmw_cyclonedds_cpp/lib:/home/unitree/cyclonedds_ws/install/cyclonedds/lib:/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/aarch64-linux-gnu:/opt/ros/foxy/lib'), ('BROWSER', '/home/unitree/.windsurf-server/bin/08b5de9bae1728a5ad46386c9b8903192a125c51/bin/helpers/browser.sh'), ('MOTD_SHOWN', 'pam'), ('HOME', '/home/unitree'), ('CONDA_SHLVL', '1'), ('CYCLONEDDS_URI', '/home/unitree/cyclonedds_ws/cyclonedds.xml'), ('OLDPWD', '/home/unitree/Desktop/unitree_dex3'), ('TERM_PROGRAM_VERSION', '1.110.1-windsurf'), ('NVM_BIN', '/home/unitree/.nvm/versions/node/v24.12.0/bin'), ('VSCODE_IPC_HOOK_CLI', '/run/user/1000/vscode-ipc-1af9265c-e5de-4976-96e3-dc284bdfb8ef.sock'), ('NVM_INC', '/home/unitree/.nvm/versions/node/v24.12.0/include/node'), ('JETSON_L4T', '35.3.1'), ('ROS_PYTHON_VERSION', '3'), ('JETSON_MODEL', 'NVIDIA Orin NX Developer Kit'), ('PAGER', 'cat'), ('VSCODE_GIT_ASKPASS_MAIN', '/home/unitree/.windsurf-server/bin/08b5de9bae1728a5ad46386c9b8903192a125c51/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/home/unitree/.windsurf-server/bin/08b5de9bae1728a5ad46386c9b8903192a125c51/node'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('_CE_M', ''), ('_CONDA_ROOT', '/home/unitree/miniforge3'), ('NVM_DIR', '/home/unitree/.nvm'), ('COLCON_PREFIX_PATH', '/home/unitree/unitree_ros2/cyclonedds_ws/install:/home/unitree/cyclonedds_ws/install'), ('ROS_DISTRO', 'foxy'), ('LOGNAME', 'unitree'), ('JETSON_MODULE', 'NVIDIA Jetson Orin NX (16GB ram)'), ('JETSON_SERIAL_NUMBER', ''), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('PKG_CONFIG_PATH', '/home/unitree/Desktop/unitree_dex3/install/fcl/lib/aarch64-linux-gnu/pkgconfig:/home/unitree/Desktop/unitree_dex3/install/fcl/lib/pkgconfig:/home/unitree/unitree_ros2/cyclonedds_ws/install/lib/aarch64-linux-gnu/pkgconfig:/home/unitree/unitree_ros2/cyclonedds_ws/install/lib/pkgconfig:/home/unitree/cyclonedds_ws/install/cyclonedds/lib/aarch64-linux-gnu/pkgconfig:/home/unitree/cyclonedds_ws/install/cyclonedds/lib/pkgconfig'), ('JETSON_CODENAME', 'P3768'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('XDG_SESSION_ID', '7'), ('_CE_CONDA', ''), ('ROS_LOCALHOST_ONLY', '0'), ('WINDSURF_CASCADE_TERMINAL_KIND', 'inherit'), ('WINDSURF_CASCADE_TERMINAL', '1'), ('PATH', '/home/unitree/.local/bin:/usr/local/cuda-11.4/bin:/home/unitree/.windsurf-server/bin/08b5de9bae1728a5ad46386c9b8903192a125c51/bin/remote-cli:/home/unitree/.local/bin:/home/unitree/miniforge3/bin:/home/unitree/miniforge3/condabin:/home/unitree/.local/bin:/home/unitree/.nvm/versions/node/v24.12.0/bin:/usr/local/cuda-11.4/bin:/home/unitree/unitree_ros2/cyclonedds_ws/install/bin:/home/unitree/cyclonedds_ws/install/cyclonedds/bin:/opt/ros/foxy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_cyclonedds_cpp'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('JETSON_SOC', 'tegra23x'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1000/vscode-git-37dc1b1adb.sock'), ('TERM_PROGRAM', 'vscode'), ('XML_CATALOG_FILES', 'file:///home/unitree/miniforge3/etc/xml/catalog file:///etc/xml/catalog file:///home/unitree/miniforge3/etc/xml/catalog file:///etc/xml/catalog'), ('AMENT_PREFIX_PATH', '/home/unitree/Desktop/unitree_dex3/install/trac_ik_lib:/home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs:/home/unitree/unitree_ros2/cyclonedds_ws/install:/home/unitree/cyclonedds_ws/install/rmw_cyclonedds_cpp:/opt/ros/foxy'), ('CONDA_PYTHON_EXE', '/home/unitree/miniforge3/bin/python'), ('SHELL', '/bin/bash'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('CONDA_DEFAULT_ENV', 'base'), ('_CONDA_EXE', '/home/unitree/miniforge3/bin/conda'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('GIT_PAGER', 'cat'), ('JETSON_CUDA_ARCH_BIN', '8.7'), ('PWD', '/home/unitree/Desktop/unitree_dex3/build/unitree_g1_dex3_stack'), ('CONDA_EXE', '/home/unitree/miniforge3/bin/conda'), ('SSH_CONNECTION', '192.168.100.20 59806 192.168.100.30 22'), ('NVM_CD_FLAGS', ''), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages:/home/unitree/unitree_ros2/cyclonedds_ws/build/g1_cam_bridge:/home/unitree/unitree_ros2/cyclonedds_ws/install/lib/python3.8/site-packages:/opt/ros/foxy/lib/python3.8/site-packages'), ('CONDA_PREFIX', '/home/unitree/miniforge3'), ('COLCON', '1'), ('JETSON_JETPACK', '5.1.1'), ('CMAKE_PREFIX_PATH', '/home/unitree/Desktop/unitree_dex3/install/trac_ik_lib:/home/unitree/Desktop/unitree_dex3/install/fcl:/home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs:/home/unitree/unitree_ros2/cyclonedds_ws/install:/home/unitree/cyclonedds_ws/install/rmw_cyclonedds_cpp:/home/unitree/cyclonedds_ws/install/cyclonedds:/opt/ros/foxy'), ('JETSON_P_NUMBER', 'p3767-0000')]), 'shell': False}
+[0.104477] (-) TimerEvent: {}
+[0.205197] (-) TimerEvent: {}
+[0.307384] (-) TimerEvent: {}
+[0.317952] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[ 11%] Built target joint_trajectory_executor\n'}
+[0.407568] (-) TimerEvent: {}
+[0.467629] (unitree_g1_dex3_stack) StdoutLine: {'line': b'Scanning dependencies of target ik_fcl_ompl_planner\n'}
+[0.508152] (-) TimerEvent: {}
+[0.531955] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[ 16%] Building CXX object CMakeFiles/ik_fcl_ompl_planner.dir/src/ik_fcl_ompl_planner.cpp.o\n'}
+[0.608337] (-) TimerEvent: {}
+[0.710296] (-) TimerEvent: {}
+[0.810659] (-) TimerEvent: {}
+[0.911070] (-) TimerEvent: {}
+[1.011502] (-) TimerEvent: {}
+[1.111910] (-) TimerEvent: {}
+[1.212937] (-) TimerEvent: {}
+[1.313557] (-) TimerEvent: {}
+[1.413946] (-) TimerEvent: {}
+[1.514362] (-) TimerEvent: {}
+[1.614773] (-) TimerEvent: {}
+[1.715203] (-) TimerEvent: {}
+[1.815729] (-) TimerEvent: {}
+[1.916137] (-) TimerEvent: {}
+[2.017448] (-) TimerEvent: {}
+[2.117849] (-) TimerEvent: {}
+[2.218258] (-) TimerEvent: {}
+[2.318690] (-) TimerEvent: {}
+[2.419403] (-) TimerEvent: {}
+[2.519857] (-) TimerEvent: {}
+[2.620218] (-) TimerEvent: {}
+[2.720629] (-) TimerEvent: {}
+[2.821017] (-) TimerEvent: {}
+[2.921636] (-) TimerEvent: {}
+[3.022046] (-) TimerEvent: {}
+[3.122469] (-) TimerEvent: {}
+[3.222910] (-) TimerEvent: {}
+[3.323483] (-) TimerEvent: {}
+[3.423911] (-) TimerEvent: {}
+[3.524317] (-) TimerEvent: {}
+[3.624782] (-) TimerEvent: {}
+[3.725216] (-) TimerEvent: {}
+[3.825687] (-) TimerEvent: {}
+[3.926271] (-) TimerEvent: {}
+[4.027582] (-) TimerEvent: {}
+[4.128360] (-) TimerEvent: {}
+[4.228887] (-) TimerEvent: {}
+[4.329272] (-) TimerEvent: {}
+[4.430180] (-) TimerEvent: {}
+[4.530610] (-) TimerEvent: {}
+[4.631020] (-) TimerEvent: {}
+[4.732923] (-) TimerEvent: {}
+[4.833379] (-) TimerEvent: {}
+[4.934171] (-) TimerEvent: {}
+[5.034681] (-) TimerEvent: {}
+[5.135804] (-) TimerEvent: {}
+[5.236216] (-) TimerEvent: {}
+[5.336765] (-) TimerEvent: {}
+[5.437229] (-) TimerEvent: {}
+[5.537630] (-) TimerEvent: {}
+[5.638035] (-) TimerEvent: {}
+[5.738493] (-) TimerEvent: {}
+[5.839650] (-) TimerEvent: {}
+[5.941099] (-) TimerEvent: {}
+[6.042188] (-) TimerEvent: {}
+[6.142631] (-) TimerEvent: {}
+[6.243056] (-) TimerEvent: {}
+[6.343492] (-) TimerEvent: {}
+[6.444082] (-) TimerEvent: {}
+[6.544528] (-) TimerEvent: {}
+[6.644965] (-) TimerEvent: {}
+[6.745411] (-) TimerEvent: {}
+[6.845814] (-) TimerEvent: {}
+[6.947127] (-) TimerEvent: {}
+[7.048914] (-) TimerEvent: {}
+[7.149518] (-) TimerEvent: {}
+[7.250356] (-) TimerEvent: {}
+[7.351138] (-) TimerEvent: {}
+[7.452309] (-) TimerEvent: {}
+[7.552985] (-) TimerEvent: {}
+[7.653391] (-) TimerEvent: {}
+[7.753820] (-) TimerEvent: {}
+[7.854319] (-) TimerEvent: {}
+[7.954778] (-) TimerEvent: {}
+[8.055188] (-) TimerEvent: {}
+[8.155656] (-) TimerEvent: {}
+[8.257667] (-) TimerEvent: {}
+[8.358067] (-) TimerEvent: {}
+[8.458475] (-) TimerEvent: {}
+[8.559251] (-) TimerEvent: {}
+[8.659786] (-) TimerEvent: {}
+[8.760211] (-) TimerEvent: {}
+[8.860907] (-) TimerEvent: {}
+[8.961613] (-) TimerEvent: {}
+[9.062245] (-) TimerEvent: {}
+[9.162765] (-) TimerEvent: {}
+[9.263165] (-) TimerEvent: {}
+[9.363868] (-) TimerEvent: {}
+[9.464698] (-) TimerEvent: {}
+[9.566193] (-) TimerEvent: {}
+[9.666731] (-) TimerEvent: {}
+[9.767855] (-) TimerEvent: {}
+[9.868257] (-) TimerEvent: {}
+[9.969614] (-) TimerEvent: {}
+[10.070014] (-) TimerEvent: {}
+[10.171202] (-) TimerEvent: {}
+[10.271661] (-) TimerEvent: {}
+[10.372105] (-) TimerEvent: {}
+[10.472575] (-) TimerEvent: {}
+[10.573190] (-) TimerEvent: {}
+[10.674076] (-) TimerEvent: {}
+[10.774460] (-) TimerEvent: {}
+[10.874860] (-) TimerEvent: {}
+[10.975377] (-) TimerEvent: {}
+[11.077543] (-) TimerEvent: {}
+[11.178019] (-) TimerEvent: {}
+[11.279898] (-) TimerEvent: {}
+[11.381163] (-) TimerEvent: {}
+[11.483278] (-) TimerEvent: {}
+[11.583713] (-) TimerEvent: {}
+[11.684465] (-) TimerEvent: {}
+[11.784840] (-) TimerEvent: {}
+[11.885730] (-) TimerEvent: {}
+[11.986134] (-) TimerEvent: {}
+[12.086661] (-) TimerEvent: {}
+[12.187395] (-) TimerEvent: {}
+[12.287812] (-) TimerEvent: {}
+[12.388195] (-) TimerEvent: {}
+[12.488689] (-) TimerEvent: {}
+[12.589124] (-) TimerEvent: {}
+[12.689685] (-) TimerEvent: {}
+[12.790144] (-) TimerEvent: {}
+[12.890904] (-) TimerEvent: {}
+[12.991318] (-) TimerEvent: {}
+[13.091747] (-) TimerEvent: {}
+[13.192190] (-) TimerEvent: {}
+[13.292671] (-) TimerEvent: {}
+[13.393190] (-) TimerEvent: {}
+[13.493625] (-) TimerEvent: {}
+[13.595306] (-) TimerEvent: {}
+[13.697525] (-) TimerEvent: {}
+[13.797955] (-) TimerEvent: {}
+[13.898606] (-) TimerEvent: {}
+[13.999463] (-) TimerEvent: {}
+[14.099855] (-) TimerEvent: {}
+[14.200287] (-) TimerEvent: {}
+[14.300911] (-) TimerEvent: {}
+[14.401309] (-) TimerEvent: {}
+[14.501942] (-) TimerEvent: {}
+[14.602376] (-) TimerEvent: {}
+[14.702818] (-) TimerEvent: {}
+[14.803266] (-) TimerEvent: {}
+[14.904343] (-) TimerEvent: {}
+[15.004741] (-) TimerEvent: {}
+[15.106204] (-) TimerEvent: {}
+[15.206584] (-) TimerEvent: {}
+[15.307026] (-) TimerEvent: {}
+[15.407733] (-) TimerEvent: {}
+[15.513533] (-) TimerEvent: {}
+[15.613938] (-) TimerEvent: {}
+[15.714512] (-) TimerEvent: {}
+[15.814941] (-) TimerEvent: {}
+[15.915365] (-) TimerEvent: {}
+[16.015779] (-) TimerEvent: {}
+[16.116192] (-) TimerEvent: {}
+[16.219375] (-) TimerEvent: {}
+[16.319802] (-) TimerEvent: {}
+[16.420211] (-) TimerEvent: {}
+[16.520627] (-) TimerEvent: {}
+[16.621028] (-) TimerEvent: {}
+[16.721457] (-) TimerEvent: {}
+[16.822025] (-) TimerEvent: {}
+[16.922438] (-) TimerEvent: {}
+[17.022848] (-) TimerEvent: {}
+[17.123417] (-) TimerEvent: {}
+[17.223826] (-) TimerEvent: {}
+[17.324237] (-) TimerEvent: {}
+[17.424670] (-) TimerEvent: {}
+[17.525211] (-) TimerEvent: {}
+[17.625723] (-) TimerEvent: {}
+[17.726612] (-) TimerEvent: {}
+[17.827068] (-) TimerEvent: {}
+[17.927577] (-) TimerEvent: {}
+[18.030295] (-) TimerEvent: {}
+[18.131840] (-) TimerEvent: {}
+[18.235392] (-) TimerEvent: {}
+[18.337520] (-) TimerEvent: {}
+[18.437945] (-) TimerEvent: {}
+[18.538370] (-) TimerEvent: {}
+[18.641158] (-) TimerEvent: {}
+[18.745195] (-) TimerEvent: {}
+[18.846084] (-) TimerEvent: {}
+[18.946467] (-) TimerEvent: {}
+[19.049947] (-) TimerEvent: {}
+[19.150653] (-) TimerEvent: {}
+[19.251506] (-) TimerEvent: {}
+[19.352718] (-) TimerEvent: {}
+[19.453106] (-) TimerEvent: {}
+[19.553519] (-) TimerEvent: {}
+[19.653934] (-) TimerEvent: {}
+[19.754702] (-) TimerEvent: {}
+[19.855192] (-) TimerEvent: {}
+[19.955849] (-) TimerEvent: {}
+[20.056782] (-) TimerEvent: {}
+[20.159377] (-) TimerEvent: {}
+[20.259771] (-) TimerEvent: {}
+[20.361203] (-) TimerEvent: {}
+[20.462446] (-) TimerEvent: {}
+[20.562857] (-) TimerEvent: {}
+[20.663401] (-) TimerEvent: {}
+[20.764315] (-) TimerEvent: {}
+[20.864739] (-) TimerEvent: {}
+[20.966702] (-) TimerEvent: {}
+[21.067096] (-) TimerEvent: {}
+[21.168105] (-) TimerEvent: {}
+[21.268526] (-) TimerEvent: {}
+[21.370399] (-) TimerEvent: {}
+[21.472944] (-) TimerEvent: {}
+[21.573710] (-) TimerEvent: {}
+[21.674152] (-) TimerEvent: {}
+[21.774761] (-) TimerEvent: {}
+[21.875174] (-) TimerEvent: {}
+[21.975622] (-) TimerEvent: {}
+[22.076697] (-) TimerEvent: {}
+[22.177513] (-) TimerEvent: {}
+[22.278080] (-) TimerEvent: {}
+[22.378615] (-) TimerEvent: {}
+[22.479084] (-) TimerEvent: {}
+[22.579497] (-) TimerEvent: {}
+[22.679934] (-) TimerEvent: {}
+[22.780365] (-) TimerEvent: {}
+[22.880766] (-) TimerEvent: {}
+[22.981195] (-) TimerEvent: {}
+[23.081694] (-) TimerEvent: {}
+[23.182122] (-) TimerEvent: {}
+[23.282522] (-) TimerEvent: {}
+[23.382932] (-) TimerEvent: {}
+[23.483386] (-) TimerEvent: {}
+[23.583828] (-) TimerEvent: {}
+[23.684212] (-) TimerEvent: {}
+[23.784626] (-) TimerEvent: {}
+[23.885028] (-) TimerEvent: {}
+[23.985447] (-) TimerEvent: {}
+[24.085852] (-) TimerEvent: {}
+[24.186271] (-) TimerEvent: {}
+[24.286692] (-) TimerEvent: {}
+[24.387147] (-) TimerEvent: {}
+[24.487574] (-) TimerEvent: {}
+[24.587983] (-) TimerEvent: {}
+[24.688390] (-) TimerEvent: {}
+[24.791396] (-) TimerEvent: {}
+[24.891775] (-) TimerEvent: {}
+[24.992190] (-) TimerEvent: {}
+[25.092613] (-) TimerEvent: {}
+[25.193006] (-) TimerEvent: {}
+[25.293413] (-) TimerEvent: {}
+[25.393900] (-) TimerEvent: {}
+[25.494433] (-) TimerEvent: {}
+[25.594848] (-) TimerEvent: {}
+[25.695292] (-) TimerEvent: {}
+[25.795712] (-) TimerEvent: {}
+[25.896119] (-) TimerEvent: {}
+[25.999389] (-) TimerEvent: {}
+[26.099814] (-) TimerEvent: {}
+[26.200443] (-) TimerEvent: {}
+[26.300804] (-) TimerEvent: {}
+[26.401219] (-) TimerEvent: {}
+[26.501655] (-) TimerEvent: {}
+[26.602061] (-) TimerEvent: {}
+[26.702471] (-) TimerEvent: {}
+[26.802900] (-) TimerEvent: {}
+[26.903292] (-) TimerEvent: {}
+[27.005373] (-) TimerEvent: {}
+[27.105788] (-) TimerEvent: {}
+[27.210604] (-) TimerEvent: {}
+[27.311247] (-) TimerEvent: {}
+[27.411683] (-) TimerEvent: {}
+[27.512035] (-) TimerEvent: {}
+[27.613803] (-) TimerEvent: {}
+[27.714160] (-) TimerEvent: {}
+[27.815012] (-) TimerEvent: {}
+[27.915536] (-) TimerEvent: {}
+[28.015940] (-) TimerEvent: {}
+[28.116390] (-) TimerEvent: {}
+[28.216999] (-) TimerEvent: {}
+[28.318419] (-) TimerEvent: {}
+[28.419325] (-) TimerEvent: {}
+[28.521801] (-) TimerEvent: {}
+[28.622308] (-) TimerEvent: {}
+[28.724078] (-) TimerEvent: {}
+[28.824512] (-) TimerEvent: {}
+[28.924926] (-) TimerEvent: {}
+[29.028017] (-) TimerEvent: {}
+[29.128428] (-) TimerEvent: {}
+[29.228865] (-) TimerEvent: {}
+[29.329294] (-) TimerEvent: {}
+[29.430005] (-) TimerEvent: {}
+[29.530443] (-) TimerEvent: {}
+[29.630853] (-) TimerEvent: {}
+[29.731298] (-) TimerEvent: {}
+[29.834087] (-) TimerEvent: {}
+[29.934811] (-) TimerEvent: {}
+[30.036708] (-) TimerEvent: {}
+[30.137121] (-) TimerEvent: {}
+[30.237654] (-) TimerEvent: {}
+[30.338042] (-) TimerEvent: {}
+[30.438968] (-) TimerEvent: {}
+[30.539648] (-) TimerEvent: {}
+[30.640047] (-) TimerEvent: {}
+[30.740509] (-) TimerEvent: {}
+[30.840906] (-) TimerEvent: {}
+[30.941316] (-) TimerEvent: {}
+[31.043251] (-) TimerEvent: {}
+[31.143655] (-) TimerEvent: {}
+[31.244048] (-) TimerEvent: {}
+[31.344431] (-) TimerEvent: {}
+[31.444897] (-) TimerEvent: {}
+[31.545489] (-) TimerEvent: {}
+[31.645912] (-) TimerEvent: {}
+[31.749469] (-) TimerEvent: {}
+[31.849868] (-) TimerEvent: {}
+[31.951583] (-) TimerEvent: {}
+[32.052029] (-) TimerEvent: {}
+[32.152427] (-) TimerEvent: {}
+[32.252887] (-) TimerEvent: {}
+[32.353479] (-) TimerEvent: {}
+[32.453869] (-) TimerEvent: {}
+[32.554675] (-) TimerEvent: {}
+[32.655396] (-) TimerEvent: {}
+[32.755803] (-) TimerEvent: {}
+[32.856165] (-) TimerEvent: {}
+[32.956644] (-) TimerEvent: {}
+[33.057006] (-) TimerEvent: {}
+[33.157379] (-) TimerEvent: {}
+[33.257777] (-) TimerEvent: {}
+[33.358494] (-) TimerEvent: {}
+[33.458879] (-) TimerEvent: {}
+[33.559304] (-) TimerEvent: {}
+[33.659704] (-) TimerEvent: {}
+[33.762559] (-) TimerEvent: {}
+[33.863761] (-) TimerEvent: {}
+[33.964147] (-) TimerEvent: {}
+[34.064772] (-) TimerEvent: {}
+[34.166470] (-) TimerEvent: {}
+[34.266989] (-) TimerEvent: {}
+[34.368472] (-) TimerEvent: {}
+[34.468858] (-) TimerEvent: {}
+[34.570310] (-) TimerEvent: {}
+[34.671322] (-) TimerEvent: {}
+[34.771725] (-) TimerEvent: {}
+[34.872140] (-) TimerEvent: {}
+[34.972894] (-) TimerEvent: {}
+[35.073311] (-) TimerEvent: {}
+[35.173692] (-) TimerEvent: {}
+[35.274101] (-) TimerEvent: {}
+[35.374515] (-) TimerEvent: {}
+[35.474877] (-) TimerEvent: {}
+[35.576669] (-) TimerEvent: {}
+[35.677077] (-) TimerEvent: {}
+[35.777475] (-) TimerEvent: {}
+[35.877887] (-) TimerEvent: {}
+[35.978293] (-) TimerEvent: {}
+[36.078709] (-) TimerEvent: {}
+[36.179676] (-) TimerEvent: {}
+[36.280609] (-) TimerEvent: {}
+[36.381009] (-) TimerEvent: {}
+[36.481745] (-) TimerEvent: {}
+[36.582175] (-) TimerEvent: {}
+[36.682565] (-) TimerEvent: {}
+[36.783404] (-) TimerEvent: {}
+[36.883844] (-) TimerEvent: {}
+[36.984241] (-) TimerEvent: {}
+[37.084673] (-) TimerEvent: {}
+[37.185077] (-) TimerEvent: {}
+[37.285509] (-) TimerEvent: {}
+[37.386084] (-) TimerEvent: {}
+[37.486537] (-) TimerEvent: {}
+[37.586874] (-) TimerEvent: {}
+[37.687248] (-) TimerEvent: {}
+[37.787825] (-) TimerEvent: {}
+[37.888290] (-) TimerEvent: {}
+[37.991486] (-) TimerEvent: {}
+[38.091900] (-) TimerEvent: {}
+[38.193891] (-) TimerEvent: {}
+[38.294262] (-) TimerEvent: {}
+[38.394870] (-) TimerEvent: {}
+[38.495699] (-) TimerEvent: {}
+[38.596267] (-) TimerEvent: {}
+[38.696671] (-) TimerEvent: {}
+[38.797072] (-) TimerEvent: {}
+[38.897469] (-) TimerEvent: {}
+[38.997858] (-) TimerEvent: {}
+[39.098276] (-) TimerEvent: {}
+[39.198687] (-) TimerEvent: {}
+[39.299087] (-) TimerEvent: {}
+[39.399614] (-) TimerEvent: {}
+[39.499996] (-) TimerEvent: {}
+[39.600562] (-) TimerEvent: {}
+[39.700972] (-) TimerEvent: {}
+[39.801353] (-) TimerEvent: {}
+[39.901732] (-) TimerEvent: {}
+[40.002126] (-) TimerEvent: {}
+[40.102534] (-) TimerEvent: {}
+[40.202910] (-) TimerEvent: {}
+[40.303337] (-) TimerEvent: {}
+[40.404174] (-) TimerEvent: {}
+[40.504573] (-) TimerEvent: {}
+[40.604950] (-) TimerEvent: {}
+[40.706776] (-) TimerEvent: {}
+[40.807183] (-) TimerEvent: {}
+[40.907644] (-) TimerEvent: {}
+[41.009373] (-) TimerEvent: {}
+[41.109796] (-) TimerEvent: {}
+[41.210207] (-) TimerEvent: {}
+[41.310566] (-) TimerEvent: {}
+[41.410904] (-) TimerEvent: {}
+[41.511785] (-) TimerEvent: {}
+[41.612213] (-) TimerEvent: {}
+[41.712614] (-) TimerEvent: {}
+[41.813450] (-) TimerEvent: {}
+[41.914224] (-) TimerEvent: {}
+[42.014684] (-) TimerEvent: {}
+[42.115074] (-) TimerEvent: {}
+[42.217279] (-) TimerEvent: {}
+[42.318339] (-) TimerEvent: {}
+[42.419182] (-) TimerEvent: {}
+[42.521123] (-) TimerEvent: {}
+[42.621543] (-) TimerEvent: {}
+[42.721914] (-) TimerEvent: {}
+[42.822460] (-) TimerEvent: {}
+[42.922831] (-) TimerEvent: {}
+[43.023248] (-) TimerEvent: {}
+[43.123813] (-) TimerEvent: {}
+[43.224218] (-) TimerEvent: {}
+[43.324620] (-) TimerEvent: {}
+[43.425017] (-) TimerEvent: {}
+[43.525763] (-) TimerEvent: {}
+[43.626251] (-) TimerEvent: {}
+[43.726706] (-) TimerEvent: {}
+[43.827153] (-) TimerEvent: {}
+[43.927596] (-) TimerEvent: {}
+[44.028048] (-) TimerEvent: {}
+[44.128492] (-) TimerEvent: {}
+[44.180530] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[ 22%] Linking CXX executable ik_fcl_ompl_planner\n'}
+[44.228695] (-) TimerEvent: {}
+[44.329088] (-) TimerEvent: {}
+[44.429674] (-) TimerEvent: {}
+[44.530180] (-) TimerEvent: {}
+[44.630592] (-) TimerEvent: {}
+[44.731527] (-) TimerEvent: {}
+[44.832098] (-) TimerEvent: {}
+[44.932842] (-) TimerEvent: {}
+[45.033530] (-) TimerEvent: {}
+[45.134100] (-) TimerEvent: {}
+[45.234513] (-) TimerEvent: {}
+[45.335129] (-) TimerEvent: {}
+[45.435603] (-) TimerEvent: {}
+[45.536429] (-) TimerEvent: {}
+[45.636926] (-) TimerEvent: {}
+[45.737352] (-) TimerEvent: {}
+[45.837766] (-) TimerEvent: {}
+[45.938175] (-) TimerEvent: {}
+[46.038628] (-) TimerEvent: {}
+[46.139057] (-) TimerEvent: {}
+[46.239484] (-) TimerEvent: {}
+[46.339942] (-) TimerEvent: {}
+[46.440354] (-) TimerEvent: {}
+[46.540751] (-) TimerEvent: {}
+[46.641114] (-) TimerEvent: {}
+[46.741488] (-) TimerEvent: {}
+[46.842948] (-) TimerEvent: {}
+[46.943393] (-) TimerEvent: {}
+[47.044183] (-) TimerEvent: {}
+[47.144581] (-) TimerEvent: {}
+[47.244967] (-) TimerEvent: {}
+[47.345463] (-) TimerEvent: {}
+[47.445882] (-) TimerEvent: {}
+[47.546570] (-) TimerEvent: {}
+[47.648434] (-) TimerEvent: {}
+[47.748988] (-) TimerEvent: {}
+[47.849431] (-) TimerEvent: {}
+[47.950643] (-) TimerEvent: {}
+[48.051046] (-) TimerEvent: {}
+[48.151389] (-) TimerEvent: {}
+[48.251927] (-) TimerEvent: {}
+[48.255703] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[ 22%] Built target ik_fcl_ompl_planner\n'}
+[48.352118] (-) TimerEvent: {}
+[48.389177] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[ 33%] Built target project_to_3d_node\n'}
+[48.452872] (-) TimerEvent: {}
+[48.499340] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[ 44%] Built target visual_detection_yolo_tester\n'}
+[48.553117] (-) TimerEvent: {}
+[48.590166] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[ 55%] Built target detection_to_goal_node\n'}
+[48.653747] (-) TimerEvent: {}
+[48.699101] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[ 66%] Built target visual_detection_tester\n'}
+[48.754321] (-) TimerEvent: {}
+[48.807873] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[ 77%] Built target right_hand_pressure_monitor\n'}
+[48.854720] (-) TimerEvent: {}
+[48.893614] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[ 88%] Built target dex3_controller\n'}
+[48.954906] (-) TimerEvent: {}
+[48.983820] (unitree_g1_dex3_stack) StdoutLine: {'line': b'[100%] Built target joint_state_publisher\n'}
+[49.030101] (unitree_g1_dex3_stack) CommandEnded: {'returncode': 0}
+[49.036929] (unitree_g1_dex3_stack) JobProgress: {'identifier': 'unitree_g1_dex3_stack', 'progress': 'install'}
+[49.055138] (-) TimerEvent: {}
+[49.069734] (unitree_g1_dex3_stack) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/unitree/Desktop/unitree_dex3/build/unitree_g1_dex3_stack'], 'cwd': '/home/unitree/Desktop/unitree_dex3/build/unitree_g1_dex3_stack', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('CONDA_PROMPT_MODIFIER', '(base)'), ('USER', 'unitree'), ('SSH_CLIENT', '192.168.100.20 59806 22'), ('XDG_SESSION_TYPE', 'tty'), ('GIT_ASKPASS', '/home/unitree/.windsurf-server/bin/08b5de9bae1728a5ad46386c9b8903192a125c51/extensions/git/dist/askpass.sh'), ('SHLVL', '0'), ('LD_LIBRARY_PATH', '/home/unitree/Desktop/unitree_dex3/install/trac_ik_lib/lib:/home/unitree/Desktop/unitree_dex3/install/fcl/lib:/home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib:/usr/local/cuda-11.4/lib64:/usr/local/lib:/usr/local/cuda-11.4/lib64:/usr/local/lib:/home/unitree/unitree_ros2/cyclonedds_ws/install/lib:/home/unitree/cyclonedds_ws/install/rmw_cyclonedds_cpp/lib:/home/unitree/cyclonedds_ws/install/cyclonedds/lib:/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/aarch64-linux-gnu:/opt/ros/foxy/lib'), ('BROWSER', '/home/unitree/.windsurf-server/bin/08b5de9bae1728a5ad46386c9b8903192a125c51/bin/helpers/browser.sh'), ('MOTD_SHOWN', 'pam'), ('HOME', '/home/unitree'), ('CONDA_SHLVL', '1'), ('CYCLONEDDS_URI', '/home/unitree/cyclonedds_ws/cyclonedds.xml'), ('OLDPWD', '/home/unitree/Desktop/unitree_dex3'), ('TERM_PROGRAM_VERSION', '1.110.1-windsurf'), ('NVM_BIN', '/home/unitree/.nvm/versions/node/v24.12.0/bin'), ('VSCODE_IPC_HOOK_CLI', '/run/user/1000/vscode-ipc-1af9265c-e5de-4976-96e3-dc284bdfb8ef.sock'), ('NVM_INC', '/home/unitree/.nvm/versions/node/v24.12.0/include/node'), ('JETSON_L4T', '35.3.1'), ('ROS_PYTHON_VERSION', '3'), ('JETSON_MODEL', 'NVIDIA Orin NX Developer Kit'), ('PAGER', 'cat'), ('VSCODE_GIT_ASKPASS_MAIN', '/home/unitree/.windsurf-server/bin/08b5de9bae1728a5ad46386c9b8903192a125c51/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/home/unitree/.windsurf-server/bin/08b5de9bae1728a5ad46386c9b8903192a125c51/node'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('_CE_M', ''), ('_CONDA_ROOT', '/home/unitree/miniforge3'), ('NVM_DIR', '/home/unitree/.nvm'), ('COLCON_PREFIX_PATH', '/home/unitree/unitree_ros2/cyclonedds_ws/install:/home/unitree/cyclonedds_ws/install'), ('ROS_DISTRO', 'foxy'), ('LOGNAME', 'unitree'), ('JETSON_MODULE', 'NVIDIA Jetson Orin NX (16GB ram)'), ('JETSON_SERIAL_NUMBER', ''), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('PKG_CONFIG_PATH', '/home/unitree/Desktop/unitree_dex3/install/fcl/lib/aarch64-linux-gnu/pkgconfig:/home/unitree/Desktop/unitree_dex3/install/fcl/lib/pkgconfig:/home/unitree/unitree_ros2/cyclonedds_ws/install/lib/aarch64-linux-gnu/pkgconfig:/home/unitree/unitree_ros2/cyclonedds_ws/install/lib/pkgconfig:/home/unitree/cyclonedds_ws/install/cyclonedds/lib/aarch64-linux-gnu/pkgconfig:/home/unitree/cyclonedds_ws/install/cyclonedds/lib/pkgconfig'), ('JETSON_CODENAME', 'P3768'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('XDG_SESSION_ID', '7'), ('_CE_CONDA', ''), ('ROS_LOCALHOST_ONLY', '0'), ('WINDSURF_CASCADE_TERMINAL_KIND', 'inherit'), ('WINDSURF_CASCADE_TERMINAL', '1'), ('PATH', '/home/unitree/.local/bin:/usr/local/cuda-11.4/bin:/home/unitree/.windsurf-server/bin/08b5de9bae1728a5ad46386c9b8903192a125c51/bin/remote-cli:/home/unitree/.local/bin:/home/unitree/miniforge3/bin:/home/unitree/miniforge3/condabin:/home/unitree/.local/bin:/home/unitree/.nvm/versions/node/v24.12.0/bin:/usr/local/cuda-11.4/bin:/home/unitree/unitree_ros2/cyclonedds_ws/install/bin:/home/unitree/cyclonedds_ws/install/cyclonedds/bin:/opt/ros/foxy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_cyclonedds_cpp'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('JETSON_SOC', 'tegra23x'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1000/vscode-git-37dc1b1adb.sock'), ('TERM_PROGRAM', 'vscode'), ('XML_CATALOG_FILES', 'file:///home/unitree/miniforge3/etc/xml/catalog file:///etc/xml/catalog file:///home/unitree/miniforge3/etc/xml/catalog file:///etc/xml/catalog'), ('AMENT_PREFIX_PATH', '/home/unitree/Desktop/unitree_dex3/install/trac_ik_lib:/home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs:/home/unitree/unitree_ros2/cyclonedds_ws/install:/home/unitree/cyclonedds_ws/install/rmw_cyclonedds_cpp:/opt/ros/foxy'), ('CONDA_PYTHON_EXE', '/home/unitree/miniforge3/bin/python'), ('SHELL', '/bin/bash'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('CONDA_DEFAULT_ENV', 'base'), ('_CONDA_EXE', '/home/unitree/miniforge3/bin/conda'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('GIT_PAGER', 'cat'), ('JETSON_CUDA_ARCH_BIN', '8.7'), ('PWD', '/home/unitree/Desktop/unitree_dex3/build/unitree_g1_dex3_stack'), ('CONDA_EXE', '/home/unitree/miniforge3/bin/conda'), ('SSH_CONNECTION', '192.168.100.20 59806 192.168.100.30 22'), ('NVM_CD_FLAGS', ''), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages:/home/unitree/unitree_ros2/cyclonedds_ws/build/g1_cam_bridge:/home/unitree/unitree_ros2/cyclonedds_ws/install/lib/python3.8/site-packages:/opt/ros/foxy/lib/python3.8/site-packages'), ('CONDA_PREFIX', '/home/unitree/miniforge3'), ('COLCON', '1'), ('JETSON_JETPACK', '5.1.1'), ('CMAKE_PREFIX_PATH', '/home/unitree/Desktop/unitree_dex3/install/trac_ik_lib:/home/unitree/Desktop/unitree_dex3/install/fcl:/home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs:/home/unitree/unitree_ros2/cyclonedds_ws/install:/home/unitree/cyclonedds_ws/install/rmw_cyclonedds_cpp:/home/unitree/cyclonedds_ws/install/cyclonedds:/opt/ros/foxy'), ('JETSON_P_NUMBER', 'p3767-0000')]), 'shell': False}
+[49.095602] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[49.096303] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Execute custom install script\n'}
+[49.097016] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/lib/unitree_g1_dex3_stack/joint_state_publisher\n'}
+[49.097459] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/lib/unitree_g1_dex3_stack/dex3_controller\n'}
+[49.097977] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/lib/unitree_g1_dex3_stack/joint_trajectory_executor\n'}
+[49.098646] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/lib/unitree_g1_dex3_stack/project_to_3d_node\n'}
+[49.099339] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/lib/unitree_g1_dex3_stack/detection_to_goal_node\n'}
+[49.100273] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/lib/unitree_g1_dex3_stack/right_hand_pressure_monitor\n'}
+[49.100479] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/lib/unitree_g1_dex3_stack/visual_detection_tester\n'}
+[49.101215] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/lib/unitree_g1_dex3_stack/visual_detection_yolo_tester\n'}
+[49.101411] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/lib/unitree_g1_dex3_stack/ik_fcl_ompl_planner\n'}
+[49.102359] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/lib/unitree_g1_dex3_stack/ultralytics_detector.py\n'}
+[49.103378] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/launch/__pycache__/perception.launch.cpython-38.pyc\n'}
+[49.103944] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/launch/control.launch.py\n'}
+[49.104346] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/launch/perception.launch.py\n'}
+[49.104647] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/launch/planner.launch.py\n'}
+[49.104832] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/launch/robot.launch.py\n'}
+[49.104949] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/launch/visual_detect_click.launch.py\n'}
+[49.105059] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/launch/visual_detect_yolo.launch.py\n'}
+[49.108746] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/dex3_1_l.urdf\n'}
+[49.109313] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/dex3_1_r.urdf\n'}
+[49.110396] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/left_hand_index_0_link.STL\n'}
+[49.110571] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/left_hand_index_1_link.STL\n'}
+[49.113722] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/left_hand_middle_0_link.STL\n'}
+[49.114567] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/left_hand_middle_1_link.STL\n'}
+[49.115412] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/left_hand_palm_link.STL\n'}
+[49.115661] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/left_hand_thumb_0_link.STL\n'}
+[49.115793] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/left_hand_thumb_1_link.STL\n'}
+[49.116868] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/left_hand_thumb_2_link.STL\n'}
+[49.117101] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/right_hand_index_0_link.STL\n'}
+[49.118650] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/right_hand_index_1_link.STL\n'}
+[49.118826] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/right_hand_middle_0_link.STL\n'}
+[49.120694] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/right_hand_middle_1_link.STL\n'}
+[49.121434] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/right_hand_palm_link.STL\n'}
+[49.121601] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/right_hand_thumb_0_link.STL\n'}
+[49.122676] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/right_hand_thumb_1_link.STL\n'}
+[49.123606] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/dexterous_hand_description/dex3_1/meshes/right_hand_thumb_2_link.STL\n'}
+[49.123756] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/collision_trimesh.py\n'}
+[49.124163] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/g1_29dof_lock_waist_with_hand_rev_1_0.urdf\n'}
+[49.124440] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/g1_29dof_lock_waist_with_hand_rev_1_0_collision_primitives.urdf\n'}
+[49.124963] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/g1_29dof_with_hand_rev_1_0.urdf\n'}
+[49.125106] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/L_hand_base_link.STL\n'}
+[49.125473] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link11_L.STL\n'}
+[49.126579] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link11_R.STL\n'}
+[49.127073] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link12_L.STL\n'}
+[49.128062] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link12_R.STL\n'}
+[49.128492] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link13_L.STL\n'}
+[49.129535] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link13_R.STL\n'}
+[49.129982] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link14_L.STL\n'}
+[49.130756] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link14_R.STL\n'}
+[49.130890] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link15_L.STL\n'}
+[49.132222] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link15_R.STL\n'}
+[49.134769] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link16_L.STL\n'}
+[49.136777] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link16_R.STL\n'}
+[49.137114] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link17_L.STL\n'}
+[49.137260] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link17_R.STL\n'}
+[49.137377] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link18_L.STL\n'}
+[49.137486] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link18_R.STL\n'}
+[49.137626] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link19_L.STL\n'}
+[49.139177] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link19_R.STL\n'}
+[49.139725] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link20_L.STL\n'}
+[49.140639] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link20_R.STL\n'}
+[49.140797] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link21_L.STL\n'}
+[49.140912] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link21_R.STL\n'}
+[49.141020] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link22_L.STL\n'}
+[49.141124] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/Link22_R.STL\n'}
+[49.141224] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/R_hand_base_link.STL\n'}
+[49.141326] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/d455_link.STL\n'}
+[49.141426] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/head_link.STL\n'}
+[49.141527] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/head_servo_link.STL\n'}
+[49.141627] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_ankle_pitch_link.STL\n'}
+[49.141756] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_ankle_roll_link.STL\n'}
+[49.142671] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_base_link.STL\n'}
+[49.142819] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_elbow_link.STL\n'}
+[49.146166] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hand_index_0_link.STL\n'}
+[49.147462] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hand_index_1_link.STL\n'}
+[49.149003] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hand_middle_0_link.STL\n'}
+[49.149202] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hand_middle_1_link.STL\n'}
+[49.149959] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hand_palm_link.STL\n'}
+[49.150104] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hand_thumb_0_link.STL\n'}
+[49.152140] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hand_thumb_1_link.STL\n'}
+[49.153379] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hand_thumb_2_link.STL\n'}
+[49.154257] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hip_pitch_link.STL\n'}
+[49.155085] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hip_roll_link.STL\n'}
+[49.156020] (-) TimerEvent: {}
+[49.156106] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_hip_yaw_link.STL\n'}
+[49.156989] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_index_1.STL\n'}
+[49.157161] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_index_2.STL\n'}
+[49.157657] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_index_force_sensor_1.STL\n'}
+[49.157796] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_index_force_sensor_2.STL\n'}
+[49.157914] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_index_force_sensor_3.STL\n'}
+[49.158020] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_knee_link.STL\n'}
+[49.158123] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_little_1.STL\n'}
+[49.158236] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_little_2.STL\n'}
+[49.158626] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_little_force_sensor_1.STL\n'}
+[49.160902] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_little_force_sensor_2.STL\n'}
+[49.161395] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_little_force_sensor_3.STL\n'}
+[49.161759] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_middle_1.STL\n'}
+[49.161921] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_middle_2.STL\n'}
+[49.162471] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_middle_force_sensor_1.STL\n'}
+[49.162844] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_middle_force_sensor_2.STL\n'}
+[49.162985] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_middle_force_sensor_3.STL\n'}
+[49.163338] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_palm_force_sensor.STL\n'}
+[49.163474] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_ring_1.STL\n'}
+[49.163603] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_ring_2.STL\n'}
+[49.163717] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_ring_force_sensor_1.STL\n'}
+[49.163837] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_ring_force_sensor_2.STL\n'}
+[49.163941] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_ring_force_sensor_3.STL\n'}
+[49.164228] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_rubber_hand.STL\n'}
+[49.164355] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_shoulder_pitch_link.STL\n'}
+[49.164980] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_shoulder_roll_link.STL\n'}
+[49.165391] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_shoulder_yaw_link.STL\n'}
+[49.165776] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_thumb_1.STL\n'}
+[49.165906] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_thumb_2.STL\n'}
+[49.166195] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_thumb_3.STL\n'}
+[49.166321] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_thumb_4.STL\n'}
+[49.166431] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_thumb_force_sensor_1.STL\n'}
+[49.166748] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_thumb_force_sensor_2.STL\n'}
+[49.166900] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_thumb_force_sensor_3.STL\n'}
+[49.167174] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_thumb_force_sensor_4.STL\n'}
+[49.167345] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_thumb_swing.STL\n'}
+[49.167473] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_wrist_pitch_link.STL\n'}
+[49.167582] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_wrist_roll_link.STL\n'}
+[49.167717] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_wrist_roll_rubber_hand.STL\n'}
+[49.168034] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/left_wrist_yaw_link.STL\n'}
+[49.168151] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/logo_link.STL\n'}
+[49.169006] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/pelvis.STL\n'}
+[49.169197] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/pelvis_contour_link.STL\n'}
+[49.170387] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_ankle_pitch_link.STL\n'}
+[49.170580] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_ankle_roll_link.STL\n'}
+[49.170877] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_base_link.STL\n'}
+[49.171006] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_elbow_link.STL\n'}
+[49.173680] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hand_index_0_link.STL\n'}
+[49.174274] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hand_index_1_link.STL\n'}
+[49.174672] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hand_middle_0_link.STL\n'}
+[49.174826] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hand_middle_1_link.STL\n'}
+[49.175462] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hand_palm_link.STL\n'}
+[49.175882] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hand_thumb_0_link.STL\n'}
+[49.176295] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hand_thumb_1_link.STL\n'}
+[49.176501] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hand_thumb_2_link.STL\n'}
+[49.177293] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hip_pitch_link.STL\n'}
+[49.177643] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hip_roll_link.STL\n'}
+[49.177859] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_hip_yaw_link.STL\n'}
+[49.178288] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_index_1.STL\n'}
+[49.178630] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_index_2.STL\n'}
+[49.179012] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_index_force_sensor_1.STL\n'}
+[49.179145] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_index_force_sensor_2.STL\n'}
+[49.179357] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_index_force_sensor_3.STL\n'}
+[49.179670] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_knee_link.STL\n'}
+[49.180269] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_little_1.STL\n'}
+[49.180438] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_little_2.STL\n'}
+[49.180561] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_little_force_sensor_1.STL\n'}
+[49.180676] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_little_force_sensor_2.STL\n'}
+[49.180793] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_little_force_sensor_3.STL\n'}
+[49.181183] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_middle_1.STL\n'}
+[49.181316] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_middle_2.STL\n'}
+[49.181428] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_middle_force_sensor_1.STL\n'}
+[49.181536] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_middle_force_sensor_2.STL\n'}
+[49.181650] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_middle_force_sensor_3.STL\n'}
+[49.182031] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_palm_force_sensor.STL\n'}
+[49.182163] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_ring_1.STL\n'}
+[49.182279] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_ring_2.STL\n'}
+[49.183084] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_ring_force_sensor_1.STL\n'}
+[49.183835] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_ring_force_sensor_2.STL\n'}
+[49.184914] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_ring_force_sensor_3.STL\n'}
+[49.185828] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_rubber_hand.STL\n'}
+[49.186273] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_shoulder_pitch_link.STL\n'}
+[49.186878] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_shoulder_roll_link.STL\n'}
+[49.188060] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_shoulder_yaw_link.STL\n'}
+[49.188645] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_thumb_1.STL\n'}
+[49.188977] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_thumb_2.STL\n'}
+[49.189539] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_thumb_3.STL\n'}
+[49.189903] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_thumb_4.STL\n'}
+[49.190452] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_thumb_force_sensor_1.STL\n'}
+[49.190904] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_thumb_force_sensor_2.STL\n'}
+[49.191469] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_thumb_force_sensor_3.STL\n'}
+[49.191902] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_thumb_force_sensor_4.STL\n'}
+[49.193710] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_wrist_pitch_link.STL\n'}
+[49.193883] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_wrist_roll_link.STL\n'}
+[49.194468] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_wrist_roll_rubber_hand.STL\n'}
+[49.194624] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/right_wrist_yaw_link.STL\n'}
+[49.194752] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/torso_constraint_L_link.STL\n'}
+[49.194896] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/torso_constraint_L_rod_link.STL\n'}
+[49.195442] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/torso_constraint_R_link.STL\n'}
+[49.196074] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/torso_constraint_R_rod_link.STL\n'}
+[49.196564] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/torso_link.STL\n'}
+[49.200898] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/torso_link_23dof_rev_1_0.STL\n'}
+[49.201283] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/torso_link_rev_1_0.STL\n'}
+[49.204467] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/waist_constraint_L.STL\n'}
+[49.205647] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/waist_constraint_R.STL\n'}
+[49.206194] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/waist_roll_link.STL\n'}
+[49.206757] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/waist_roll_link_rev_1_0.STL\n'}
+[49.206959] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/waist_support_link.STL\n'}
+[49.208221] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/waist_yaw_link.STL\n'}
+[49.209189] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/waist_yaw_link_rev_1_0.STL\n'}
+[49.209802] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/robots/g1_description/meshes/xl330_link.STL\n'}
+[49.210083] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/ament_index/resource_index/package_run_dependencies/unitree_g1_dex3_stack\n'}
+[49.210234] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/ament_index/resource_index/parent_prefix_path/unitree_g1_dex3_stack\n'}
+[49.210354] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/environment/ament_prefix_path.sh\n'}
+[49.210465] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/environment/ament_prefix_path.dsv\n'}
+[49.210605] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/environment/path.sh\n'}
+[49.210714] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/environment/path.dsv\n'}
+[49.210816] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/local_setup.bash\n'}
+[49.210916] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/local_setup.sh\n'}
+[49.211015] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/local_setup.zsh\n'}
+[49.211112] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/local_setup.dsv\n'}
+[49.211208] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Symlinking: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/package.dsv\n'}
+[49.233439] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/ament_index/resource_index/packages/unitree_g1_dex3_stack\n'}
+[49.234227] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/cmake/unitree_g1_dex3_stackConfig.cmake\n'}
+[49.234435] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/cmake/unitree_g1_dex3_stackConfig-version.cmake\n'}
+[49.234578] (unitree_g1_dex3_stack) StdoutLine: {'line': b'-- Up-to-date symlink: /home/unitree/Desktop/unitree_dex3/install/unitree_g1_dex3_stack/share/unitree_g1_dex3_stack/package.xml\n'}
+[49.239034] (unitree_g1_dex3_stack) CommandEnded: {'returncode': 0}
+[49.256126] (-) TimerEvent: {}
+[49.289446] (unitree_g1_dex3_stack) JobEnded: {'identifier': 'unitree_g1_dex3_stack', 'rc': 0}
+[49.290913] (-) EventReactorShutdown: {}

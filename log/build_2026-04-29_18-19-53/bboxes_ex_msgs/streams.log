@@ -1,0 +1,135 @@
+[0.055s] Invoking command in '/home/unitree/Desktop/unitree_dex3/build/bboxes_ex_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake --build /home/unitree/Desktop/unitree_dex3/build/bboxes_ex_msgs -- -j8 -l8
+[0.296s] [  2%] Built target bboxes_ex_msgs__cpp
+[0.371s] [ 12%] Built target bboxes_ex_msgs__rosidl_generator_c
+[0.457s] [ 23%] Built target bboxes_ex_msgs__rosidl_typesupport_introspection_cpp
+[0.538s] [ 33%] Built target bboxes_ex_msgs__rosidl_typesupport_c
+[0.644s] [ 43%] Built target bboxes_ex_msgs__rosidl_typesupport_introspection_c
+[0.734s] [ 53%] Built target bboxes_ex_msgs__rosidl_typesupport_fastrtps_cpp
+[0.811s] [ 64%] Built target bboxes_ex_msgs__rosidl_typesupport_cpp
+[0.876s] [ 74%] Built target bboxes_ex_msgs__rosidl_typesupport_fastrtps_c
+[0.926s] [ 74%] Built target bboxes_ex_msgs
+[0.984s] [ 76%] Built target bboxes_ex_msgs__py
+[1.045s] [ 84%] Built target bboxes_ex_msgs__python
+[1.102s] [ 89%] Built target bboxes_ex_msgs__rosidl_typesupport_c__pyext
+[1.163s] [ 94%] Built target bboxes_ex_msgs__rosidl_typesupport_fastrtps_c__pyext
+[1.223s] [100%] Built target bboxes_ex_msgs__rosidl_typesupport_introspection_c__pyext
+[1.252s] Invoked command in '/home/unitree/Desktop/unitree_dex3/build/bboxes_ex_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake --build /home/unitree/Desktop/unitree_dex3/build/bboxes_ex_msgs -- -j8 -l8
+[1.259s] Invoking command in '/home/unitree/Desktop/unitree_dex3/build/bboxes_ex_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake --install /home/unitree/Desktop/unitree_dex3/build/bboxes_ex_msgs
+[1.281s] -- Install configuration: ""
+[1.282s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/ament_index/resource_index/rosidl_interfaces/bboxes_ex_msgs
+[1.283s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs
+[1.283s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg
+[1.283s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/bounding_box.h
+[1.283s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/rosidl_generator_c__visibility_control.h
+[1.283s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/bounding_boxes.h
+[1.284s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail
+[1.284s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__functions.h
+[1.288s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__functions.c
+[1.288s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__functions.h
+[1.288s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__functions.c
+[1.288s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__type_support.h
+[1.291s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__struct.h
+[1.291s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__struct.h
+[1.291s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__type_support.h
+[1.291s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/environment/library_path.sh
+[1.291s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/environment/library_path.dsv
+[1.291s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/libbboxes_ex_msgs__rosidl_generator_c.so
+[1.291s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs
+[1.292s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg
+[1.292s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[1.292s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail
+[1.292s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__rosidl_typesupport_fastrtps_c.h
+[1.292s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__rosidl_typesupport_fastrtps_c.h
+[1.292s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/libbboxes_ex_msgs__rosidl_typesupport_fastrtps_c.so
+[1.292s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs
+[1.292s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg
+[1.293s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[1.293s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail
+[1.293s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__rosidl_typesupport_fastrtps_cpp.hpp
+[1.293s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__rosidl_typesupport_fastrtps_cpp.hpp
+[1.293s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/dds_fastrtps
+[1.293s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/libbboxes_ex_msgs__rosidl_typesupport_fastrtps_cpp.so
+[1.293s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs
+[1.293s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg
+[1.293s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[1.294s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail
+[1.294s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__type_support.c
+[1.294s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__type_support.c
+[1.294s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__rosidl_typesupport_introspection_c.h
+[1.294s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__rosidl_typesupport_introspection_c.h
+[1.294s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/libbboxes_ex_msgs__rosidl_typesupport_introspection_c.so
+[1.294s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/libbboxes_ex_msgs__rosidl_typesupport_c.so
+[1.294s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs
+[1.294s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg
+[1.294s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/bounding_boxes.hpp
+[1.295s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/bounding_box.hpp
+[1.295s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail
+[1.295s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__type_support.hpp
+[1.295s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__traits.hpp
+[1.295s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__traits.hpp
+[1.295s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__struct.hpp
+[1.295s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__builder.hpp
+[1.295s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__type_support.hpp
+[1.295s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__struct.hpp
+[1.295s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__builder.hpp
+[1.296s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/rosidl_generator_cpp__visibility_control.hpp
+[1.296s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs
+[1.296s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg
+[1.296s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail
+[1.296s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__rosidl_typesupport_introspection_cpp.hpp
+[1.296s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_box__type_support.cpp
+[1.296s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__type_support.cpp
+[1.296s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/include/bboxes_ex_msgs/msg/detail/bounding_boxes__rosidl_typesupport_introspection_cpp.hpp
+[1.296s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/libbboxes_ex_msgs__rosidl_typesupport_introspection_cpp.so
+[1.296s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/libbboxes_ex_msgs__rosidl_typesupport_cpp.so
+[1.297s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/environment/pythonpath.sh
+[1.297s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/environment/pythonpath.dsv
+[1.297s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages/bboxes_ex_msgs/__init__.py
+[1.375s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages/bboxes_ex_msgs/msg
+[1.375s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages/bboxes_ex_msgs/msg/_bounding_boxes.py
+[1.375s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages/bboxes_ex_msgs/msg/_bounding_box.py
+[1.375s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages/bboxes_ex_msgs/msg/_bounding_box_s.c
+[1.375s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages/bboxes_ex_msgs/msg/__init__.py
+[1.375s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages/bboxes_ex_msgs/msg/_bounding_boxes_s.c
+[1.376s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages/bboxes_ex_msgs/bboxes_ex_msgs_s__rosidl_typesupport_fastrtps_c.cpython-38-aarch64-linux-gnu.so
+[1.376s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages/bboxes_ex_msgs/bboxes_ex_msgs_s__rosidl_typesupport_introspection_c.cpython-38-aarch64-linux-gnu.so
+[1.378s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/python3.8/site-packages/bboxes_ex_msgs/bboxes_ex_msgs_s__rosidl_typesupport_c.cpython-38-aarch64-linux-gnu.so
+[1.378s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/lib/libbboxes_ex_msgs__python.so
+[1.379s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/msg/BoundingBox.idl
+[1.379s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/msg/BoundingBoxes.idl
+[1.379s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/msg/BoundingBox.msg
+[1.379s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/msg/BoundingBoxes.msg
+[1.379s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/ament_index/resource_index/package_run_dependencies/bboxes_ex_msgs
+[1.379s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/ament_index/resource_index/parent_prefix_path/bboxes_ex_msgs
+[1.380s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/environment/ament_prefix_path.sh
+[1.380s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/environment/ament_prefix_path.dsv
+[1.380s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/environment/path.sh
+[1.380s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/environment/path.dsv
+[1.380s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/local_setup.bash
+[1.380s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/local_setup.sh
+[1.380s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/local_setup.zsh
+[1.380s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/local_setup.dsv
+[1.380s] -- Installing: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/package.dsv
+[1.381s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/ament_index/resource_index/packages/bboxes_ex_msgs
+[1.381s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_generator_cExport.cmake
+[1.381s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_generator_cExport-noconfig.cmake
+[1.383s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_typesupport_introspection_cExport.cmake
+[1.384s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[1.384s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_typesupport_cExport.cmake
+[1.384s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_typesupport_cExport-noconfig.cmake
+[1.384s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_generator_cppExport.cmake
+[1.384s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_typesupport_introspection_cppExport.cmake
+[1.384s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[1.385s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_typesupport_cppExport.cmake
+[1.385s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgs__rosidl_typesupport_cppExport-noconfig.cmake
+[1.385s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/rosidl_cmake-extras.cmake
+[1.386s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/ament_cmake_export_dependencies-extras.cmake
+[1.387s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/ament_cmake_export_libraries-extras.cmake
+[1.387s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/ament_cmake_export_targets-extras.cmake
+[1.387s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/ament_cmake_export_include_directories-extras.cmake
+[1.388s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[1.388s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[1.388s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgsConfig.cmake
+[1.388s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/cmake/bboxes_ex_msgsConfig-version.cmake
+[1.388s] -- Up-to-date: /home/unitree/Desktop/unitree_dex3/install/bboxes_ex_msgs/share/bboxes_ex_msgs/package.xml
+[1.410s] Invoked command in '/home/unitree/Desktop/unitree_dex3/build/bboxes_ex_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake --install /home/unitree/Desktop/unitree_dex3/build/bboxes_ex_msgs
