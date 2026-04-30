@@ -233,6 +233,32 @@ private:
 
     RCLCPP_INFO(this->get_logger(), "Trajectory point %zu executed; holding stiff at end-point while hand closes.", msg->points.size());
 
+    // Plan 01-12: capture trajectory end-point from the last waypoint.
+    // latest_joint_positions_ is STALE here — single-threaded executor
+    // blocks lowstateCallback for the entire trajectoryCallback, so it
+    // still holds the standing pose from callback entry. Using it in
+    // the hold loop or ramp was commanding the arm back to standing.
+    std::vector<float> trajectory_endpoint;
+    if (!standing_pose.empty()) {
+      trajectory_endpoint = standing_pose;  // baseline for non-trajectory joints
+    } else {
+      trajectory_endpoint.resize(29, 0.0f);
+    }
+    if (!msg->points.empty()) {
+      const auto& last_point = msg->points.back();
+      for (size_t j = 0; j < last_point.positions.size() && j < msg->joint_names.size(); ++j) {
+        auto it = joint_name_to_index.find(msg->joint_names[j]);
+        if (it != joint_name_to_index.end()) {
+          size_t idx = it->second;
+          if (idx < trajectory_endpoint.size()) {
+            auto lim = joint_limits_.at(msg->joint_names[j]);
+            double pos = std::min(std::max(last_point.positions[j], lim.lower), lim.upper);
+            trajectory_endpoint[idx] = static_cast<float>(pos);
+          }
+        }
+      }
+    }
+
     // Plan 01-11: close the publish gap. The two prior sleep_for(1s) calls
     // (one to settle the last waypoint, one to wait for hand close) left the
     // executor silent for 2 s right when smoothness mattered most -- firmware
@@ -252,8 +278,8 @@ private:
         for (const auto& pair : joint_name_to_index) {
           size_t idx = pair.second;
           hold_cmd.motor_cmd[idx].mode = 1;
-          if (latest_joint_positions_.size() > idx) {
-            hold_cmd.motor_cmd[idx].q = latest_joint_positions_[idx];
+          if (trajectory_endpoint.size() > idx) {
+            hold_cmd.motor_cmd[idx].q = trajectory_endpoint[idx];
           } else {
             hold_cmd.motor_cmd[idx].q = 0.0f;
           }
@@ -268,14 +294,10 @@ private:
     }
     RCLCPP_INFO(this->get_logger(), "Hand closed; trajectory execution complete, returning to default pose.");
 
-    // Plan 01-09: snapshot the trajectory end-point as the ramp's starting
-    // pose. We interpolate from this fixed start (not the live, drifting
-    // latest_joint_positions_) toward the standing snapshot, so the planner
-    // stiffly tracks a deterministic path back to standing.
-    std::vector<float> ramp_start_positions;
-    if (!latest_joint_positions_.empty()) {
-      ramp_start_positions = latest_joint_positions_;
-    }
+    // Plan 01-12: use the trajectory end-point (computed from the last
+    // waypoint above) as the ramp's starting pose, not the stale
+    // latest_joint_positions_.
+    std::vector<float> ramp_start_positions = trajectory_endpoint;
 
     // Smoothly interpolate final_cmd.motor_cmd[JointIndex::kNotUsedJoint].q from 1.0 to 0.0
     // Plan 01-08: 3 s ramp duration preserved. Plan 01-09 drives an explicit
