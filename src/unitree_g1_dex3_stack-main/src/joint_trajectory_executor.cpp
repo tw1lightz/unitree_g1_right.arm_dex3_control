@@ -309,7 +309,7 @@ private:
     auto sleep_ns = std::chrono::nanoseconds(static_cast<int64_t>((interp_duration / interp_steps) * 1e9));
     for (int step = 0; step <= interp_steps; ++step) {
       double t = static_cast<double>(step) / interp_steps;
-      double value = (1.0 - t) * 1.0 + t * 0.0; // Linear interpolation
+      double value = (1.0 - t) * 0.5 + t * 0.0; // Linear interpolation from 0.5 (matching trajectory/hold) to 0.0
       unitree_hg::msg::LowCmd final_cmd;
       final_cmd.motor_cmd[JointIndex::kNotUsedJoint].q = static_cast<float>(value);
       // Plan 01-09: drive the arm explicitly from trajectory end-point to
