@@ -141,6 +141,7 @@ endif()
 
 install(PROGRAMS
   scripts/ultralytics_detector.py
+  scripts/tcp_torso_pose.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
