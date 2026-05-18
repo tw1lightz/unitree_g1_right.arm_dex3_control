@@ -46,3 +46,26 @@ ros2 launch unitree_g1_dex3_stack reach.launch.py \
 ## 架构
 
 详见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
+
+
+## Phase 7: AprilTag 检测节点
+
+AprilTag 检测节点依赖 `pupil-apriltags`（pip 包，不在 rosdep 中）。每台部署机器只需安装一次：
+
+```bash
+pip install pupil-apriltags
+```
+
+独立启动（单条命令即可，无需先启动其他 launch）：
+
+```bash
+ros2 launch unitree_g1_dex3_stack apriltag.launch.py
+ros2 launch unitree_g1_dex3_stack apriltag.launch.py imshow:=false   # 无显示器 / SSH 部署
+```
+
+节点发布两个话题：
+
+- `/apriltag/tag_pose` — `geometry_msgs/PoseStamped`，tag 中心原始位姿（坐标系：`torso_link`）
+- `/apriltag/target_pose` — `geometry_msgs/PoseStamped`，tag 位姿在 tag 局部系上叠加 XYZ 偏移后的目标位姿（坐标系：`torso_link`）
+
+检测参数集中在 `config/apriltag.yaml`（`tag_size`、`target_tag_id`、`offset_xyz`、`decision_margin_min` 等）。
