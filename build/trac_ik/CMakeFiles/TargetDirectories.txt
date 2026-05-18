@@ -1,9 +1,0 @@
-/home/unitree/Desktop/unitree_dex3/build/trac_ik/CMakeFiles/uninstall.dir
-/home/unitree/Desktop/unitree_dex3/build/trac_ik/CMakeFiles/trac_ik_uninstall.dir
-/home/unitree/Desktop/unitree_dex3/build/trac_ik/CMakeFiles/test.dir
-/home/unitree/Desktop/unitree_dex3/build/trac_ik/CMakeFiles/edit_cache.dir
-/home/unitree/Desktop/unitree_dex3/build/trac_ik/CMakeFiles/rebuild_cache.dir
-/home/unitree/Desktop/unitree_dex3/build/trac_ik/CMakeFiles/list_install_components.dir
-/home/unitree/Desktop/unitree_dex3/build/trac_ik/CMakeFiles/install.dir
-/home/unitree/Desktop/unitree_dex3/build/trac_ik/CMakeFiles/install/local.dir
-/home/unitree/Desktop/unitree_dex3/build/trac_ik/CMakeFiles/install/strip.dir

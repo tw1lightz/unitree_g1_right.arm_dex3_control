@@ -1,7 +1,0 @@
-{
-  "package_name": "bboxes_ex_msgs",
-  "non_idl_tuples": [
-    "/home/unitree/Desktop/unitree_dex3/src/bboxes_ex_msgs:msg/BoundingBox.msg",
-    "/home/unitree/Desktop/unitree_dex3/src/bboxes_ex_msgs:msg/BoundingBoxes.msg"
-  ]
-}
