@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: AprilTag 定位 + TCP 修正
-status: ready
-last_updated: "2026-05-18T04:55:00.000Z"
+status: verifying
+last_updated: "2026-05-18T09:31:12.142Z"
 last_activity: 2026-05-18 -- Phase 07 complete (TAG-01..04)
 progress:
   total_phases: 4
