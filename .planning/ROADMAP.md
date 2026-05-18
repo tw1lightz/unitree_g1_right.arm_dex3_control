@@ -23,19 +23,20 @@
 
 ---
 
-## Phase 7: AprilTag 检测节点
+## Phase 7: AprilTag 检测节点 ✅
 
+**Status:** Complete (2026-05-18)
 **Goal:** 实现 AprilTag 36h11 检测，发布 tag 位姿并转换到 torso_link 帧。
 
-**Requirements:** TAG-01, TAG-02, TAG-03, TAG-04
+**Requirements:** TAG-01 ✓, TAG-02 ✓, TAG-03 ✓, TAG-04 ✓
 
 **Success Criteria:**
-1. pupil-apriltags 检测节点从 D435i color stream 检测 tag36h11
-2. 检测到 tag 后发布 6-DOF 位姿（PoseStamped）
-3. 可配置 tag→物品 XYZ 偏移通过 YAML 文件设置
-4. 位姿通过 TF 从 camera_color_optical_frame 变换到 torso_link
-5. 低质量检测被过滤（decision_margin 阈值）
-6. 节点可独立启动测试，不依赖 planner
+1. ✓ pupil-apriltags 检测节点从 D435i color stream 检测 tag36h11
+2. ✓ 检测到 tag 后发布 6-DOF 位姿（PoseStamped）
+3. ✓ 可配置 tag→物品 XYZ 偏移通过 YAML 文件设置
+4. ✓ 位姿通过 TF 从 camera_color_optical_frame 变换到 torso_link
+5. ✓ 低质量检测被过滤（decision_margin 阈值）
+6. ✓ 节点可独立启动测试，不依赖 planner
 
 **Depends on:** Phase 6（YOLO 已清理，避免冲突）
 
@@ -80,10 +81,10 @@
 | CLEAN-01 | Phase 6 | Complete |
 | TCP-01 | Phase 6 | Complete |
 | TCP-02 | Phase 6 | Complete |
-| TAG-01 | Phase 7 | Pending |
-| TAG-02 | Phase 7 | Pending |
-| TAG-03 | Phase 7 | Pending |
-| TAG-04 | Phase 7 | Pending |
+| TAG-01 | Phase 7 | Complete |
+| TAG-02 | Phase 7 | Complete |
+| TAG-03 | Phase 7 | Complete |
+| TAG-04 | Phase 7 | Complete |
 | ORI-01 | Phase 8 | Pending |
 | INTG-01 | Phase 9 | Pending |
 | INTG-02 | Phase 9 | Pending |
@@ -94,4 +95,4 @@
 
 ---
 *Roadmap created: 2026-05-15*
-*Last updated: 2026-05-18 — Phase 6 complete (CLEAN-01, TCP-01, TCP-02)*
+*Last updated: 2026-05-18 — Phase 7 complete (TAG-01, TAG-02, TAG-03, TAG-04)*

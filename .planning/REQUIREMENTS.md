@@ -13,10 +13,10 @@ Requirements for milestone v1.1. Each maps to roadmap phases.
 
 ### AprilTag 检测（Detection）
 
-- [ ] **TAG-01**: AprilTag 36h11 检测节点，使用 pupil-apriltags 从 D435i color stream 检测并发布 tag 6-DOF 位姿
-- [ ] **TAG-02**: 可配置 tag→物品 XYZ 偏移，通过 YAML 配置文件设置
-- [ ] **TAG-03**: 将 tag 位姿从相机帧通过 TF 变换到 torso_link 帧
-- [ ] **TAG-04**: 检测置信度过滤，拒绝模糊/低质量检测结果
+- [x] **TAG-01**: AprilTag 36h11 检测节点，使用 pupil-apriltags 从 D435i color stream 检测并发布 tag 6-DOF 位姿
+- [x] **TAG-02**: 可配置 tag→物品 XYZ 偏移，通过 YAML 配置文件设置
+- [x] **TAG-03**: 将 tag 位姿从相机帧通过 TF 变换到 torso_link 帧
+- [x] **TAG-04**: 检测置信度过滤，拒绝模糊/低质量检测结果
 
 ### TCP 修正（TCP Correction）
 
@@ -64,10 +64,10 @@ Requirements for milestone v1.1. Each maps to roadmap phases.
 | CLEAN-01 | Phase 6 | Complete |
 | TCP-01 | Phase 6 | Complete |
 | TCP-02 | Phase 6 | Complete |
-| TAG-01 | Phase 7 | Pending |
-| TAG-02 | Phase 7 | Pending |
-| TAG-03 | Phase 7 | Pending |
-| TAG-04 | Phase 7 | Pending |
+| TAG-01 | Phase 7 | Complete |
+| TAG-02 | Phase 7 | Complete |
+| TAG-03 | Phase 7 | Complete |
+| TAG-04 | Phase 7 | Complete |
 | ORI-01 | Phase 8 | Pending |
 | INTG-01 | Phase 9 | Pending |
 | INTG-02 | Phase 9 | Pending |
@@ -79,4 +79,4 @@ Requirements for milestone v1.1. Each maps to roadmap phases.
 
 ---
 *Requirements defined: 2026-05-15*
-*Last updated: 2026-05-15 after initial definition*
+*Last updated: 2026-05-18 — Phase 7 complete (TAG-01, TAG-02, TAG-03, TAG-04 marked complete)*
