@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: AprilTag 定位 + TCP 修正
-status: planning
-last_updated: "2026-05-18T03:36:43.650Z"
-last_activity: 2026-05-18 — Phase 06 close-out (SUMMARY.md, VERIFICATION.md, STATE/ROADMAP/REQUIREMENTS marked complete)
+status: ready_to_plan
+last_updated: "2026-05-18T11:31:00.000Z"
+last_activity: 2026-05-18 — Phase 7 CONTEXT.md gathered (5 areas discussed: output semantics, YAML+ID, filtering, language/package, OpenCV viz)
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 3
   completed_plans: 3
-  percent: 100
+  percent: 25
 ---
 
 # Project State
@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-05-15)
 
 Phase: 7
 Plan: Not started
-Status: Ready to plan (Phase 6 complete; CONTEXT.md not yet gathered for Phase 7)
-Last activity: 2026-05-18 — Phase 06 close-out (SUMMARY.md, VERIFICATION.md, STATE/ROADMAP/REQUIREMENTS marked complete)
+Status: Context gathered — ready to plan (5 areas discussed; CONTEXT.md + DISCUSSION-LOG.md committed)
+Last activity: 2026-05-18 — Phase 7 CONTEXT.md gathered
 
 ## Current Milestone
 
@@ -36,7 +36,7 @@ Last activity: 2026-05-18 — Phase 06 close-out (SUMMARY.md, VERIFICATION.md, S
 | Phase | Name | Status | Requirements |
 |-------|------|--------|--------------|
 | 6 | YOLO 清理 + TCP Offset 集成 | ✓ Complete (2026-05-18) | CLEAN-01 ✓, TCP-01 ✓, TCP-02 ✓ |
-| 7 | AprilTag 检测节点 | ○ Pending | TAG-01~04 |
+| 7 | AprilTag 检测节点 | ⏳ Context gathered, ready to plan | TAG-01~04 |
 | 8 | 自适应末端位姿 | ○ Pending | ORI-01 |
 | 9 | 端到端集成 | ○ Pending | INTG-01~02 |
 
@@ -45,10 +45,10 @@ Progress: ██░░░░░░░░ 25% (1/4 phases)
 ## Active Context
 
 - v1.0 milestone complete — full right-arm reaching pipeline working
-- YOLO 检测经测试不可行，需移除
-- 新检测方案：AprilTag 36h11 + 可配置偏移
-- TCP offset (0.175m) 需集成到 planner IK 目标
-- 固定末端位姿导致 IK/OMPL 失败率高，需自适应策略
+- Phase 6 complete: YOLO 已彻底移除；TCP offset 通过 URDF `right_tcp_link` 集成到 planner IK 链
+- Phase 7 context gathered: 双 topic（`/apriltag/tag_pose` + `/apriltag/target_pose`，frame_id=`torso_link`）、tag_size=0.08m、target_tag_id=0、tag 局部系 offset、Python rclpy + pupil-apriltags、OpenCV imshow 可视化（绿/红框 + 三轴 + HUD）
+- D435i 全局分辨率确定为 640×480 @ 15fps，align_depth 关闭
+- Phase 9 才整合到端到端 launch 并桥接到 `/goal_pose`
 
 ## Decisions Log
 
