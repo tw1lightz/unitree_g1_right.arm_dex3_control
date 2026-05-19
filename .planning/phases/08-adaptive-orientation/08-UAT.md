@@ -1,11 +1,11 @@
 ---
-status: complete
+status: diagnosed
 phase: 08-adaptive-orientation
 source:
   - 08-01-SUMMARY.md
   - 08-02-SUMMARY.md
 started: 2026-05-19T10:23:00+08:00
-updated: 2026-05-19T10:48:00+08:00
+updated: 2026-05-19T10:50:00+08:00
 ---
 
 ## Current Test
@@ -141,7 +141,13 @@ blocked: 0
     adaptive_false_pass_count: 4
     delta: +1
     interpretation: "Both modes leave 4 targets unsolved on the same 8-target set; the +1 delta says adaptive orientation makes one extra target reachable but does NOT solve the underlying workspace-edge weakness. Strongly suggests the 5/8 result is a planner-pipeline limitation (TRAC-IK seed strategy / OMPL bounds / collision rejection / IK-too-close-to-seed retry) rather than a Phase 8 adaptive-orientation bug. Per-target baseline failure list was not captured — capture it during diagnosis if it changes the root-cause split."
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "HYPOTHESIS H1 (likely): single-deterministic-orientation kinematic limit at workspace edges. center-far at 0.61 m is at/beyond max arm reach (~0.55-0.60 m); center-near requires steep TCP downward pitch outside wrist limits; left-of-mid requires TCP +X to point across body centerline outside right-arm joint range. Per CONTEXT D-04, multi-candidate orientation fallback is explicitly Future ORI-02 — Phase 8 was scoped to single deterministic orientation. The +1 baseline-vs-adaptive delta confirms Phase 8 ADD value (saves 1 target from being orientation-unfeasible) without breaking the underlying kinematic ceiling. Confirmation requires planner stdout capture during a re-run; see debug session for the grep contract that decides H1 vs H2/H3/H4."
+  artifacts:
+    - path: "src/unitree_g1_dex3_stack-main/src/ik_fcl_ompl_planner.cpp"
+      issue: "Pre-existing IK retry loop (20 random seeds × 1.0 s = up to 20 s worst-case) may exhaust within harness 3.0 s timeout for hard cases — orthogonal to Phase 8 but visible here"
+    - path: "src/unitree_g1_dex3_stack-main/scripts/adaptive_orientation_ab.py"
+      issue: "timeout_sec default 3.0 s may be too tight when planner stacks TRAC-IK retries + OMPL planning"
+  missing:
+    - "Planner stdout/stderr captured during a re-run of test 3 — grep for 'TRAC-IK result|IK failed|OMPL state validity|OMPL failed|Adaptive orientation' to disambiguate H1 (kinematic) from H2 (timeout) from H3 (OMPL) from H4 (collision)"
+    - "Per-target PASS/FAIL list for baseline (adaptive=false) run — to confirm whether the failed 4 in baseline overlap with the failed 3 in adaptive (full overlap = strongest H1 signal)"
+  debug_session: ".planning/debug/08-uat-5of8.md"
