@@ -29,8 +29,8 @@ Requirements for milestone v1.1. Each maps to roadmap phases.
 
 ### 集成（Integration）
 
-- [ ] **INTG-01**: 新 launch 文件 apriltag_reach.launch.py 替代原 YOLO pipeline
-- [ ] **INTG-02**: 端到端验证：AprilTag 检测 → 偏移计算 → TF 变换 → planner → executor 全流程
+- [x] **INTG-01**: 新 launch 文件 apriltag_reach.launch.py 替代原 YOLO pipeline
+- [x] **INTG-02**: 端到端验证：AprilTag 检测 → 偏移计算 → TF 变换 → planner → executor 全流程
 
 ## Future Requirements
 
@@ -69,8 +69,8 @@ Requirements for milestone v1.1. Each maps to roadmap phases.
 | TAG-03 | Phase 7 | Complete |
 | TAG-04 | Phase 7 | Complete |
 | ORI-01 | Phase 8 | Complete |
-| INTG-01 | Phase 9 | Pending |
-| INTG-02 | Phase 9 | Pending |
+| INTG-01 | Phase 9 | Complete |
+| INTG-02 | Phase 9 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 10 total
@@ -79,4 +79,4 @@ Requirements for milestone v1.1. Each maps to roadmap phases.
 
 ---
 *Requirements defined: 2026-05-15*
-*Last updated: 2026-05-18 — Phase 7 complete (TAG-01, TAG-02, TAG-03, TAG-04 marked complete)*
+*Last updated: 2026-05-19 — Phase 9 complete (INTG-01, INTG-02 marked complete; v1.1 all 10 requirements complete)*

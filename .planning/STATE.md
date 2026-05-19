@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: AprilTag 定位 + TCP 修正
 status: executing
-last_updated: "2026-05-19T07:53:28.668Z"
-last_activity: 2026-05-19 -- Phase 9 execution started
+last_updated: "2026-05-19T08:25:02.577Z"
+last_activity: 2026-05-19 -- Phase 9 complete (INTG-01, INTG-02)
 progress:
   total_phases: 4
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 12
-  completed_plans: 8
-  percent: 67
+  completed_plans: 12
+  percent: 100
 ---
 
 # Project State
@@ -24,10 +24,10 @@ See: .planning/PROJECT.md (updated 2026-05-15)
 
 ## Current Position
 
-Phase: 9 (apriltag-reach) — EXECUTING
-Plan: 1 of 4
-Status: Executing Phase 9
-Last activity: 2026-05-19 -- Phase 9 execution started
+Phase: 9 (apriltag-reach) — COMPLETE
+Plan: 4 of 4
+Status: Complete
+Last activity: 2026-05-19 -- Phase 9 complete
 
 ## Current Milestone
 
@@ -38,9 +38,9 @@ Last activity: 2026-05-19 -- Phase 9 execution started
 | 6 | YOLO 清理 + TCP Offset 集成 | ✓ Complete (2026-05-18) | CLEAN-01 ✓, TCP-01 ✓, TCP-02 ✓ |
 | 7 | AprilTag 检测节点 | ✓ Complete (2026-05-18) | TAG-01 ✓, TAG-02 ✓, TAG-03 ✓, TAG-04 ✓ |
 | 8 | 自适应末端位姿 | ✓ Complete (2026-05-19) | ORI-01 ✓ |
-| 9 | 端到端集成 | ○ Pending | INTG-01~02 |
+| 9 | 端到端集成 | ✓ Complete (2026-05-19) | INTG-01 ✓, INTG-02 ✓ |
 
-Progress: ████████░░ 75% (3/4 phases) — Phase 8 done
+Progress: ████████████ 100% (4/4 phases) — Phase 9 complete
 
 ## Active Context
 
@@ -53,6 +53,7 @@ Progress: ████████░░ 75% (3/4 phases) — Phase 8 done
 - Phase 8 verifier: 11/11 must_haves PASS, 0 fail；HV-1..HV-4（shoulder log、toggle log、live A/B、D-08 reject）在 G1 现场回归。Roadmap 成功标准 #4（workspace boundary / shoulder-overhead）partial — 代码含 D-03 fallback，但 D-14 选择 tabletop-only UAT，完整 UAT 留给 Future ORI-02。
 - Phase 8 UAT (2026-05-19): 5 项测试 4 PASS + 1 issue 已 known_limit_within_scope 化。Test 3 D-15 验收 5/8 vs baseline 4/8（净 +1 / +25%）；3 个 FAIL 经 planner stdout 分析全部归类为 D-04/D-14 scope 之外的约束 —— center-far 物理不可达、left-of-mid 双模式中线碰撞、center-near 单 orientation 取舍。Future ORI-02 multi-candidate orientation 是这两类 collision 类失败的修复路径，center-far 类需上层限制 reach 或换更长臂。详见 .planning/debug/resolved/08-uat-5of8.md。
 - Phase 9 才整合到端到端 launch 并桥接到 `/goal_pose`
+- Phase 9 complete (2026-05-19): 4 plans executed — bridge node (Plan 01), A/B orientation harness (Plan 02), UAT + end-to-end launch (Plan 03), build config + documentation finalization (Plan 04). CMakeLists install targets updated, keyboard_trigger_node.py deleted, README reflects three-entry launch table with G key trigger and UAT instructions. Requirements INTG-01, INTG-02 closed. Ready for hardware UAT execution and Phase 10 planning.
 
 ## Decisions Log
 
@@ -64,6 +65,9 @@ Progress: ████████░░ 75% (3/4 phases) — Phase 8 done
 | Phase 7 检测节点单独 launch | Phase 7 | 隔离 detection 与 manipulation pipeline；Phase 9 再合 |
 | imshow 作为 launch arg 而非 YAML param | Phase 7 (D-15) | 部署侧切换 (headless / SSH) 需要灵活覆盖 |
 | pupil-apriltags 不进 package.xml | Phase 7 | 仅 pip 提供，rosdep 没有；改为 README 提示 + pip install |
+| Added rclpy to package.xml for Python nodes | Phase 9 (Plan 04) | Bridge node and UAT harness use rclpy; ensures runtime dependency tracking |
+| Removed all YOLO-era references from README | Phase 9 (Plan 04) | Phase 6 removed YOLO; README must reflect AprilTag-only pipeline |
+| Updated trigger key from YOLO K to bridge G | Phase 9 (Plan 04) | Matches apriltag_goal_bridge.py D-02 design |
 
 ---
 Last activity: 2026-05-19 -- Phase 08 complete (ORI-01)
