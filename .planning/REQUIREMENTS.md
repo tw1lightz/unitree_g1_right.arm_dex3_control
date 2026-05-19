@@ -25,7 +25,7 @@ Requirements for milestone v1.1. Each maps to roadmap phases.
 
 ### 自适应位姿（Adaptive Orientation）
 
-- [ ] **ORI-01**: 根据目标位置相对肩部的方向，自动计算可行的末端 orientation
+- [x] **ORI-01**: 根据目标位置相对肩部的方向，自动计算可行的末端 orientation
 
 ### 集成（Integration）
 
@@ -68,7 +68,7 @@ Requirements for milestone v1.1. Each maps to roadmap phases.
 | TAG-02 | Phase 7 | Complete |
 | TAG-03 | Phase 7 | Complete |
 | TAG-04 | Phase 7 | Complete |
-| ORI-01 | Phase 8 | Pending |
+| ORI-01 | Phase 8 | Complete |
 | INTG-01 | Phase 9 | Pending |
 | INTG-02 | Phase 9 | Pending |
 
