@@ -68,10 +68,17 @@ def generate_launch_description():
             os.path.join(realsense_share, 'launch', 'rs_launch.py')
         ),
         launch_arguments={
-            'enable_sync': 'true',
+            'serial_no': '_243722074823',
+            'enable_color': 'true',
+            'enable_depth': 'false',
+            'enable_infra1': 'false',
+            'enable_infra2': 'false',
+            'enable_gyro': 'false',
+            'enable_accel': 'false',
+            'enable_sync': 'false',
             'align_depth.enable': 'false',
-            'rgb_camera.profile': '640x480x15',
-            'depth_module.profile': '640x480x15',
+            'rgb_camera.color_profile': '640x480x15',
+            'initial_reset': 'true',
         }.items(),
     )
 
