@@ -37,10 +37,50 @@ RIGHT_ARM_JOINT_NAMES = [
 TCP_OFFSET_X = 0.175  # m, 沿 wrist_yaw X 轴
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-URDF_PATH = os.path.join(
-    SCRIPT_DIR, "robots", "g1_description",
-    "g1_29dof_lock_waist_with_hand_rev_1_0.urdf"
-)
+URDF_FILENAME = "g1_29dof_lock_waist_with_hand_rev_1_0.urdf"
+
+
+def find_urdf():
+    """Locate the G1 URDF without requiring a hand-built scripts/robots/ symlink.
+
+    Lookup order:
+      1. ament_index_python.get_package_share_directory('unitree_g1_dex3_stack')/robots/g1_description/<file>
+         — works after `colcon build` + `source install/setup.bash`.
+      2. Walk up from this script's directory, checking ``<dir>/robots/g1_description/<file>``
+         — works on a fresh checkout without colcon, since the URDF lives at
+         ``<repo>/src/unitree_g1_dex3_stack-main/robots/g1_description/`` next
+         to ``scripts/``.
+    """
+    # 1. ament_index colcon-installed share directory
+    try:
+        from ament_index_python import get_package_share_directory  # type: ignore
+        share_dir = get_package_share_directory("unitree_g1_dex3_stack")
+        candidate = os.path.join(share_dir, "robots", "g1_description", URDF_FILENAME)
+        if os.path.isfile(candidate):
+            return candidate
+    except Exception:
+        pass
+
+    # 2. Walk up from the script directory until robots/g1_description/<file> is found
+    cur = SCRIPT_DIR
+    for _ in range(6):  # bounded climb; repo layout has it within 1-2 levels
+        candidate = os.path.join(cur, "robots", "g1_description", URDF_FILENAME)
+        if os.path.isfile(candidate):
+            return candidate
+        parent = os.path.dirname(cur)
+        if parent == cur:  # reached filesystem root
+            break
+        cur = parent
+
+    raise FileNotFoundError(
+        f"Could not locate {URDF_FILENAME!r}. Tried ament_index "
+        f"share_dir/robots/g1_description/ and ancestor robots/g1_description/ "
+        f"directories starting at {SCRIPT_DIR!r}. Ensure the package is "
+        f"either colcon-installed or run from inside the repo checkout."
+    )
+
+
+URDF_PATH = find_urdf()
 
 # URDF 中右臂关节名（用于 Pinocchio buildReducedModel）
 RIGHT_ARM_URDF_JOINTS = [
