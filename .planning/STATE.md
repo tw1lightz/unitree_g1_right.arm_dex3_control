@@ -2,16 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: AprilTag 定位 + TCP 修正
-status: ready_to_plan
-last_updated: 2026-05-19T02:04:18.707Z
-last_activity: 2026-05-19 -- Phase 8 complete (ORI-01)
+status: planning
+last_updated: "2026-05-19T06:53:55.119Z"
+last_activity: 2026-05-19
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 8
   completed_plans: 8
   percent: 75
-stopped_at: Phase 8 complete (2/2) — ready to discuss Phase 9
 ---
 
 # Project State
