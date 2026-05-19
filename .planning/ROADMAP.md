@@ -52,7 +52,7 @@
 **Success Criteria:**
 1. ✓ 根据目标位置相对右肩的方向自动计算 orientation
 2. ✓ 计算出的 orientation 使手臂自然指向目标（非固定死姿态）
-3. ✓ 对比固定姿态，IK 成功率明显提升（A/B 验证 harness 落地 — Plan 02；现场 PASS_COUNT/8 由 HV-3 现场记录）
+3. ⚠ partial — 实测 +25% 相对改善（adaptive=true 5/8 PASS vs adaptive=false baseline 4/8 PASS，HV-3 2026-05-19 现场 A/B 实测）。adaptive 救回 right-side + low 两个 baseline IK 失败，回归 center-near 一个（单 orientation 取舍），对真·难的 center-far / left-of-mid 不分伯仲。"明显提升" 的目标（≥ 8/8）需要 Future ORI-02 multi-candidate orientation。
 4. ✓ 在工作空间边界和肩部正上方等困难区域仍能找到可行姿态（D-03 +Y_torso fallback 已实现；CONTEXT D-14 选择 tabletop-only UAT，工作空间边界与肩部正上方完整 UAT 覆盖延期至 Future ORI-02）
 
 **Depends on:** Phase 6（TCP offset 已集成，orientation 计算基于 TCP）
@@ -96,4 +96,4 @@
 
 ---
 *Roadmap created: 2026-05-15*
-*Last updated: 2026-05-19 — Phase 8 complete (ORI-01)*
+*Last updated: 2026-05-19 — Phase 8 complete (ORI-01); UAT measured 5/8 vs 4/8 baseline, criterion #3 reframed as partial*
