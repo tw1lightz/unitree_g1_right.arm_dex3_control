@@ -83,8 +83,8 @@ class AprilTagDetectorNode(Node):
         # ---------- detector + helpers ----------
         self.detector = Detector(
             families=self.tag_family,
-            nthreads=1,
-            quad_decimate=1.0,
+            nthreads=2,
+            quad_decimate=2.0,
             refine_edges=1,
         )
         self.bridge = CvBridge()
@@ -100,6 +100,7 @@ class AprilTagDetectorNode(Node):
 
         # ---------- FPS sliding window (D-20) ----------
         self.frame_times = collections.deque(maxlen=30)
+        self.last_processed_time = 0.0
 
         # ---------- log throttling ----------
         self.last_warn_time = 0.0
@@ -109,8 +110,7 @@ class AprilTagDetectorNode(Node):
         # ---------- OpenCV window (D-18) ----------
         self.window_name = f"AprilTag detector (id={self.target_tag_id})"
         if self.imshow_enabled:
-            cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
-            cv2.resizeWindow(self.window_name, 640, 480)
+            cv2.namedWindow(self.window_name, cv2.WINDOW_AUTOSIZE)
 
         # ---------- subs (sensor_data QoS — RealSense is BEST_EFFORT) ----------
         self.create_subscription(
@@ -161,7 +161,15 @@ class AprilTagDetectorNode(Node):
     # ------------------------------------------------------------------
     def image_cb(self, msg: Image):
         # FPS bookkeeping (D-20: sliding window over last 30 frames)
-        self.frame_times.append(time.monotonic())
+        now = time.monotonic()
+        self.frame_times.append(now)
+
+        # Skip frames to limit detection rate to ~5 Hz
+        if now - self.last_processed_time < 0.20:
+            if self.imshow_enabled:
+                cv2.waitKey(1)
+            return
+        self.last_processed_time = now
 
         if self.camera_params is None:
             self._warn_camera_info_missing()
@@ -176,12 +184,30 @@ class AprilTagDetectorNode(Node):
 
         gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
 
+        # Downscale to half resolution before detection to reduce CPU load
+        scale = 0.5
+        h, w = gray.shape[:2]
+        if w > 640:
+            gray_small = cv2.resize(gray, (int(w * scale), int(h * scale)),
+                                    interpolation=cv2.INTER_AREA)
+            fx, fy, cx, cy = self.camera_params
+            cam_params_small = (fx * scale, fy * scale, cx * scale, cy * scale)
+        else:
+            gray_small = gray
+            cam_params_small = self.camera_params
+
         detections = self.detector.detect(
-            gray,
+            gray_small,
             estimate_tag_pose=True,
-            camera_params=self.camera_params,
+            camera_params=cam_params_small,
             tag_size=self.tag_size,
         )
+
+        # Scale corners back to original resolution for correct viz overlay
+        if w > 640:
+            for d in detections:
+                d.corners = d.corners / scale
+                d.center = d.center / scale
 
         # Prepare display canvas only if imshow currently enabled
         display = bgr.copy() if self.imshow_enabled else None
@@ -330,8 +356,9 @@ class AprilTagDetectorNode(Node):
                 cv2.LINE_AA,
             )
 
-            cv2.imshow(self.window_name, display)
-            key = cv2.waitKey(1) & 0xFF
+            display_show = cv2.resize(display, (640, 480))
+            cv2.imshow(self.window_name, display_show)
+            key = cv2.waitKey(10) & 0xFF
             if key == ord('q'):
                 cv2.destroyWindow(self.window_name)
                 self.imshow_enabled = False
