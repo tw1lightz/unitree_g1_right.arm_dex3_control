@@ -117,6 +117,7 @@ install(PROGRAMS
   scripts/tcp_torso_pose.py
   scripts/keyboard_trigger_node.py
   scripts/apriltag_detector_node.py
+  scripts/adaptive_orientation_ab.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
