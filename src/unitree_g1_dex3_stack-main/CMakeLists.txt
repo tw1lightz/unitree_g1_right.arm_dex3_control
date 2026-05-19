@@ -115,9 +115,10 @@ endif()
 
 install(PROGRAMS
   scripts/tcp_torso_pose.py
-  scripts/keyboard_trigger_node.py
   scripts/apriltag_detector_node.py
   scripts/adaptive_orientation_ab.py
+  scripts/apriltag_goal_bridge.py
+  scripts/apriltag_reach_uat.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
