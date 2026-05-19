@@ -22,7 +22,7 @@ def generate_launch_description():
 
     adaptive_arg = DeclareLaunchArgument(
         'adaptive_orientation_enabled',
-        default_value='true',
+        default_value='',
         description='Pass through to planner.launch.py',
     )
 
@@ -57,6 +57,7 @@ def generate_launch_description():
             'enable_sync': 'false',
             'align_depth.enable': 'false',
             'rgb_camera.color_profile': '640x480x15',
+            'accelerate_gpu_with_glsl': 'true',
             'initial_reset': 'true',
         }.items(),
     )
@@ -96,6 +97,8 @@ def generate_launch_description():
             'stale_threshold_s': 1.0,
             'smoothing_window': 5,
             'trigger_key': 'g',
+            'fixed_orientation_enabled': True,
+            'fixed_rpy': [-0.0873, -0.0340, 0.0199],
         }],
     )
 

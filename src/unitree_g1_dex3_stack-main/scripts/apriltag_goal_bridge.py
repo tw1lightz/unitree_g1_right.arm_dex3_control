@@ -31,6 +31,8 @@ class AprilTagGoalBridge(Node):
         self.declare_parameter('trigger_key', 'g')
         self.declare_parameter('goal_pose_topic', '/goal_pose')
         self.declare_parameter('target_pose_topic', '/apriltag/target_pose')
+        self.declare_parameter('fixed_orientation_enabled', False)
+        self.declare_parameter('fixed_rpy', [0.0, 0.0, 0.0])
 
         self.reach_max = float(self.get_parameter('reach_max_distance').value)
         self.stale_threshold = float(
@@ -41,6 +43,10 @@ class AprilTagGoalBridge(Node):
             self.get_parameter('trigger_key').value).lower()
         goal_topic = str(self.get_parameter('goal_pose_topic').value)
         target_topic = str(self.get_parameter('target_pose_topic').value)
+        self.fixed_orientation_enabled = bool(
+            self.get_parameter('fixed_orientation_enabled').value)
+        fixed_rpy = list(self.get_parameter('fixed_rpy').value)
+        self.fixed_rpy = [float(v) for v in fixed_rpy[:3]]
 
         # ------------------------------------------------------------------
         # 3b. State variables
@@ -102,6 +108,21 @@ class AprilTagGoalBridge(Node):
             f'(reach_max={self.reach_max}m, '
             f'smoothing={self.smoothing_window}, '
             f'stale={self.stale_threshold}s)')
+
+    def _fixed_orientation_quaternion(self):
+        roll, pitch, yaw = self.fixed_rpy
+        cy = math.cos(yaw * 0.5)
+        sy = math.sin(yaw * 0.5)
+        cp = math.cos(pitch * 0.5)
+        sp = math.sin(pitch * 0.5)
+        cr = math.cos(roll * 0.5)
+        sr = math.sin(roll * 0.5)
+        return (
+            sr * cp * cy - cr * sp * sy,
+            cr * sp * cy + sr * cp * sy,
+            cr * cp * sy - sr * sp * cy,
+            cr * cp * cy + sr * sp * sy,
+        )
 
     # ------------------------------------------------------------------
     # 4. _target_cb — cache incoming /apriltag/target_pose
@@ -258,7 +279,14 @@ class AprilTagGoalBridge(Node):
         goal.pose.position.x = avg_x
         goal.pose.position.y = avg_y
         goal.pose.position.z = avg_z
-        goal.pose.orientation = self._last_orientation  # raw copy per D-08
+        if self.fixed_orientation_enabled:
+            qx, qy, qz, qw = self._fixed_orientation_quaternion()
+            goal.pose.orientation.x = qx
+            goal.pose.orientation.y = qy
+            goal.pose.orientation.z = qz
+            goal.pose.orientation.w = qw
+        else:
+            goal.pose.orientation = self._last_orientation  # raw copy per D-08
 
         self.goal_pub.publish(goal)
         self.get_logger().info(

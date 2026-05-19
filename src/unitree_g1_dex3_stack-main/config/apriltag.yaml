@@ -12,7 +12,7 @@ apriltag_detector:
     target_tag_id: 0            # only this tag id is published (D-07)
 
     # ---------- offset (tag-local frame, applied as T_cam_tag * Translate(offset)) ----------
-    offset_xyz: [0.0, 0.0, 0.05]  # [x, y, z] in tag-local frame (meters)
+    offset_xyz: [0.0, 0.0, 0.0]  # [x, y, z] in tag-local frame (meters)
 
     # ---------- filtering ----------
     decision_margin_min: 25.0   # reject low-quality detections (D-10)
@@ -26,3 +26,12 @@ apriltag_detector:
 
     # ---------- TF lookup ----------
     tf_lookup_timeout_s: 0.5
+
+ik_fcl_ompl_planner:
+  ros__parameters:
+    tcp_offset_x: 0.175
+    adaptive_orientation_enabled: false
+
+tcp_torso_pose:
+  ros__parameters:
+    tcp_offset_x: 0.175

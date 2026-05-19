@@ -1,0 +1,43 @@
+unitree@unitree-g1-nx:~/Desktop/unitree_dex3$ ros2 launch unitree_g1_dex3_stack planner.launch.py 
+[INFO] [launch]: All log files can be found below /home/unitree/.ros/log/2026-05-19-18-14-15-224806-unitree-g1-nx-62662
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [ik_fcl_ompl_planner-1]: process started with pid [62671]
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.033314254] [ik_fcl_ompl_planner]: TCP offset overridden to 0.1750 m
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.040670970] [ik_fcl_ompl_planner]: adaptive_orientation_enabled = false
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.049093897] [ik_fcl_ompl_planner]: Right shoulder reference point in 'torso_link': [0.0040, -0.1002, 0.2478]
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.116803273] [ik_fcl_ompl_planner]: IKFCLPlannerNode initialized with 43 joints
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.118437662] [ik_fcl_ompl_planner]: Using base link: torso_link, right tip: right_tcp_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.119573826] [ik_fcl_ompl_planner]: Planning timeout: 1.00 seconds, velocity_scale: 0.05, min_time_step: 0.02
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.120739592] [ik_fcl_ompl_planner]: Collision skip pairs: 9
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.127810731] [ik_fcl_ompl_planner]: Skipping collision check for pair: right_hand_thumb_0_link:right_wrist_yaw_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.129307419] [ik_fcl_ompl_planner]: Skipping collision check for pair: torso_link:right_shoulder_pitch_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.130377757] [ik_fcl_ompl_planner]: Skipping collision check for pair: right_shoulder_pitch_link:right_shoulder_roll_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.131295835] [ik_fcl_ompl_planner]: Skipping collision check for pair: right_shoulder_roll_link:right_shoulder_yaw_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.137893615] [ik_fcl_ompl_planner]: Skipping collision check for pair: right_shoulder_yaw_link:right_elbow_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.138940368] [ik_fcl_ompl_planner]: Skipping collision check for pair: right_elbow_link:right_wrist_roll_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.139859022] [ik_fcl_ompl_planner]: Skipping collision check for pair: right_wrist_roll_link:right_wrist_pitch_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.140780172] [ik_fcl_ompl_planner]: Skipping collision check for pair: right_wrist_pitch_link:right_wrist_yaw_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.141471042] [ik_fcl_ompl_planner]: Skipping collision check for pair: right_wrist_yaw_link:right_tcp_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.149402561] [ik_fcl_ompl_planner]: Planner type: RRTConnect
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.150856719] [ik_fcl_ompl_planner]: Simplification: method=simple, timeout=0.50 seconds, max_steps=100, max_empty_steps=50
+[ik_fcl_ompl_planner-1] [INFO] [1779185656.150914801] [ik_fcl_ompl_planner]: Right arm: base_link = torso_link, tip_link = right_tcp_link
+[ik_fcl_ompl_planner-1] [INFO] [1779185666.502232744] [ik_fcl_ompl_planner]: goal_pose already in base frame 'torso_link'
+[ik_fcl_ompl_planner-1] [INFO] [1779185667.514504760] [ik_fcl_ompl_planner]: TRAC-IK current-seed result: Success (code: 272)
+[ik_fcl_ompl_planner-1] [WARN] [1779185667.515311698] [ik_fcl_ompl_planner]: Collision detected between right_elbow_link and torso_link
+[ik_fcl_ompl_planner-1] [WARN] [1779185667.515400821] [ik_fcl_ompl_planner]: TRAC-IK current-seed solution rejected: collision
+[ik_fcl_ompl_planner-1] [INFO] [1779185668.519580880] [ik_fcl_ompl_planner]: TRAC-IK neutral-seed result: Success (code: 339)
+[ik_fcl_ompl_planner-1] [WARN] [1779185668.520088576] [ik_fcl_ompl_planner]: Collision detected between right_elbow_link and torso_link
+[ik_fcl_ompl_planner-1] [WARN] [1779185668.520170147] [ik_fcl_ompl_planner]: TRAC-IK neutral-seed solution rejected: collision
+[ik_fcl_ompl_planner-1] [INFO] [1779185669.522456592] [ik_fcl_ompl_planner]: TRAC-IK random-seed result: Success (code: 425)
+[ik_fcl_ompl_planner-1] [INFO] [1779185669.522944287] [ik_fcl_ompl_planner]: TRAC-IK random-seed solution accepted
+[ik_fcl_ompl_planner-1] [INFO] [1779185669.523239625] [ik_fcl_ompl_planner]: OMPL bounds set for 7 right-arm joints: [right_shoulder_pitch_joint=-3.0892,2.6704] [right_shoulder_roll_joint=-2.2515,1.5882] [right_shoulder_yaw_joint=-2.618,2.618] [right_elbow_joint=-1.0472,2.0944] [right_wrist_roll_joint=-1.97222,1.97222] [right_wrist_pitch_joint=-1.61443,1.61443] [right_wrist_yaw_joint=-1.61443,1.61443]
+[ik_fcl_ompl_planner-1] [WARN] [1779185669.525462960] [ik_fcl_ompl_planner]: Collision detected between right_shoulder_yaw_link and torso_link
+[ik_fcl_ompl_planner-1] Debug:   RRTConnect: Planner range detected to be 2.205551
+[ik_fcl_ompl_planner-1] Info:    RRTConnect: Starting planning with 1 states already in datastructure
+[ik_fcl_ompl_planner-1] Info:    RRTConnect: Created 4 states (2 start + 2 goal)
+[ik_fcl_ompl_planner-1] Info:    Solution found in 0.114741 seconds
+[ik_fcl_ompl_planner-1] Info:    SimpleSetup: Path simplification took 0.083747 seconds and changed from 3 to 2 states
+[ik_fcl_ompl_planner-1] [INFO] [1779185669.735120783] [ik_fcl_ompl_planner]: Simplified: 3 → 2 waypoints (-33%)
+[ik_fcl_ompl_planner-1] [INFO] [1779185669.735473051] [ik_fcl_ompl_planner]: Trajectory: 10 waypoints, 0.412 seconds total duration
+[ik_fcl_ompl_planner-1] [INFO] [1779185669.735810469] [ik_fcl_ompl_planner]: Trajectory validation passed
+[ik_fcl_ompl_planner-1] [INFO] [1779185669.736153456] [ik_fcl_ompl_planner]: Plan published: 10 waypoints over 7 right-arm joints

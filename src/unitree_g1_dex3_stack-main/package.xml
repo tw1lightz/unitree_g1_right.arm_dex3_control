@@ -45,6 +45,7 @@
 
   <!-- ROS2 Python client library for Python nodes -->
   <exec_depend>rclpy</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
 
   <!-- AprilTag detector runtime deps (Phase 7) -->
   <exec_depend>realsense2_camera</exec_depend>

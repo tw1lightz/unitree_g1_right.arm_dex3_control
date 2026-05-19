@@ -78,6 +78,7 @@ def generate_launch_description():
             'enable_sync': 'false',
             'align_depth.enable': 'false',
             'rgb_camera.color_profile': '640x480x15',
+            'accelerate_gpu_with_glsl': 'true',
             'initial_reset': 'true',
         }.items(),
     )

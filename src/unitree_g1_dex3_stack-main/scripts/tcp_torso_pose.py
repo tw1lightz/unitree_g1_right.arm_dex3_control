@@ -15,7 +15,9 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
 import PyKDL
+import yaml
 
+from ament_index_python.packages import get_package_share_directory
 from urdf_parser_py.urdf import URDF
 
 
@@ -108,7 +110,7 @@ class TcpTorsoPoseNode(Node):
 
         # ---------- parameters ----------
         self.declare_parameter('urdf_path', '')
-        self.declare_parameter('tcp_offset_x', 0.175)
+        self.declare_parameter('tcp_offset_x', self._load_default_tcp_offset_x())
         self.declare_parameter('base_link', 'torso_link')
         self.declare_parameter('tip_link', 'right_wrist_yaw_link')
         self.declare_parameter('publish_rate', 10.0)
@@ -198,6 +200,23 @@ class TcpTorsoPoseNode(Node):
         self.sub_joint_states = self.create_subscription(
             JointState, '/joint_states', self.joint_state_callback, 10)
         self.timer = self.create_timer(1.0 / publish_rate, self.timer_callback)
+
+    def _load_default_tcp_offset_x(self):
+        try:
+            config_path = os.path.join(
+                get_package_share_directory('unitree_g1_dex3_stack'),
+                'config',
+                'apriltag.yaml')
+            with open(config_path, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f) or {}
+            value = data.get('tcp_torso_pose', {}).get(
+                'ros__parameters', {}).get('tcp_offset_x')
+            if value is not None:
+                return float(value)
+        except Exception as e:
+            self.get_logger().warn(
+                f'Failed to load tcp_offset_x from config/apriltag.yaml: {e}')
+        return 0.175
 
     # ------------------------------------------------------------------
     def _try_robot_description(self):

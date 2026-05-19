@@ -38,6 +38,8 @@
 #include <chrono>
 #include <cmath>
 #include <algorithm>
+#include <random>
+#include <sstream>
 
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
@@ -585,106 +587,60 @@ private:
                                     pose_in_base.pose.position.y,
                                     pose_in_base.pose.position.z));
 
-        // Try IK with current state as seed
         KDL::JntArray seed(planning_joints.size());
         for (size_t i = 0; i < planning_joints.size(); ++i) seed(i) = planning_positions[i];
         auto& solver = ik_right;
         KDL::JntArray goal(planning_joints.size());
-        int ik_result = solver->CartToJnt(seed, target_frame, goal);
+        auto ik_result_str = [](int result) {
+            switch (result) {
+                case -1: return "Solver init error: invalid chain or limits";
+                case -3: return "No solution found";
+                default: return result > 0 ? "Success" : "Unknown error";
+            }
+        };
+        auto try_ik_candidate = [&](const KDL::JntArray& candidate_seed, const std::string& label) {
+            KDL::JntArray candidate_goal(planning_joints.size());
+            int result = solver->CartToJnt(candidate_seed, target_frame, candidate_goal);
+            RCLCPP_INFO(this->get_logger(), "TRAC-IK %s result: %s (code: %d)",
+                label.c_str(), ik_result_str(result), result);
+            if (result <= 0) {
+                return false;
+            }
+            if (isInCollision(candidate_goal, this->collision_skip_pairs_, planning_links)) {
+                RCLCPP_WARN(this->get_logger(), "TRAC-IK %s solution rejected: collision", label.c_str());
+                return false;
+            }
+            goal = candidate_goal;
+            RCLCPP_INFO(this->get_logger(), "TRAC-IK %s solution accepted", label.c_str());
+            return true;
+        };
 
-        // Check specific return codes
-        const char* result_str;
-        switch (ik_result) {
-            case -1: result_str = "Solver init error: invalid chain or limits"; break;
-            case -3: result_str = "No solution found"; break;
-            default: result_str = ik_result > 0 ? "Success" : "Unknown error";
-        }
-        RCLCPP_INFO(this->get_logger(), "TRAC-IK result: %s (code: %d)", result_str, ik_result);
-
-        bool ik_success = (ik_result > 0);
-
-        if (!ik_success) {
-            RCLCPP_WARN(this->get_logger(), "IK failed with current state as seed. Trying neutral seed.");
-            // Try neutral seed (all zeros)
+        bool goal_found = try_ik_candidate(seed, "current-seed");
+        if (!goal_found) {
             KDL::JntArray neutral_seed(planning_joints.size());
             for (size_t i = 0; i < planning_joints.size(); ++i) neutral_seed(i) = 0.0;
-            if (solver->CartToJnt(neutral_seed, target_frame, goal) > 0) {
-                RCLCPP_INFO(this->get_logger(), "IK succeeded with neutral seed.");
-            } else {
-                RCLCPP_ERROR(this->get_logger(), "IK failed with both current and neutral seed. Aborting.");
-                return;
-            }
+            goal_found = try_ik_candidate(neutral_seed, "neutral-seed");
         }
-        if (!solver->CartToJnt(seed, target_frame, goal)) {
-            RCLCPP_WARN(this->get_logger(), "IK failed for goal pose");
-            return;
-        }
-
-        // If IK result is too close to the seed, try random seeds up to N times
-        double ik_max_diff = 0.0;
-        double solution_threshold = 0.01; // Minimum required difference in at least one joint
-        for (size_t i = 0; i < planning_joints.size(); ++i) {
-            double diff = std::abs(goal(i) - seed(i));
-            if (diff > ik_max_diff) ik_max_diff = diff;
-        }
-        int max_random_tries = 20;  // Increased from 5 to 20
-        int random_tries = 0;
-        
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        
-        KDL::JntArray best_solution = goal;
-        double best_diff = ik_max_diff;
-        
-        while (best_diff < solution_threshold && random_tries < max_random_tries) {
-            RCLCPP_DEBUG(this->get_logger(), 
-                "IK solution is too close to seed (max diff %.6f). Trying random seed (%d/%d)", 
-                best_diff, random_tries+1, max_random_tries);
-                
-            KDL::JntArray random_seed(planning_joints.size());
-            for (size_t i = 0; i < planning_joints.size(); ++i) {
-                auto lim_it = joint_limits_.find(planning_joints[i]);
-                double low = lim_it != joint_limits_.end() ? lim_it->second.first : -3.14;
-                double high = lim_it != joint_limits_.end() ? lim_it->second.second : 3.14;
-                std::uniform_real_distribution<> dis(low, high);
-                random_seed(i) = dis(gen);
-            }
-            
-            // Try IK with random seed
-            KDL::JntArray new_goal;
-            if (solver->CartToJnt(random_seed, target_frame, new_goal)) {
-                double max_diff = 0.0;
+        if (!goal_found) {
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            const int max_random_tries = 20;
+            for (int random_tries = 0; random_tries < max_random_tries && !goal_found; ++random_tries) {
+                KDL::JntArray random_seed(planning_joints.size());
                 for (size_t i = 0; i < planning_joints.size(); ++i) {
-                    double diff = std::abs(new_goal(i) - random_seed(i));
-                    if (diff > max_diff) max_diff = diff;
+                    auto lim_it = joint_limits_.find(planning_joints[i]);
+                    double low = lim_it != joint_limits_.end() ? lim_it->second.first : -3.14;
+                    double high = lim_it != joint_limits_.end() ? lim_it->second.second : 3.14;
+                    std::uniform_real_distribution<> dis(low, high);
+                    random_seed(i) = dis(gen);
                 }
-                
-                // Update best solution if this one is more different from its seed
-                if (max_diff > best_diff) {
-                    best_diff = max_diff;
-                    best_solution = new_goal;
-                    
-                    // Print the improved solution
-                    std::ostringstream sol_oss;
-                    sol_oss << "Found better solution (diff=" << max_diff << "): [ ";
-                    for (size_t i = 0; i < planning_joints.size(); ++i) {
-                        sol_oss << std::fixed << std::setprecision(6) << new_goal(i);
-                        if (i + 1 < planning_joints.size()) sol_oss << ", ";
-                    }
-                    sol_oss << " ]";
-                    RCLCPP_DEBUG(this->get_logger(), "%s", sol_oss.str().c_str());
-                }
+                goal_found = try_ik_candidate(random_seed, "random-seed");
             }
-            random_tries++;
         }
-        
-        if (best_diff < solution_threshold) {
-            RCLCPP_ERROR(this->get_logger(), "Failed to find a sufficiently different IK solution after %d attempts. Best difference: %.6f", max_random_tries, best_diff);
+        if (!goal_found) {
+            RCLCPP_ERROR(this->get_logger(), "IK failed to find a collision-free goal state. Aborting.");
             return;
         }
-        
-        // Use the best solution found
-        goal = best_solution;
 
         // OMPL bounds: use URDF joint limits if available, else fallback to [-3.14, 3.14]
         auto space = std::make_shared<ob::RealVectorStateSpace>(planning_joints.size());
