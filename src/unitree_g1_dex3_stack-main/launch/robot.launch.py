@@ -25,7 +25,11 @@ def launch_setup(context, *args, **kwargs):
             executable='robot_state_publisher',
             name='robot_state_publisher',
             output='screen',
-            parameters=[{'robot_description': robot_description}]
+            parameters=[{'robot_description': robot_description}],
+            remappings=[
+                ('/tf', LaunchConfiguration('tf_topic')),
+                ('/tf_static', LaunchConfiguration('tf_static_topic')),
+            ],
         ),
 #        Node(
 #            package='joint_state_publisher_gui',
@@ -53,6 +57,16 @@ def generate_launch_description():
         default_value='',
         description='Full path to URDF file (overrides urdf_name if set)'
     )
+    tf_topic_arg = DeclareLaunchArgument(
+        'tf_topic',
+        default_value='/tf',
+        description='TF topic used by robot_state_publisher'
+    )
+    tf_static_topic_arg = DeclareLaunchArgument(
+        'tf_static_topic',
+        default_value='/tf_static',
+        description='TF static topic used by robot_state_publisher'
+    )
     return LaunchDescription([
         SetEnvironmentVariable('RMW_IMPLEMENTATION', 'rmw_cyclonedds_cpp'),
         SetEnvironmentVariable('CYCLONEDDS_URI',
@@ -61,5 +75,7 @@ def generate_launch_description():
             '</Interfaces></General></Domain></CycloneDDS>'),
         urdf_name_arg,
         urdf_path_arg,
+        tf_topic_arg,
+        tf_static_topic_arg,
         OpaqueFunction(function=launch_setup)
     ])

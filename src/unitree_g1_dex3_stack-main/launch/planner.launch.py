@@ -42,6 +42,10 @@ def launch_setup(context, *args, **kwargs):
             name='ik_fcl_ompl_planner',
             output='screen',
             parameters=[config_file, parameters],
+            remappings=[
+                ('/tf', LaunchConfiguration('tf_topic')),
+                ('/tf_static', LaunchConfiguration('tf_static_topic')),
+            ],
             arguments=[
                 '--ros-args',
                 '--log-level',
@@ -64,5 +68,7 @@ def generate_launch_description():
         DeclareLaunchArgument('planner_type', default_value='RRTConnect'),
         DeclareLaunchArgument('adaptive_orientation_enabled', default_value=''),
         DeclareLaunchArgument('collision_skip_pairs', default_value='right_hand_thumb_0_link:right_wrist_yaw_link'),
+        DeclareLaunchArgument('tf_topic', default_value='/tf'),
+        DeclareLaunchArgument('tf_static_topic', default_value='/tf_static'),
     ]
     return LaunchDescription(args + [OpaqueFunction(function=launch_setup)])

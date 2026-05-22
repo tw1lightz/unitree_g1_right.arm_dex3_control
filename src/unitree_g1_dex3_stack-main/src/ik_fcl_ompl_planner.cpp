@@ -68,6 +68,7 @@ public:
         this->declare_parameter("goal_pose_topic", "/goal_pose");
         this->declare_parameter("planner_type", "RRTConnect");
         this->declare_parameter("collision_skip_pairs", std::vector<std::string>{});
+        this->declare_parameter("collision_detection_enabled", true);
         this->declare_parameter("simplify_method", std::string("simple"));
         this->declare_parameter("simplify_timeout", 0.5);
         this->declare_parameter("simplify_max_steps", 100);
@@ -110,6 +111,7 @@ public:
         this->get_parameter("goal_pose_topic", goal_pose_topic_);
         this->get_parameter("planner_type", planner_type_);
         this->get_parameter("collision_skip_pairs", collision_skip_pairs_);
+        this->get_parameter("collision_detection_enabled", collision_detection_enabled_);
         this->get_parameter("simplify_method", simplify_method_);
         this->get_parameter("simplify_timeout", simplify_timeout_);
         this->get_parameter("simplify_max_steps", simplify_max_steps_);
@@ -158,6 +160,9 @@ public:
         RCLCPP_INFO(this->get_logger(),
             "adaptive_orientation_enabled = %s",
             adaptive_orientation_enabled_ ? "true" : "false");
+        RCLCPP_INFO(this->get_logger(),
+            "collision_detection_enabled = %s",
+            collision_detection_enabled_ ? "true" : "false");
 
         // Parse joint limits from URDF for OMPL bounds
         for (const auto& joint_pair : urdf_model.joints_) {
@@ -244,7 +249,9 @@ public:
             chain_link_names_.insert(kdl_chain_right.getSegment(i).getName());
         }
 
-        buildCollisionObjects();
+        if (collision_detection_enabled_) {
+            buildCollisionObjects();
+        }
 
         goal_pose_sub_ = this->create_subscription<geometry_msgs::msg::PoseStamped>(
             "/goal_pose", 10, std::bind(&IKFCLPlannerNode::goalPoseCallback, this, _1));
@@ -302,6 +309,7 @@ private:
     std::string goal_pose_topic_ = "/goal_pose";
     std::string planner_type_ = "RRTConnect";
     std::vector<std::string> collision_skip_pairs_;
+    bool collision_detection_enabled_ = true;
     std::string log_level_ = "info";
     std::string simplify_method_ = "simple";
     double simplify_timeout_ = 0.5;
@@ -453,7 +461,11 @@ private:
             RCLCPP_INFO(this->get_logger(), "goal_pose already in base frame '%s'", base_link_.c_str());
         } else {
             try {
-                pose_in_base = tf_buffer_.transform(*pose, base_link_, tf2::durationFromSec(0.5));
+                // Use latest available TF (stamp=0) to avoid TF_OLD_DATA
+                auto latest_pose = *pose;
+                latest_pose.header.stamp.sec = 0;
+                latest_pose.header.stamp.nanosec = 0;
+                pose_in_base = tf_buffer_.transform(latest_pose, base_link_, tf2::durationFromSec(0.5));
                 RCLCPP_INFO(this->get_logger(), "Transformed goal_pose from '%s' to '%s': [%.3f, %.3f, %.3f]",
                     pose->header.frame_id.c_str(), base_link_.c_str(),
                     pose_in_base.pose.position.x, pose_in_base.pose.position.y, pose_in_base.pose.position.z);
@@ -568,14 +580,34 @@ private:
         // pre-existing joint-order ERROR check that lived here was removed
         // in Plan 01-05 because it was a false-positive on every goal.
         std::vector<double> planning_positions;
+        int joint_name_fallback_count = 0;
         for (const auto& jname : planning_joints) {
             auto it = std::find(joint_names_.begin(), joint_names_.end(), jname);
             if (it != joint_names_.end()) {
                 size_t idx = std::distance(joint_names_.begin(), it);
-                planning_positions.push_back(latest_joint_positions_[idx]);
+                double val = latest_joint_positions_[idx];
+                planning_positions.push_back(val);
+                RCLCPP_INFO(this->get_logger(), "  start joint %s = %.4f (matched from /joint_states[%zu])",
+                    jname.c_str(), val, idx);
             } else {
                 planning_positions.push_back(0.0); // fallback if not found
+                ++joint_name_fallback_count;
+                RCLCPP_ERROR(this->get_logger(), "  start joint %s = 0.0 (FALLBACK — name NOT found in /joint_states!)",
+                    jname.c_str());
             }
+        }
+        if (joint_name_fallback_count > 0) {
+            RCLCPP_ERROR(this->get_logger(),
+                "CRITICAL: %d/%zu planning joints fell back to 0.0! Joint name mismatch between KDL chain and /joint_states.",
+                joint_name_fallback_count, planning_joints.size());
+            // Print /joint_states names for debugging
+            std::ostringstream js_names;
+            for (size_t i = 0; i < joint_names_.size(); ++i) {
+                if (i > 0) js_names << ", ";
+                js_names << joint_names_[i];
+            }
+            RCLCPP_INFO(this->get_logger(), "/joint_states joint names (%zu): [%s]",
+                joint_names_.size(), js_names.str().c_str());
         }
         KDL::Frame target_frame(KDL::Rotation::Quaternion(
                                     pose_in_base.pose.orientation.x,
@@ -640,6 +672,58 @@ private:
         if (!goal_found) {
             RCLCPP_ERROR(this->get_logger(), "IK failed to find a collision-free goal state. Aborting.");
             return;
+        }
+
+        // ------------------------------------------------------------------
+        // FK diagnostic: verify IK goal reaches target and start is correct
+        // ------------------------------------------------------------------
+        {
+            KDL::Frame start_fk, goal_fk;
+            KDL::JntArray start_jnt(planning_joints.size());
+            for (size_t i = 0; i < planning_joints.size(); ++i) start_jnt(i) = planning_positions[i];
+            int start_ret = fk_right_solver->JntToCart(start_jnt, start_fk);
+            int goal_ret = fk_right_solver->JntToCart(goal, goal_fk);
+
+            RCLCPP_INFO(this->get_logger(),
+                "=== FK DIAGNOSTIC ===");
+            RCLCPP_INFO(this->get_logger(),
+                "  Target frame xyz:  [%.4f, %.4f, %.4f]",
+                target_frame.p.x(), target_frame.p.y(), target_frame.p.z());
+            RCLCPP_INFO(this->get_logger(),
+                "  Start FK xyz:      [%.4f, %.4f, %.4f] (ret=%d)",
+                start_fk.p.x(), start_fk.p.y(), start_fk.p.z(), start_ret);
+            RCLCPP_INFO(this->get_logger(),
+                "  Goal FK xyz:       [%.4f, %.4f, %.4f] (ret=%d)",
+                goal_fk.p.x(), goal_fk.p.y(), goal_fk.p.z(), goal_ret);
+            RCLCPP_INFO(this->get_logger(),
+                "  Goal FK error:     [%.4f, %.4f, %.4f]  norm=%.4f m",
+                goal_fk.p.x() - target_frame.p.x(),
+                goal_fk.p.y() - target_frame.p.y(),
+                goal_fk.p.z() - target_frame.p.z(),
+                std::sqrt(std::pow(goal_fk.p.x() - target_frame.p.x(), 2) +
+                          std::pow(goal_fk.p.y() - target_frame.p.y(), 2) +
+                          std::pow(goal_fk.p.z() - target_frame.p.z(), 2)));
+            RCLCPP_INFO(this->get_logger(),
+                "  Start→Goal joint delta norm: %.4f rad",
+                [&](){
+                    double sum = 0.0;
+                    for (size_t i = 0; i < planning_joints.size(); ++i)
+                        sum += std::pow(goal(i) - planning_positions[i], 2);
+                    return std::sqrt(sum);
+                }());
+            // Print start and goal joint values compactly
+            {
+                std::ostringstream s_joints, g_joints;
+                for (size_t i = 0; i < planning_joints.size(); ++i) {
+                    if (i > 0) { s_joints << ", "; g_joints << ", "; }
+                    s_joints << std::fixed << std::setprecision(4) << planning_positions[i];
+                    g_joints << std::fixed << std::setprecision(4) << goal(i);
+                }
+                RCLCPP_INFO(this->get_logger(), "  Start joints (rad): [%s]", s_joints.str().c_str());
+                RCLCPP_INFO(this->get_logger(), "  Goal  joints (rad): [%s]", g_joints.str().c_str());
+            }
+            RCLCPP_INFO(this->get_logger(),
+                "=== END FK DIAGNOSTIC ===");
         }
 
         // OMPL bounds: use URDF joint limits if available, else fallback to [-3.14, 3.14]
@@ -736,7 +820,11 @@ private:
             const std::size_t n_after = path.getStateCount();
             RCLCPP_INFO(this->get_logger(), "Simplified: %zu → %zu waypoints (-%zu%%)",
                         n_before, n_after, n_before > 0 ? (n_before - n_after) * 100 / n_before : 0);
+            const std::size_t n_before_interp = path.getStateCount();
             path.interpolate();
+            const std::size_t n_after_interp = path.getStateCount();
+            RCLCPP_INFO(this->get_logger(), "After interpolate(): %zu → %zu states (+%zu)",
+                n_before_interp, n_after_interp, n_after_interp - n_before_interp);
             const auto& states = path.getStates();
             trajectory_msgs::msg::JointTrajectory traj_msg;
             traj_msg.joint_names = planning_joints;
@@ -765,8 +853,41 @@ private:
                 point.time_from_start = rclcpp::Duration::from_seconds(cumulative_time);
                 traj_msg.points.push_back(point);
             }
-            RCLCPP_INFO(this->get_logger(), "Trajectory: %zu waypoints, %.3f seconds total duration",
-                        traj_msg.points.size(), cumulative_time);
+            RCLCPP_INFO(this->get_logger(), "Trajectory: %zu waypoints, %.3f seconds total duration (velocity_scale=%.3f, min_time_step=%.3f)",
+                        traj_msg.points.size(), cumulative_time, velocity_scale_, min_time_step_);
+            // --- Velocity limit & per-segment diagnostic ---
+            {
+                std::ostringstream vel_limits_oss;
+                vel_limits_oss << "Velocity limits for " << planning_joints.size() << " right-arm joints:";
+                int vel_found = 0, vel_missing = 0;
+                for (size_t i = 0; i < planning_joints.size(); ++i) {
+                    auto vel_it = velocity_limits_.find(planning_joints[i]);
+                    bool found = (vel_it != velocity_limits_.end());
+                    double v = found ? vel_it->second : 10.0;
+                    vel_limits_oss << " [" << planning_joints[i] << "=" << std::fixed << std::setprecision(2) << v;
+                    vel_limits_oss << (found ? "]" : "(fallback)]");
+                    if (found) ++vel_found; else ++vel_missing;
+                }
+                RCLCPP_INFO(this->get_logger(), "%s", vel_limits_oss.str().c_str());
+                if (vel_missing > 0) {
+                    RCLCPP_WARN(this->get_logger(), "%d/%zu joints missing velocity limits — using fallback 10.0 rad/s",
+                        vel_missing, planning_joints.size());
+                }
+                RCLCPP_INFO(this->get_logger(), "Per-segment dt (max across joints):");
+                for (size_t idx = 1; idx < traj_msg.points.size(); ++idx) {
+                    double t_prev = rclcpp::Duration(traj_msg.points[idx - 1].time_from_start).seconds();
+                    double t_curr = rclcpp::Duration(traj_msg.points[idx].time_from_start).seconds();
+                    double dt = t_curr - t_prev;
+                    double max_dq = 0.0;
+                    std::string max_joint;
+                    for (size_t i = 0; i < planning_joints.size(); ++i) {
+                        double dq = std::abs(traj_msg.points[idx].positions[i] - traj_msg.points[idx - 1].positions[i]);
+                        if (dq > max_dq) { max_dq = dq; max_joint = planning_joints[i]; }
+                    }
+                    RCLCPP_INFO(this->get_logger(), "  seg[%zu]: dt=%.4fs  max_dq=%.4frad (%s)",
+                        idx, dt, max_dq, max_joint.c_str());
+                }
+            }
             // Pre-publish trajectory validation with auto-fix
             bool position_fixed = false;
             bool velocity_fixed = false;
@@ -837,6 +958,42 @@ private:
                     return;
                 }
             }
+            // ------------------------------------------------------------------
+            // FK verification: check first and last trajectory waypoint TCP pose
+            // ------------------------------------------------------------------
+            if (!traj_msg.points.empty()) {
+                const auto& first_pt = traj_msg.points.front();
+                const auto& last_pt = traj_msg.points.back();
+                KDL::JntArray first_jnt(planning_joints.size()), last_jnt(planning_joints.size());
+                for (size_t i = 0; i < planning_joints.size(); ++i) {
+                    first_jnt(i) = first_pt.positions[i];
+                    last_jnt(i) = last_pt.positions[i];
+                }
+                KDL::Frame first_fk, last_fk;
+                int first_ret = fk_right_solver->JntToCart(first_jnt, first_fk);
+                int last_ret = fk_right_solver->JntToCart(last_jnt, last_fk);
+                RCLCPP_INFO(this->get_logger(),
+                    "=== TRAJECTORY FK DIAGNOSTIC ===");
+                RCLCPP_INFO(this->get_logger(),
+                    "  First waypoint FK xyz: [%.4f, %.4f, %.4f] (ret=%d)",
+                    first_fk.p.x(), first_fk.p.y(), first_fk.p.z(), first_ret);
+                RCLCPP_INFO(this->get_logger(),
+                    "  Last  waypoint FK xyz: [%.4f, %.4f, %.4f] (ret=%d)",
+                    last_fk.p.x(), last_fk.p.y(), last_fk.p.z(), last_ret);
+                RCLCPP_INFO(this->get_logger(),
+                    "  Target frame xyz:     [%.4f, %.4f, %.4f]",
+                    target_frame.p.x(), target_frame.p.y(), target_frame.p.z());
+                RCLCPP_INFO(this->get_logger(),
+                    "  Last waypoint FK error: [%.4f, %.4f, %.4f]  norm=%.4f m",
+                    last_fk.p.x() - target_frame.p.x(),
+                    last_fk.p.y() - target_frame.p.y(),
+                    last_fk.p.z() - target_frame.p.z(),
+                    std::sqrt(std::pow(last_fk.p.x() - target_frame.p.x(), 2) +
+                              std::pow(last_fk.p.y() - target_frame.p.y(), 2) +
+                              std::pow(last_fk.p.z() - target_frame.p.z(), 2)));
+                RCLCPP_INFO(this->get_logger(),
+                    "=== END TRAJECTORY FK DIAGNOSTIC ===");
+            }
             traj_msg.header.stamp = this->now();
             traj_pub_->publish(traj_msg);
             RCLCPP_INFO(this->get_logger(),
@@ -850,6 +1007,9 @@ private:
     // Restrict collision checking to only pairs where at least one link is in planning_links
     bool isInCollision(const KDL::JntArray& joints, const std::vector<std::string>& skip_pairs = {}, const std::set<std::string>& planning_links = {})
     {
+        if (!collision_detection_enabled_) {
+            return false;
+        }
         auto& fk_solver = fk_right_solver;
         auto& kdl_chain = kdl_chain_right;
         std::map<std::string, KDL::Frame> segment_frames;

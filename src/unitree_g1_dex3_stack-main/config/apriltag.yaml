@@ -25,13 +25,15 @@ apriltag_detector:
     target_pose_topic: "/apriltag/target_pose"
 
     # ---------- TF lookup ----------
-    tf_lookup_timeout_s: 0.5
+    tf_lookup_timeout_s: 0.02
 
 ik_fcl_ompl_planner:
   ros__parameters:
-    tcp_offset_x: 0.175
+    tcp_offset_x: 0.12
     adaptive_orientation_enabled: false
+    collision_detection_enabled: false
+    velocity_scale: 0.02
 
 tcp_torso_pose:
   ros__parameters:
-    tcp_offset_x: 0.175
+    tcp_offset_x: 0.12

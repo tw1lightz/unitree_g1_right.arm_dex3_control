@@ -189,14 +189,10 @@ class AprilTagGoalBridge(Node):
                 f'{self._shoulder_origin[1]:.3f}, '
                 f'{self._shoulder_origin[2]:.3f})')
         except Exception as ex:
-            self.get_logger().warn(
-                f'[apriltag_goal_bridge] Shoulder TF lookup failed '
-                f'({self._shoulder_retry_count}): {ex}')
-            if self._shoulder_retry_count > 10:
-                self.get_logger().fatal(
-                    '[apriltag_goal_bridge] Could not resolve '
-                    'shoulder origin after 10 attempts')
-                raise SystemExit(1)
+            if self._shoulder_retry_count == 1 or self._shoulder_retry_count % 10 == 0:
+                self.get_logger().warn(
+                    f'[apriltag_goal_bridge] Shoulder TF lookup failed '
+                    f'({self._shoulder_retry_count}): {ex}')
 
     # ------------------------------------------------------------------
     # 7. _tick — periodic keyboard poll (0.1s)

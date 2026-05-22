@@ -19,7 +19,10 @@ hardcoded.
 """
 
 import collections
+import queue
+import threading
 import time
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 import numpy as np
 import cv2
@@ -58,9 +61,10 @@ class AprilTagDetectorNode(Node):
         self.declare_parameter('camera_info_topic', '/camera/color/camera_info')
         self.declare_parameter('tag_pose_topic', '/apriltag/tag_pose')
         self.declare_parameter('target_pose_topic', '/apriltag/target_pose')
-        self.declare_parameter('tf_lookup_timeout_s', 0.5)
+        self.declare_parameter('tf_lookup_timeout_s', 0.02)
         # imshow: launch arg (D-15), default true; q-key disables at runtime
         self.declare_parameter('imshow', True)
+        self.declare_parameter('stream_port', 0)
 
         # ---------- read parameters into instance state ----------
         self.tag_family = self.get_parameter('tag_family').value
@@ -79,11 +83,13 @@ class AprilTagDetectorNode(Node):
             self.get_parameter('tf_lookup_timeout_s').value)
         self.imshow = bool(self.get_parameter('imshow').value)
         self.imshow_enabled = self.imshow  # mutable so 'q' key can disable
+        self.stream_port = int(self.get_parameter('stream_port').value)
+        self.stream_enabled = self.stream_port > 0
 
         # ---------- detector + helpers ----------
         self.detector = Detector(
             families=self.tag_family,
-            nthreads=2,
+            nthreads=1,
             quad_decimate=2.0,
             refine_edges=1,
         )
@@ -107,10 +113,20 @@ class AprilTagDetectorNode(Node):
         self.last_info_warn_time = 0.0
         self._info_logged_once = False
 
-        # ---------- OpenCV window (D-18) ----------
+        # ---------- MJPEG stream ----------
+        self._stream_frame = None  # latest JPEG bytes
+        self._stream_lock = threading.Lock()
+        if self.stream_enabled:
+            self._start_mjpeg_server()
+
+        # ---------- OpenCV display thread (D-18) ----------
         self.window_name = f"AprilTag detector (id={self.target_tag_id})"
+        self._display_queue = queue.Queue(maxsize=1)  # drop old frames
         if self.imshow_enabled:
             cv2.namedWindow(self.window_name, cv2.WINDOW_AUTOSIZE)
+            self._display_timer = self.create_timer(0.03, self._display_timer_cb)
+        else:
+            self._display_timer = None
 
         # ---------- subs (sensor_data QoS — RealSense is BEST_EFFORT) ----------
         self.create_subscription(
@@ -128,7 +144,8 @@ class AprilTagDetectorNode(Node):
         self.get_logger().info(
             f"AprilTag detector ready: family={self.tag_family} "
             f"target_id={self.target_tag_id} tag_size={self.tag_size}m "
-            f"output_frame={self.output_frame} imshow={self.imshow_enabled}")
+            f"output_frame={self.output_frame} imshow={self.imshow_enabled} "
+            f"stream={'http://0.0.0.0:' + str(self.stream_port) + '/stream' if self.stream_enabled else 'off'}")
 
     # ------------------------------------------------------------------
     # CameraInfo callback — cache intrinsics on first arrival
@@ -164,10 +181,8 @@ class AprilTagDetectorNode(Node):
         now = time.monotonic()
         self.frame_times.append(now)
 
-        # Skip frames to limit detection rate to ~5 Hz
-        if now - self.last_processed_time < 0.20:
-            if self.imshow_enabled:
-                cv2.waitKey(1)
+        # Skip frames to limit detection rate to ~3 Hz
+        if now - self.last_processed_time < 0.33:
             return
         self.last_processed_time = now
 
@@ -184,17 +199,13 @@ class AprilTagDetectorNode(Node):
 
         gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
 
-        # Downscale to half resolution before detection to reduce CPU load
+        # Always downscale to half resolution for detection (critical on ARM/Tegra)
         scale = 0.5
         h, w = gray.shape[:2]
-        if w > 640:
-            gray_small = cv2.resize(gray, (int(w * scale), int(h * scale)),
-                                    interpolation=cv2.INTER_AREA)
-            fx, fy, cx, cy = self.camera_params
-            cam_params_small = (fx * scale, fy * scale, cx * scale, cy * scale)
-        else:
-            gray_small = gray
-            cam_params_small = self.camera_params
+        gray_small = cv2.resize(gray, (int(w * scale), int(h * scale)),
+                                interpolation=cv2.INTER_AREA)
+        fx, fy, cx, cy = self.camera_params
+        cam_params_small = (fx * scale, fy * scale, cx * scale, cy * scale)
 
         detections = self.detector.detect(
             gray_small,
@@ -203,17 +214,17 @@ class AprilTagDetectorNode(Node):
             tag_size=self.tag_size,
         )
 
-        # Scale corners back to original resolution for correct viz overlay
-        if w > 640:
-            for d in detections:
-                d.corners = d.corners / scale
-                d.center = d.center / scale
+        # Scale corners back to original resolution for viz overlay
+        for d in detections:
+            d.corners = d.corners / scale
+            d.center = d.center / scale
 
-        # Prepare display canvas only if imshow currently enabled
-        display = bgr.copy() if self.imshow_enabled else None
+        # Prepare display canvas if imshow or streaming is active
+        display = bgr.copy() if (self.imshow_enabled or self.stream_enabled) else None
 
         # Track best margin across all detections (for HUD)
         best_margin = 0.0
+        accepted_poses = []
 
         for d in detections:
             if d.decision_margin > best_margin:
@@ -305,19 +316,7 @@ class AprilTagDetectorNode(Node):
             target_pose_cam.pose.orientation.z = float(target_quat[2])
             target_pose_cam.pose.orientation.w = float(target_quat[3])
 
-            # ---------- TF transform to output_frame (D-09 + D-04) ----------
-            timeout = Duration(seconds=self.tf_lookup_timeout_s)
-            try:
-                pose_torso = self.tf_buffer.transform(
-                    pose_cam, self.output_frame, timeout=timeout)
-                target_torso = self.tf_buffer.transform(
-                    target_pose_cam, self.output_frame, timeout=timeout)
-            except tf2_ros.TransformException as ex:
-                self._warn_throttled(f"TF transform failed: {ex}")
-                continue
-
-            self.tag_pose_pub.publish(pose_torso)
-            self.target_pose_pub.publish(target_torso)
+            accepted_poses.append((pose_cam, target_pose_cam))
 
         # ---------- HUD + window blit (only if imshow active) ----------
         if display is not None:
@@ -357,13 +356,109 @@ class AprilTagDetectorNode(Node):
             )
 
             display_show = cv2.resize(display, (640, 480))
-            cv2.imshow(self.window_name, display_show)
-            key = cv2.waitKey(10) & 0xFF
-            if key == ord('q'):
-                cv2.destroyWindow(self.window_name)
-                self.imshow_enabled = False
-                self.get_logger().info(
-                    "imshow disabled by 'q' key (node continues publishing)")
+
+            # MJPEG stream: encode and store
+            if self.stream_enabled:
+                _, jpeg = cv2.imencode('.jpg', display_show,
+                                       [cv2.IMWRITE_JPEG_QUALITY, 70])
+                with self._stream_lock:
+                    self._stream_frame = jpeg.tobytes()
+
+            # Local window
+            if self.imshow_enabled:
+                try:
+                    self._display_queue.put_nowait(display_show)
+                except queue.Full:
+                    pass  # drop frame, display thread is busy
+
+        # ---------- TF transform + publish (after display to keep window responsive) ----------
+        if accepted_poses:
+            timeout = Duration(seconds=self.tf_lookup_timeout_s)
+            for pose_cam, target_pose_cam in accepted_poses:
+                try:
+                    pose_torso = self.tf_buffer.transform(
+                        pose_cam, self.output_frame, timeout=timeout)
+                    target_torso = self.tf_buffer.transform(
+                        target_pose_cam, self.output_frame, timeout=timeout)
+                except tf2_ros.TransformException as ex:
+                    self._warn_throttled(f"TF transform failed: {ex}")
+                    continue
+                self.tag_pose_pub.publish(pose_torso)
+                self.target_pose_pub.publish(target_torso)
+
+    # ------------------------------------------------------------------
+    # OpenCV display worker (runs in dedicated thread, never blocks ROS)
+    # ------------------------------------------------------------------
+    def _display_timer_cb(self):
+        if not self.imshow_enabled:
+            if self._display_timer is not None:
+                self.destroy_timer(self._display_timer)
+                self._display_timer = None
+            return
+
+        frame = None
+        try:
+            while True:
+                frame = self._display_queue.get_nowait()
+        except queue.Empty:
+            pass
+
+        if frame is not None:
+            cv2.imshow(self.window_name, frame)
+
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('q'):
+            cv2.destroyWindow(self.window_name)
+            self.imshow_enabled = False
+            self.get_logger().info(
+                "imshow disabled by 'q' key (node continues publishing)")
+
+    # ------------------------------------------------------------------
+    # MJPEG HTTP server
+    # ------------------------------------------------------------------
+    def _start_mjpeg_server(self):
+        node_ref = self
+
+        class MjpegHandler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                if self.path == '/stream':
+                    self.send_response(200)
+                    self.send_header('Content-Type',
+                                     'multipart/x-mixed-replace; boundary=frame')
+                    self.end_headers()
+                    try:
+                        while True:
+                            with node_ref._stream_lock:
+                                frame = node_ref._stream_frame
+                            if frame is None:
+                                time.sleep(0.1)
+                                continue
+                            self.wfile.write(b'--frame\r\n')
+                            self.wfile.write(b'Content-Type: image/jpeg\r\n')
+                            self.wfile.write(f'Content-Length: {len(frame)}\r\n'.encode())
+                            self.wfile.write(b'\r\n')
+                            self.wfile.write(frame)
+                            self.wfile.write(b'\r\n')
+                            time.sleep(0.15)  # ~6-7 fps to clients
+                    except (BrokenPipeError, ConnectionResetError):
+                        pass
+                else:
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'text/html')
+                    self.end_headers()
+                    self.wfile.write(
+                        b'<html><body style="margin:0;background:#000">'
+                        b'<img src="/stream" style="width:100%;height:auto">'
+                        b'</body></html>')
+
+            def log_message(self, format, *args):
+                pass  # suppress per-request logs
+
+        server = HTTPServer(('0.0.0.0', self.stream_port), MjpegHandler)
+        t = threading.Thread(target=server.serve_forever, daemon=True)
+        t.start()
+        self.get_logger().info(
+            f"MJPEG stream server started on http://0.0.0.0:{self.stream_port}/stream")
 
     # ------------------------------------------------------------------
     # helpers

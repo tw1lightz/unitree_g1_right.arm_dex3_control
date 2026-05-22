@@ -42,7 +42,46 @@ sudo apt install -y \
   libeigen3-dev \
   liboctomap-dev \
   libopencv-dev \
-  libpcl-dev
+  libpcl-dev \
+  python3-pykdl \
+  python3-numpy \
+  python3-pip
+```
+
+### 2.1 Python 依赖（标定与重力补偿脚本）
+
+标定脚本（`scripts/calibrate_kdl_tau.py`、`scripts/gravity_calibration_manual.py`）需要 `PyKDL` 和 `numpy`，已在上面通过 apt 安装。
+
+如果需要使用 Pinocchio 重力补偿节点（`gravity_torque_publisher.py`，可选），安装 Pinocchio：
+
+```bash
+pip3 install pin
+```
+
+### 2.2 AprilTag 检测的 Python 依赖
+
+`apriltag_detector_node.py` 和 `apriltag_goal_bridge.py` 依赖以下 pip 包：
+
+```bash
+pip install pupil-apriltags
+```
+
+**注意**: pip 安装的 `numpy` 版本可能和 ROS 2 Humble 的 `cv_bridge`（基于 numpy 1.x 编译）冲突。如果运行时出现：
+
+```text
+AttributeError: _ARRAY_API not found
+```
+
+说明 pip 的 numpy 2.x 覆盖了系统 numpy 1.x。降级即可：
+
+```bash
+pip install "numpy<2"
+```
+
+同理，如果 `pip install opencv-python` 版本过新，也可能与 cv_bridge 冲突。本项目的图像处理通过 apt 的 `python3-opencv` 完成，不需要 pip 的 `opencv-python`；如有冲突可卸载：
+
+```bash
+pip uninstall opencv-python
 ```
 
 `libccd-dev` 是必须项；否则源码内的 `fcl` 会在 CMake 阶段报错：
@@ -96,7 +135,27 @@ Could not find a package configuration file provided by "unitree_hg"
 source ~/unitree_ros2/cyclonedds_ws/install/setup.bash
 ```
 
-## 4. 准备本项目工作区
+## 4. 准备 RealSense ROS2 工作区
+
+`apriltag_reach.launch.py` 启动 RealSense D435 相机，依赖 `realsense2_camera` 消息包。如果机器上还未编译，先安装：
+
+```bash
+cd ~
+git clone https://github.com/IntelRealSense/realsense-ros.git
+cd realsense-ros
+source /opt/ros/humble/setup.bash
+colcon build
+```
+
+建议将 realsense 工作区的 source 写入 `~/.bashrc`：
+
+```bash
+echo "source ~/realsense-ros2/install/setup.bash" >> ~/.bashrc
+```
+
+否则每个新终端启动 launch 前都需要手动 source。
+
+## 5. 准备本项目工作区
 
 确保目录结构类似：
 
@@ -120,6 +179,7 @@ cd ~/Desktop/unitree_dex3
 ```bash
 source /opt/ros/humble/setup.bash
 source ~/unitree_ros2/cyclonedds_ws/install/setup.bash
+source ~/realsense-ros2/install/setup.bash
 ```
 
 如果本工作区已经编译过，也可以追加：
@@ -128,9 +188,9 @@ source ~/unitree_ros2/cyclonedds_ws/install/setup.bash
 source install/setup.bash
 ```
 
-## 5. 编译
+## 6. 编译
 
-### 5.1 首次全量编译
+### 6.1 首次全量编译
 
 ```bash
 cd ~/Desktop/unitree_dex3
@@ -148,7 +208,7 @@ Summary: 5 packages finished
 
 只要没有 `failed`，就算编译成功。
 
-### 5.2 只重编主包
+### 6.2 只重编主包
 
 修改 `unitree_g1_dex3_stack-main` 后，可只编译主包：
 
@@ -162,9 +222,9 @@ colcon build --packages-select unitree_g1_dex3_stack --cmake-args -DBUILD_IK_FCL
 source install/setup.bash
 ```
 
-## 6. 运行验证
+## 7. 运行验证
 
-### 6.1 启动 robot model
+### 7.1 启动 robot model
 
 先启动 `robot_state_publisher`，让 planner 能读取正确的 `robot_description`：
 
@@ -179,7 +239,7 @@ ros2 launch unitree_g1_dex3_stack robot.launch.py
 
 保持这个终端运行。
 
-### 6.2 启动 planner
+### 7.2 启动 planner
 
 另开一个终端：
 
@@ -199,9 +259,9 @@ Simplification: method=..., timeout=..., max_steps=..., max_empty_steps=...
 Right arm: base_link = torso_link, tip_link = right_wrist_yaw_link
 ```
 
-## 7. 常见问题
+## 8. 常见问题
 
-### 7.1 `unitree_hg` 找不到
+### 8.1 `unitree_hg` 找不到
 
 错误：
 
@@ -218,7 +278,7 @@ source ~/unitree_ros2/cyclonedds_ws/install/setup.bash
 
 然后重新构建。
 
-### 7.2 `CCD is required by FCL`
+### 8.2 `CCD is required by FCL`
 
 错误：
 
@@ -235,7 +295,7 @@ sudo apt install -y libccd-dev
 
 然后重新构建。
 
-### 7.3 `resource_retriever/retriever.h` 找不到
+### 8.3 `resource_retriever/retriever.h` 找不到
 
 ROS 2 Humble 使用：
 
@@ -249,7 +309,7 @@ ROS 2 Humble 使用：
 #include <resource_retriever/retriever.h>
 ```
 
-### 7.4 `ObjectHypothesisWithPose` 没有 `id` 或 `score`
+### 8.4 `ObjectHypothesisWithPose` 没有 `id` 或 `score`
 
 ROS 2 Humble 的 `vision_msgs` 结构应使用：
 
@@ -265,7 +325,7 @@ detection.results.front().id
 detection.results.front().score
 ```
 
-### 7.5 `PathSimplifier` 没有 `shortcutPath`
+### 8.5 `PathSimplifier` 没有 `shortcutPath`
 
 ROS Humble 当前 OMPL 版本没有 `shortcutPath()`。本项目使用：
 
@@ -273,7 +333,7 @@ ROS Humble 当前 OMPL 版本没有 `shortcutPath()`。本项目使用：
 ps.partialShortcutPath(path, max_steps, max_empty_steps);
 ```
 
-### 7.6 `planner.launch.py` 报空 tuple 参数
+### 8.6 `planner.launch.py` 报空 tuple 参数
 
 错误：
 
@@ -283,7 +343,7 @@ Expected 'value' to be one of [...], but got '()' of type '<class 'tuple'>'
 
 原因通常是 launch 文件把空列表作为 ROS 参数传入。`collision_skip_pairs` 为空时不要传入该参数，让 C++ 节点使用默认空 vector。
 
-### 7.7 `Failed to extract KDL chain for right arm`
+### 8.7 `Failed to extract KDL chain for right arm`
 
 错误：
 
@@ -304,7 +364,7 @@ Failed to extract KDL chain for right arm
 ros2 param get /robot_state_publisher robot_description | grep -E "torso_link|right_wrist_yaw_link|right_hand_palm_link"
 ```
 
-### 7.8 `tcp_torso_pose.py` 报 `No module named 'kdl_parser_py'`
+### 8.8 `tcp_torso_pose.py` 报 `No module named 'kdl_parser_py'`
 
 错误：
 
@@ -328,7 +388,66 @@ ModuleNotFoundError: No module named 'urdf_parser_py'
 
 按上面的命令装 `ros-humble-urdfdom-py` 即可。
 
-## 8. 编译成功判定
+### 8.9 `realsense2_camera` 找不到
+
+错误：
+
+```text
+PackageNotFoundError: "package 'realsense2_camera' not found, searching: [...]
+```
+
+原因：`apriltag_reach.launch.py` 引用了 `realsense2_camera`，但当前终端没有 source realsense-ros2 工作区。
+
+处理：
+
+```bash
+source ~/realsense-ros2/install/setup.bash
+```
+
+建议将该行写入 `~/.bashrc` 以持久化，见第 4 节。
+
+### 8.10 `_ARRAY_API not found` / `No module named 'pupil_apriltags'`
+
+错误：
+
+```text
+AttributeError: _ARRAY_API not found
+ModuleNotFoundError: No module named 'pupil_apriltags'
+```
+
+原因：(1) pip 安装的 numpy 2.x 覆盖了系统 numpy 1.x，但 ROS 2 Humble 的 `cv_bridge` 是用 numpy 1.x 编译的；(2) `pupil_apriltags` 未安装。
+
+处理：
+
+```bash
+pip install "numpy<2" pupil-apriltags
+```
+
+### 8.11 `right_shoulder_pitch_link` TF 不存在
+
+运行 `apriltag_reach.launch.py` 后 `apriltag_goal_bridge` 反复报：
+
+```text
+"right_shoulder_pitch_link" passed to lookupTransform argument source_frame does not exist.
+```
+
+最后以 `FATAL` 退出。
+
+原因：`joint_state_publisher` 无法从机器人订阅 `/lf/lowstate`（电机状态），导致 `/joint_states` 为空，`robot_state_publisher` 无法发布完整 TF 树。通常是因为机器人本体未上电、电机控制器未启动。
+
+排查：
+
+```bash
+# 看 joint_states 是否有数据
+ros2 topic echo /joint_states --once
+
+# 看 lowstate 是否有数据
+ros2 topic echo /lf/lowstate --once
+```
+
+如果 `/lf/lowstate` 无数据，需要先在机器人上启动 Unitree HG SDK，确保电机上电。
+
+## 9. 编译成功判定
 
 目标包成功：
 

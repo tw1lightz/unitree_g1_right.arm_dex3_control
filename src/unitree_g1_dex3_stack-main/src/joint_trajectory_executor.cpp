@@ -9,7 +9,6 @@
 #include <trajectory_msgs/msg/joint_trajectory.hpp>
 #include <trajectory_msgs/msg/joint_trajectory_point.hpp>
 
-#include <std_msgs/msg/bool.hpp>
 
 #include <array>
 #include <vector>
@@ -19,6 +18,10 @@
 #include <string>
 #include <string_view>
 #include <urdf/model.h>
+
+#include <kdl_parser/kdl_parser.hpp>
+#include <kdl/chaindynparam.hpp>
+#include <kdl/jntarray.hpp>
 
 #include <atomic>
 #include <csignal>
@@ -92,8 +95,6 @@ public:
     qos_profile.best_effort();
 
     cmd_pub_ = this->create_publisher<unitree_hg::msg::LowCmd>("/arm_sdk", qos_profile);
-    left_hand_pub_ = this->create_publisher<std_msgs::msg::Bool>("/dex3/left/command", 10);
-    right_hand_pub_ = this->create_publisher<std_msgs::msg::Bool>("/dex3/right/command", 10);
 
     traj_sub_ = this->create_subscription<trajectory_msgs::msg::JointTrajectory>(
       "/joint_trajectory_targets", 10,
@@ -144,6 +145,25 @@ public:
           joint_limits_[joint->name] = lim;
         }
         RCLCPP_INFO(this->get_logger(), "Loaded joint limits from URDF");
+
+        // Build KDL tree and right-arm chain for gravity compensation
+        KDL::Tree kdl_tree;
+        if (kdl_parser::treeFromUrdfModel(urdf_model, kdl_tree)) {
+          if (kdl_tree.getChain("torso_link", "right_wrist_yaw_link", kdl_chain_right_)) {
+            // Gravity in torso_link frame: Z is up
+            gravity_solver_ = std::make_unique<KDL::ChainDynParam>(
+                kdl_chain_right_, KDL::Vector(0.0, 0.0, -9.81));
+            gravity_enabled_ = true;
+            RCLCPP_INFO(this->get_logger(),
+                "KDL gravity compensation enabled: %u segments, %u joints",
+                kdl_chain_right_.getNrOfSegments(), kdl_chain_right_.getNrOfJoints());
+          } else {
+            RCLCPP_WARN(this->get_logger(),
+                "Failed to get KDL chain torso_link->right_wrist_yaw_link; gravity comp disabled");
+          }
+        } else {
+          RCLCPP_WARN(this->get_logger(), "Failed to build KDL tree; gravity comp disabled");
+        }
       } else {
         RCLCPP_WARN(this->get_logger(), "Failed to parse URDF for joint limits");
       }
@@ -168,12 +188,38 @@ public:
 
 private:
   rclcpp::Publisher<unitree_hg::msg::LowCmd>::SharedPtr cmd_pub_;
-  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr left_hand_pub_;
-  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr right_hand_pub_;
   rclcpp::Subscription<trajectory_msgs::msg::JointTrajectory>::SharedPtr traj_sub_;
   rclcpp::Subscription<unitree_hg::msg::LowState>::SharedPtr lowstate_sub_;
   std::map<std::string, JointLimits> joint_limits_;
   std::vector<float> latest_joint_positions_;
+
+  // KDL gravity compensation
+  KDL::Chain kdl_chain_right_;
+  std::unique_ptr<KDL::ChainDynParam> gravity_solver_;
+  bool gravity_enabled_ = false;
+
+  // KDL gravity torque correction (from calibrate_kdl_tau.py)
+  // Wrist joints (4-6): scale=1 since KDL gives near-zero; only bias compensates
+  const std::array<float, 7> gravity_scale_ = {1.5761f, 1.6540f, 2.1793f, 2.5543f, 1.0f, 1.0f, 1.0f};
+  const std::array<float, 7> gravity_bias_  = {-0.0400f, 0.4672f, 0.1232f, 0.2478f, -0.0832f, 0.0251f, 0.0624f};
+
+  // Compute gravity torques for 7 right-arm joints given their positions.
+  std::vector<float> computeGravityTorques(const std::array<float, 7>& q_right_arm) {
+    std::vector<float> torques(7, 0.0f);
+    if (!gravity_enabled_) return torques;
+    unsigned int nj = kdl_chain_right_.getNrOfJoints();
+    KDL::JntArray q_kdl(nj);
+    for (unsigned int i = 0; i < nj && i < 7; ++i) {
+      q_kdl(i) = static_cast<double>(q_right_arm[i]);
+    }
+    KDL::JntArray gravity_torques(nj);
+    if (gravity_solver_->JntToGravity(q_kdl, gravity_torques) == 0) {
+      for (unsigned int i = 0; i < nj && i < 7; ++i) {
+        torques[i] = gravity_scale_[i] * static_cast<float>(gravity_torques(i)) + gravity_bias_[i];
+      }
+    }
+    return torques;
+  }
 
   void lowstateCallback(const unitree_hg::msg::LowState::SharedPtr msg) {
     // Store latest positions for all arm joints
@@ -245,46 +291,23 @@ private:
       return;
     }
 
-    auto hand_it = std::find_if(msg->joint_names.begin(), msg->joint_names.end(),
-      [](const std::string& name) {
-        return name.find("left") != std::string::npos || name.find("right") != std::string::npos;
-      });
-    if (hand_it == msg->joint_names.end()) {
-      RCLCPP_ERROR(this->get_logger(), "No side found in trajectory message");
-      return;
-    }
-    bool is_left_hand = hand_it->find("left") != std::string::npos;
-    RCLCPP_INFO(this->get_logger(), "Executing trajectory for %s hand", is_left_hand ? "left" : "right");
-    rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr hand_cmd_pub = is_left_hand ? left_hand_pub_ : right_hand_pub_;
 
-    // Plan 01-09: snapshot standing pose at callback entry. Arm is guaranteed
-    // to be at standing here (either previous trajectory's ramp settled it
-    // back, or robot just booted with body controller holding standing). This
-    // snapshot is the target the end-of-trajectory ramp will drive toward.
+    // snapshot standing pose at callback entry — target for end-of-trajectory ramp
     std::vector<float> standing_pose;
     if (!latest_joint_positions_.empty()) {
       standing_pose = latest_joint_positions_;
     }
 
-    // Start with preparing the hand, open it fully
-    std_msgs::msg::Bool hand_cmd;
-    hand_cmd.data = false; // Open hand command
-    // Plan 04-01 (D-01 minimal removal): hand-open publish deleted; sleep_for(1s) below stays as an inert settling delay.
-    // Wait for the hand to open
-    rclcpp::sleep_for(1s);  // Wait for the hand to open
-    RCLCPP_INFO(this->get_logger(), "Hand opened fully, starting trajectory execution");
-
     auto start_time = this->now();
 
     // Plan 01-06: honor SIGINT/SIGTERM mid-trajectory by breaking out of
-    // the waypoint loop at the next iteration. The trailing hand-close +
-    // 1s end-of-trajectory ramp then runs from the current trajectory
-    // point, producing a smooth release without re-grabbing authority.
+    // the waypoint loop at the next iteration. The end-of-trajectory ramp
+    // then runs from the current trajectory point, producing a smooth release.
     for (size_t i = 0; i < msg->points.size() && !g_shutdown_requested.load(); ++i) {
       const auto& point = msg->points[i];
       unitree_hg::msg::LowCmd cmd_msg;
 
-      cmd_msg.motor_cmd[JointIndex::kNotUsedJoint].q = 0.5f; // Full transition speed for trajectory following
+      cmd_msg.motor_cmd[JointIndex::kNotUsedJoint].q = 1.0f; // Full motion-sdk authority (matches free_arm_demo.py)
       // Fill all joints with latest state first
       // Plan 04-03 D-06 Option A: all 28 body joints locked with kp=60; non-right-arm joints held at latest_joint_positions_. Trajectory column override below drives right-arm q. Matches free_arm_demo.py coexistence pattern.
       for (const auto& pair : joint_name_to_index) {
@@ -298,8 +321,9 @@ private:
           cmd_msg.motor_cmd[idx].q = 0.0f;
         }
         cmd_msg.motor_cmd[idx].dq = 0.f;
-        cmd_msg.motor_cmd[idx].kp = 60.0f;
-        cmd_msg.motor_cmd[idx].kd = 1.5f;
+        bool is_wrist = (pair.first.find("wrist") != std::string::npos);
+        cmd_msg.motor_cmd[idx].kp = is_wrist ? 40.0f : 100.0f;
+        cmd_msg.motor_cmd[idx].kd = is_wrist ? 3.0f : 5.0f;
         cmd_msg.motor_cmd[idx].tau = 0.f;
       }
       // Plan 04-02 D-05: walk only the right-arm columns from the original msg; map lookups are guarded by stage 2 above.
@@ -313,6 +337,18 @@ private:
         cmd_msg.motor_cmd[target_index].q = target_position;
       }
 
+      // Gravity compensation: KDL feedforward torques for right-arm joints
+      if (gravity_enabled_) {
+        std::array<float, 7> q_ra;
+        for (size_t k = 0; k < 7; ++k) {
+          q_ra[k] = cmd_msg.motor_cmd[kRightArmJointIndices[k]].q;
+        }
+        auto grav_tau = computeGravityTorques(q_ra);
+        for (size_t k = 0; k < 7; ++k) {
+          cmd_msg.motor_cmd[kRightArmJointIndices[k]].tau = grav_tau[k];
+        }
+      }
+
       // Wait until the scheduled time for this point
       rclcpp::Time scheduled_time = start_time + point.time_from_start;
       rclcpp::Duration wait_time = scheduled_time - this->now();
@@ -323,7 +359,7 @@ private:
       cmd_pub_->publish(cmd_msg);
     }
 
-    RCLCPP_INFO(this->get_logger(), "Trajectory point %zu executed; holding stiff at end-point while hand closes.", msg->points.size());
+    RCLCPP_INFO(this->get_logger(), "Trajectory %zu waypoints executed; holding stiff at end-point.", msg->points.size());
 
     // Plan 01-12: capture trajectory end-point from the last waypoint.
     // latest_joint_positions_ is STALE here — single-threaded executor
@@ -351,22 +387,15 @@ private:
       }
     }
 
-    // Plan 01-11: close the publish gap. The two prior sleep_for(1s) calls
-    // (one to settle the last waypoint, one to wait for hand close) left the
-    // executor silent for 2 s right when smoothness mattered most -- firmware
-    // had no master/q from us during that window and started dragging the arm
-    // toward standing on its own. Replace with a single 1 s hold-publish loop
-    // that keeps publishing master=0.5 + q=latest + mode=1 + kp/kd at 250 Hz.
-    // Hand close runs in parallel (separate publisher) starting at frame 0.
-    hand_cmd.data = true;
-    // Plan 04-01 (D-01 minimal removal): hand-close publish deleted; the true assignment above is kept for future DEX3 re-enable.
+    // 1 s hold-publish loop at 250 Hz — keeps publishing master=0.5 + endpoint q
+    // so the arm has time to settle at the trajectory end-point.
 
     {
       const int hold_steps = 250;                            // 1.0 s @ 250 Hz
       const auto hold_sleep_ns = std::chrono::nanoseconds(4'000'000); // 4 ms
       for (int s = 0; s < hold_steps; ++s) {
         unitree_hg::msg::LowCmd hold_cmd;
-        hold_cmd.motor_cmd[JointIndex::kNotUsedJoint].q = 0.5f; // full planner authority
+        hold_cmd.motor_cmd[JointIndex::kNotUsedJoint].q = 1.0f; // full motion-sdk authority
         // Plan 04-03 D-06 Option A: all 28 body joints locked with kp=60 at trajectory end-point.
         for (const auto& pair : joint_name_to_index) {
           size_t idx = pair.second;
@@ -377,15 +406,27 @@ private:
             hold_cmd.motor_cmd[idx].q = 0.0f;
           }
           hold_cmd.motor_cmd[idx].dq = 0.f;
-          hold_cmd.motor_cmd[idx].kp = 60.0f;
-          hold_cmd.motor_cmd[idx].kd = 1.5f;
+          bool is_wrist = (pair.first.find("wrist") != std::string::npos);
+          hold_cmd.motor_cmd[idx].kp = is_wrist ? 40.0f : 100.0f;
+          hold_cmd.motor_cmd[idx].kd = is_wrist ? 3.0f : 5.0f;
           hold_cmd.motor_cmd[idx].tau = 0.f;
+        }
+        // Gravity compensation for hold
+        if (gravity_enabled_) {
+          std::array<float, 7> q_ra;
+          for (size_t k = 0; k < 7; ++k) {
+            q_ra[k] = hold_cmd.motor_cmd[kRightArmJointIndices[k]].q;
+          }
+          auto grav_tau = computeGravityTorques(q_ra);
+          for (size_t k = 0; k < 7; ++k) {
+            hold_cmd.motor_cmd[kRightArmJointIndices[k]].tau = grav_tau[k];
+          }
         }
         cmd_pub_->publish(hold_cmd);
         rclcpp::sleep_for(hold_sleep_ns);
       }
     }
-    RCLCPP_INFO(this->get_logger(), "Hand closed; trajectory execution complete, returning to default pose.");
+    RCLCPP_INFO(this->get_logger(), "Trajectory execution complete, ramping back to standing pose.");
 
     // Plan 01-12: use the trajectory end-point (computed from the last
     // waypoint above) as the ramp's starting pose, not the stale
@@ -402,7 +443,7 @@ private:
     auto sleep_ns = std::chrono::nanoseconds(static_cast<int64_t>((interp_duration / interp_steps) * 1e9));
     for (int step = 0; step <= interp_steps; ++step) {
       double t = static_cast<double>(step) / interp_steps;
-      double value = (1.0 - t) * 0.5 + t * 0.0; // Linear interpolation from 0.5 (matching trajectory/hold) to 0.0
+      double value = (1.0 - t) * 1.0 + t * 0.0; // Linear interpolation from 1.0 (matching trajectory/hold) to 0.0
       unitree_hg::msg::LowCmd final_cmd;
       final_cmd.motor_cmd[JointIndex::kNotUsedJoint].q = static_cast<float>(value);
       // Plan 01-09: drive the arm explicitly from trajectory end-point to
@@ -425,9 +466,21 @@ private:
           final_cmd.motor_cmd[idx].q = 0.0f;
         }
         final_cmd.motor_cmd[idx].dq = 0.f;
-        final_cmd.motor_cmd[idx].kp = 60.0f;
-        final_cmd.motor_cmd[idx].kd = 1.5f;
+        bool is_wrist = (pair.first.find("wrist") != std::string::npos);
+        final_cmd.motor_cmd[idx].kp = is_wrist ? 40.0f : 100.0f;
+        final_cmd.motor_cmd[idx].kd = is_wrist ? 3.0f : 5.0f;
         final_cmd.motor_cmd[idx].tau = 0.f;
+      }
+      // Gravity compensation for ramp
+      if (gravity_enabled_) {
+        std::array<float, 7> q_ra;
+        for (size_t k = 0; k < 7; ++k) {
+          q_ra[k] = final_cmd.motor_cmd[kRightArmJointIndices[k]].q;
+        }
+        auto grav_tau = computeGravityTorques(q_ra);
+        for (size_t k = 0; k < 7; ++k) {
+          final_cmd.motor_cmd[kRightArmJointIndices[k]].tau = grav_tau[k];
+        }
       }
       cmd_pub_->publish(final_cmd);
       rclcpp::sleep_for(sleep_ns);
