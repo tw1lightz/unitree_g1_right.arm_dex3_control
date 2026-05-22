@@ -300,11 +300,7 @@ private:
 
     auto start_time = this->now();
 
-    // Plan 01-06: honor SIGINT/SIGTERM mid-trajectory by breaking out of
-    // the waypoint loop at the next iteration. The end-of-trajectory ramp
-    // then runs from the current trajectory point, producing a smooth release.
-    for (size_t i = 0; i < msg->points.size() && !g_shutdown_requested.load(); ++i) {
-      const auto& point = msg->points[i];
+    auto publish_command_for_positions = [&](const std::vector<double>& positions) {
       unitree_hg::msg::LowCmd cmd_msg;
 
       cmd_msg.motor_cmd[JointIndex::kNotUsedJoint].q = 1.0f; // Full motion-sdk authority (matches free_arm_demo.py)
@@ -323,7 +319,7 @@ private:
         cmd_msg.motor_cmd[idx].dq = 0.f;
         bool is_wrist = (pair.first.find("wrist") != std::string::npos);
         cmd_msg.motor_cmd[idx].kp = is_wrist ? 40.0f : 100.0f;
-        cmd_msg.motor_cmd[idx].kd = is_wrist ? 3.0f : 5.0f;
+        cmd_msg.motor_cmd[idx].kd = 5.0f;
         cmd_msg.motor_cmd[idx].tau = 0.f;
       }
       // Plan 04-02 D-05: walk only the right-arm columns from the original msg; map lookups are guarded by stage 2 above.
@@ -331,7 +327,7 @@ private:
         const size_t j = right_arm_columns_in_msg[k];
         auto target_joint_name = msg->joint_names[j];
         auto target_index = joint_name_to_index.at(target_joint_name);
-        auto target_position = point.positions[j];
+        auto target_position = positions[j];
         auto lim = joint_limits_.at(target_joint_name);
         target_position = std::min(std::max(target_position, lim.lower), lim.upper);
         cmd_msg.motor_cmd[target_index].q = target_position;
@@ -349,14 +345,54 @@ private:
         }
       }
 
-      // Wait until the scheduled time for this point
-      rclcpp::Time scheduled_time = start_time + point.time_from_start;
+      cmd_pub_->publish(cmd_msg);
+    };
+
+    auto sleep_until = [&](const rclcpp::Time& scheduled_time) {
       rclcpp::Duration wait_time = scheduled_time - this->now();
       if (wait_time > rclcpp::Duration::from_seconds(0)) {
         rclcpp::sleep_for(std::chrono::nanoseconds(wait_time.nanoseconds()));
       }
+    };
 
-      cmd_pub_->publish(cmd_msg);
+    const int64_t trajectory_publish_period_ns = 4'000'000;
+
+    if (!msg->points.empty() && !g_shutdown_requested.load()) {
+      const auto& first_point = msg->points.front();
+      sleep_until(start_time + first_point.time_from_start);
+      publish_command_for_positions(first_point.positions);
+    }
+
+    // Plan 01-06: honor SIGINT/SIGTERM mid-trajectory by breaking out of
+    // the waypoint loop at the next iteration. The end-of-trajectory ramp
+    // then runs from the current trajectory point, producing a smooth release.
+    for (size_t i = 1; i < msg->points.size() && !g_shutdown_requested.load(); ++i) {
+      const auto& previous_point = msg->points[i - 1];
+      const auto& point = msg->points[i];
+      rclcpp::Time segment_start_time = start_time + previous_point.time_from_start;
+      rclcpp::Time segment_end_time = start_time + point.time_from_start;
+      const int64_t segment_duration_ns = (segment_end_time - segment_start_time).nanoseconds();
+
+      if (segment_duration_ns > 0) {
+        for (int64_t elapsed_ns = trajectory_publish_period_ns;
+             elapsed_ns < segment_duration_ns && !g_shutdown_requested.load();
+             elapsed_ns += trajectory_publish_period_ns)
+        {
+          const double t = static_cast<double>(elapsed_ns) / static_cast<double>(segment_duration_ns);
+          std::vector<double> interpolated_positions = point.positions;
+          for (size_t j = 0; j < interpolated_positions.size() && j < previous_point.positions.size(); ++j) {
+            interpolated_positions[j] =
+              (1.0 - t) * previous_point.positions[j] + t * point.positions[j];
+          }
+          sleep_until(segment_start_time + rclcpp::Duration(std::chrono::nanoseconds(elapsed_ns)));
+          publish_command_for_positions(interpolated_positions);
+        }
+      }
+
+      if (!g_shutdown_requested.load()) {
+        sleep_until(segment_end_time);
+        publish_command_for_positions(point.positions);
+      }
     }
 
     RCLCPP_INFO(this->get_logger(), "Trajectory %zu waypoints executed; holding stiff at end-point.", msg->points.size());
@@ -408,7 +444,7 @@ private:
           hold_cmd.motor_cmd[idx].dq = 0.f;
           bool is_wrist = (pair.first.find("wrist") != std::string::npos);
           hold_cmd.motor_cmd[idx].kp = is_wrist ? 40.0f : 100.0f;
-          hold_cmd.motor_cmd[idx].kd = is_wrist ? 3.0f : 5.0f;
+          hold_cmd.motor_cmd[idx].kd = 5.0f;
           hold_cmd.motor_cmd[idx].tau = 0.f;
         }
         // Gravity compensation for hold
@@ -468,7 +504,7 @@ private:
         final_cmd.motor_cmd[idx].dq = 0.f;
         bool is_wrist = (pair.first.find("wrist") != std::string::npos);
         final_cmd.motor_cmd[idx].kp = is_wrist ? 40.0f : 100.0f;
-        final_cmd.motor_cmd[idx].kd = is_wrist ? 3.0f : 5.0f;
+        final_cmd.motor_cmd[idx].kd = 5.0f;
         final_cmd.motor_cmd[idx].tau = 0.f;
       }
       // Gravity compensation for ramp
