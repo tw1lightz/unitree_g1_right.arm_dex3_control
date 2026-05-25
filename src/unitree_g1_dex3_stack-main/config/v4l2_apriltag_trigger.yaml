@@ -2,7 +2,7 @@ v4l2_apriltag_trigger:
   ros__parameters:
     camera_id: "d435i_front"
     expected_serial: "253243060636"
-    video_device: "/dev/v4l/by-id/usb-Intel_R__RealSense_TM__Depth_Camera_435i_Intel_R__RealSense_TM__Depth_Camera_435i_253243060636-video-index0"
+    video_device: "auto"
     expected_usb_interface_num: "03"
     image_width: 640
     image_height: 480
@@ -17,7 +17,7 @@ v4l2_apriltag_trigger:
     tag_family: "tag36h11"
     tag_size: 0.08
     target_tag_id: 0
-    offset_xyz: [0.0, 0.0, 0.0]
+    offset_xyz: [0.13, -0.04, -0.07]
     decision_margin_min: 25.0
     detect_scale: 0.5
 

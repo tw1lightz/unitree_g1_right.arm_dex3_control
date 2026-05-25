@@ -62,7 +62,7 @@ def generate_launch_description():
 
     v4l2_video_device_arg = DeclareLaunchArgument(
         'v4l2_video_device',
-        default_value='/dev/v4l/by-id/usb-Intel_R__RealSense_TM__Depth_Camera_435i_Intel_R__RealSense_TM__Depth_Camera_435i_253243060636-video-index0',
+        default_value='auto',
         description='Stable V4L2 RGB device path for the target D435i',
     )
 

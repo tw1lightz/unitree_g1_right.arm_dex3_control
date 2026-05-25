@@ -36,7 +36,7 @@ class V4L2AprilTagTrigger(Node):
         self.declare_parameter('expected_serial', '253243060636')
         self.declare_parameter(
             'video_device',
-            '/dev/v4l/by-id/usb-Intel_R__RealSense_TM__Depth_Camera_435i_Intel_R__RealSense_TM__Depth_Camera_435i_253243060636-video-index0')
+            'auto')
         self.declare_parameter('expected_usb_interface_num', '03')
         self.declare_parameter('image_width', 640)
         self.declare_parameter('image_height', 480)
@@ -83,6 +83,7 @@ class V4L2AprilTagTrigger(Node):
         self.camera_id = str(self.get_parameter('camera_id').value)
         self.expected_serial = str(self.get_parameter('expected_serial').value)
         self.video_device = str(self.get_parameter('video_device').value)
+        self.configured_video_device = self.video_device
         self.expected_usb_interface_num = str(
             self.get_parameter('expected_usb_interface_num').value)
         self.image_width = int(self.get_parameter('image_width').value)
@@ -194,12 +195,21 @@ class V4L2AprilTagTrigger(Node):
             f'warmup={self.warmup_frames} frames/{self.warmup_min_s:.1f}s '
             f'continuous_capture={self.continuous_capture} '
             f'detect_only={self.detect_only} '
+            f'offset_xyz=[{self.offset_xyz[0]:.3f}, {self.offset_xyz[1]:.3f}, {self.offset_xyz[2]:.3f}] '
             f'fx={fx:.3f} fy={fy:.3f} cx={cx:.3f} cy={cy:.3f}')
 
     def _validate_video_device(self):
-        if not os.path.exists(self.video_device):
-            raise RuntimeError(f'video_device does not exist: {self.video_device}')
+        selected = self._select_video_device()
+        if selected is None:
+            self.get_logger().error(
+                f'[v4l2_apriltag_trigger] no usable video_device found '
+                f'(configured={self.configured_video_device}, '
+                f'serial={self.expected_serial or "any"}, '
+                f'usb_interface={self.expected_usb_interface_num or "any"}); '
+                f'will retry on capture')
+            return False
 
+        self.video_device = selected
         self.video_realpath = os.path.realpath(self.video_device)
         properties = self._read_udev_properties(self.video_realpath)
         serial = properties.get('ID_SERIAL_SHORT', '')
@@ -218,6 +228,77 @@ class V4L2AprilTagTrigger(Node):
             f'[v4l2_apriltag_trigger] video_device={self.video_device} '
             f'realpath={self.video_realpath} serial={serial or "unknown"} '
             f'usb_interface={interface_num or "unknown"}')
+        return True
+
+    def _select_video_device(self):
+        candidate_paths = []
+        configured = (self.configured_video_device or '').strip()
+        if configured and configured.lower() != 'auto':
+            candidate_paths.append(configured)
+        candidate_paths.extend(sorted(glob.glob('/dev/v4l/by-path/*video-index0')))
+        candidate_paths.extend(sorted(glob.glob('/dev/v4l/by-id/*video-index0')))
+        candidate_paths.extend(sorted(glob.glob('/dev/video*')))
+
+        seen_realpaths = set()
+        for path in candidate_paths:
+            if not path or not os.path.exists(path):
+                continue
+            realpath = os.path.realpath(path)
+            if realpath in seen_realpaths:
+                continue
+            seen_realpaths.add(realpath)
+            ok, reason = self._video_device_matches(realpath)
+            if not ok:
+                self.get_logger().debug(
+                    f'[v4l2_apriltag_trigger] skipping {path}: {reason}')
+                continue
+            if path != self.video_device:
+                self.get_logger().warn(
+                    f'[v4l2_apriltag_trigger] auto-selected video_device {path} '
+                    f'(realpath={realpath})')
+            return path
+        return None
+
+    def _video_device_matches(self, device_path):
+        properties = self._read_udev_properties(device_path)
+        serial = properties.get('ID_SERIAL_SHORT', '')
+        interface_num = properties.get('ID_USB_INTERFACE_NUM', '')
+
+        if self.expected_serial and serial != self.expected_serial:
+            return False, f'serial expected {self.expected_serial}, got {serial or "unknown"}'
+        if self.expected_usb_interface_num and interface_num != self.expected_usb_interface_num:
+            return False, (
+                f'USB interface expected {self.expected_usb_interface_num}, '
+                f'got {interface_num or "unknown"}')
+        if not self._video_device_supports_format(device_path):
+            return False, (
+                f'missing requested format {self.image_width}x{self.image_height} '
+                f'{self.fourcc}')
+        return True, 'ok'
+
+    def _video_device_supports_format(self, device_path):
+        try:
+            result = subprocess.run(
+                ['v4l2-ctl', '--list-formats-ext', '-d', device_path],
+                check=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=2.0,
+            )
+        except Exception as ex:
+            self.get_logger().warn(f'v4l2-ctl query failed for {device_path}: {ex}')
+            return True
+
+        output = result.stdout
+        if result.returncode != 0:
+            return False
+        requested_size = f'Size: Discrete {self.image_width}x{self.image_height}'
+        if self.fourcc and f"'{self.fourcc}'" not in output:
+            return False
+        if requested_size not in output:
+            return False
+        return True
 
     def _read_udev_properties(self, device_path):
         try:
@@ -331,11 +412,19 @@ class V4L2AprilTagTrigger(Node):
         avg_x = sum(xs) / len(xs)
         avg_y = sum(ys) / len(ys)
         avg_z = sum(zs) / len(zs)
+        tag_xs = [item['tag_torso'].pose.position.x for item in accepted]
+        tag_ys = [item['tag_torso'].pose.position.y for item in accepted]
+        tag_zs = [item['tag_torso'].pose.position.z for item in accepted]
+        tag_avg_x = sum(tag_xs) / len(tag_xs)
+        tag_avg_y = sum(tag_ys) / len(tag_ys)
+        tag_avg_z = sum(tag_zs) / len(tag_zs)
         if self.detect_only:
             best = max(accepted, key=lambda item: item['decision_margin'])
             self.get_logger().info(
                 f'[v4l2_apriltag_trigger] detect_only accepted={len(accepted)}/{len(frames)} '
+                f'tag=({tag_avg_x:.3f}, {tag_avg_y:.3f}, {tag_avg_z:.3f}) '
                 f'target=({avg_x:.3f}, {avg_y:.3f}, {avg_z:.3f}) '
+                f'delta=({avg_x - tag_avg_x:.3f}, {avg_y - tag_avg_y:.3f}, {avg_z - tag_avg_z:.3f}) '
                 f'@ {self.output_frame}, best_margin={best["decision_margin"]:.1f}, not publishing {self.goal_pose_topic}')
             return
 
@@ -367,7 +456,9 @@ class V4L2AprilTagTrigger(Node):
         self._waiting_for_completion = True
         self.get_logger().info(
             f'[v4l2_apriltag_trigger] accepted={len(accepted)}/{len(frames)} '
+            f'tag=({tag_avg_x:.3f}, {tag_avg_y:.3f}, {tag_avg_z:.3f}) '
             f'target=({avg_x:.3f}, {avg_y:.3f}, {avg_z:.3f}) '
+            f'delta=({avg_x - tag_avg_x:.3f}, {avg_y - tag_avg_y:.3f}, {avg_z - tag_avg_z:.3f}) '
             f'@ {self.output_frame}, |target-shoulder|={dist:.3f} m, publishing {self.goal_pose_topic}')
 
     def _capture_frames(self):
@@ -415,54 +506,74 @@ class V4L2AprilTagTrigger(Node):
         return frames
 
     def _capture_frames_on_demand(self):
-        cap = self._open_capture()
-        if cap is None:
-            return []
+        for attempt in range(2):
+            cap = self._open_capture()
+            if cap is None:
+                return []
 
-        try:
-            frames = []
-            warmup_target = max(0, self.warmup_frames)
-            warmup_start = time.monotonic()
-            warmup_min_deadline = warmup_start + max(0.0, self.warmup_min_s)
-            warmup_max_deadline = warmup_start + max(
-                1.0,
-                max(warmup_target, 1) / max(self.fps, 1.0)
-                + max(0.0, self.warmup_min_s)
-                + 1.0)
-            warmup_reads = 0
-            while ((warmup_reads < warmup_target
-                    or time.monotonic() < warmup_min_deadline)
-                   and time.monotonic() < warmup_max_deadline):
-                ret, _ = cap.read()
-                if ret:
-                    warmup_reads += 1
-                else:
+            try:
+                frames = []
+                warmup_target = max(0, self.warmup_frames)
+                warmup_start = time.monotonic()
+                warmup_min_deadline = warmup_start + max(0.0, self.warmup_min_s)
+                warmup_max_deadline = warmup_start + max(
+                    1.0,
+                    max(warmup_target, 1) / max(self.fps, 1.0)
+                    + max(0.0, self.warmup_min_s)
+                    + 1.0)
+                warmup_reads = 0
+                while ((warmup_reads < warmup_target
+                        or time.monotonic() < warmup_min_deadline)
+                       and time.monotonic() < warmup_max_deadline):
+                    ret, _ = cap.read()
+                    if ret:
+                        warmup_reads += 1
+                    else:
+                        self.get_logger().warn(
+                            '[v4l2_apriltag_trigger] failed to read one warmup frame')
+                        time.sleep(0.05)
+                if warmup_reads < warmup_target:
                     self.get_logger().warn(
-                        '[v4l2_apriltag_trigger] failed to read one warmup frame')
-                    time.sleep(0.05)
-            if warmup_reads < warmup_target:
+                        f'[v4l2_apriltag_trigger] warmup only read '
+                        f'{warmup_reads}/{warmup_target} frames')
+                for _ in range(max(1, self.sample_count)):
+                    ret, frame = cap.read()
+                    if ret and frame is not None:
+                        frames.append(frame.copy())
+                    else:
+                        self.get_logger().warn(
+                            '[v4l2_apriltag_trigger] failed to read one frame')
+                    if self.sample_interval_s > 0.0:
+                        time.sleep(self.sample_interval_s)
+                if frames or attempt > 0:
+                    return frames
                 self.get_logger().warn(
-                    f'[v4l2_apriltag_trigger] warmup only read '
-                    f'{warmup_reads}/{warmup_target} frames')
-            for _ in range(max(1, self.sample_count)):
-                ret, frame = cap.read()
-                if ret and frame is not None:
-                    frames.append(frame.copy())
-                else:
-                    self.get_logger().warn(
-                        '[v4l2_apriltag_trigger] failed to read one frame')
-                if self.sample_interval_s > 0.0:
-                    time.sleep(self.sample_interval_s)
-            return frames
-        finally:
-            cap.release()
+                    '[v4l2_apriltag_trigger] no frames from current video device; rescanning and retrying once')
+                self.video_device = self.configured_video_device
+                time.sleep(0.2)
+            finally:
+                cap.release()
+        return []
 
     def _open_capture(self):
+        if not self.video_device or self.video_device.lower() == 'auto' or not os.path.exists(self.video_device):
+            if not self._validate_video_device():
+                return None
+
         cap = cv2.VideoCapture(self.video_device, cv2.CAP_V4L2)
         if not cap.isOpened():
-            self.get_logger().error(
-                f'[v4l2_apriltag_trigger] failed to open {self.video_device}')
-            return None
+            failed_device = self.video_device
+            cap.release()
+            self.get_logger().warn(
+                f'[v4l2_apriltag_trigger] failed to open {failed_device}; rescanning video devices')
+            self.video_device = self.configured_video_device
+            if self._validate_video_device():
+                time.sleep(0.2)
+                cap = cv2.VideoCapture(self.video_device, cv2.CAP_V4L2)
+            if not cap.isOpened():
+                self.get_logger().error(
+                    f'[v4l2_apriltag_trigger] failed to open {self.video_device}')
+                return None
 
         cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, float(self.image_width))
