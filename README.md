@@ -5,6 +5,7 @@ Unitree G1 右臂 + Dex-3 灵巧手 ROS 2 全栈：AprilTag V4L2 检测 → OMPL
 ## 简要说明：
 该项目基于April Tag定位，然后基于识别的April Tag的坐标系做偏移，计算出灵巧手需要按压的位置，然后通过OMPL规划器规划路径，最后执行。
 TCP定义：right_wrist_yaw_link沿着x轴（指向手指伸出方向）向前一段距离offset
+考虑到ompl规划时间和可能的碰撞误检导致规划失败，暂时把碰撞检测环节跳过，使用两个固定位姿应对偏左的坐标
 ![detected_02.jpg](https://wp-cdn.4ce.cn/v2/mcyX4AW.jpeg)
 
 **运行环境**：所有 ROS 2 节点均在 Docker 容器内运行（`unitree-dex3:humble`），宿主机通过 `run.sh` 启动。
