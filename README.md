@@ -2,6 +2,11 @@
 
 Unitree G1 右臂 + Dex-3 灵巧手 ROS 2 全栈：AprilTag V4L2 检测 → OMPL 规划 → 右臂执行 → 灵巧手按压。
 
+## 简要说明：
+该项目基于April Tag定位，然后基于识别的April Tag的坐标系做偏移，计算出灵巧手需要按压的位置，然后通过OMPL规划器规划路径，最后执行。
+TCP定义：right_wrist_yaw_link沿着x轴（指向手指伸出方向）向前一段距离offset
+![detected_02.jpg](https://wp-cdn.4ce.cn/v2/mcyX4AW.jpeg)
+
 **运行环境**：所有 ROS 2 节点均在 Docker 容器内运行（`unitree-dex3:humble`），宿主机通过 `run.sh` 启动。
 
 ---
@@ -44,16 +49,14 @@ cd /home/unitree/Desktop/unitree_container
 
 #### Step 1：构建 Docker 镜像
 
+通常需要代理加速
+
 ```bash
 cd /home/unitree/Desktop/unitree_container
 bash build.sh
 ```
 
-如果需要代理：
 
-```bash
-USE_PROXY=1 PROXY_URL=http://192.168.100.20:7890 bash build.sh
-```
 
 #### Step 2：首次全量编译 ROS 2 工作区
 
