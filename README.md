@@ -257,7 +257,100 @@ cd /home/unitree/Desktop/unitree_container
 
 ---
 
-## 6. 其他常用操作
+## 6. 常用命令速查
+
+> 来源：`unitree_container/usual command.txt`
+
+### 编译
+
+```bash
+# 容器内编译
+colcon --log-base /workspaces/unitree_dex3/log_container build \
+  --base-paths /workspaces/unitree_dex3/src \
+  --build-base /workspaces/unitree_dex3/build_container \
+  --install-base /workspaces/unitree_dex3/install_container \
+  --packages-select unitree_g1_dex3_stack \
+  --cmake-args -DBUILD_IK_FCL_OMPL_PLANNER=ON -DPython3_EXECUTABLE=/usr/bin/python3
+
+# 宿主机一键编译
+cd /home/unitree/Desktop/unitree_container
+./run.sh bash -lc 'colcon --log-base /workspaces/unitree_dex3/log_container build --base-paths /workspaces/unitree_dex3/src --build-base /workspaces/unitree_dex3/build_container --install-base /workspaces/unitree_dex3/install_container --packages-select unitree_g1_dex3_stack --cmake-args -DBUILD_IK_FCL_OMPL_PLANNER=ON -DPython3_EXECUTABLE=/usr/bin/python3'
+```
+
+### 启动 Docker
+
+```bash
+bash /home/unitree/Desktop/unitree_container/run.sh
+# Shell 打开后自动 source：
+#   /opt/ros/humble/setup.bash
+#   /opt/unitree_ros2/cyclonedds_ws/install/setup.bash
+#   /workspaces/unitree_dex3/install_container/setup.bash
+```
+
+### 单独调试（不启动 reach launch）
+
+```bash
+ros2 launch unitree_g1_dex3_stack robot.launch
+ros2 launch unitree_g1_dex3_stack control.launch
+ros2 launch unitree_g1_dex3_stack planner.launch.py adaptive_orientation_enabled:=true
+```
+
+### AprilTag 检测 + 执行
+
+```bash
+# 检测并执行
+ros2 launch unitree_g1_dex3_stack apriltag_reach.launch.py
+
+# 只检测不执行
+ros2 launch unitree_g1_dex3_stack apriltag_reach.launch.py detect_only:=true
+```
+
+### Button Press
+
+```bash
+# dry-run（不控制灵巧手）
+./run.sh ros2 launch unitree_g1_dex3_stack apriltag_button_press.launch.py dry_run:=true
+
+# 真机执行
+./run.sh ros2 launch unitree_g1_dex3_stack apriltag_button_press.launch.py dry_run:=false
+
+# 只启动相机识别
+./run.sh ros2 launch unitree_g1_dex3_stack apriltag_button_press.launch.py camera_only:=true
+```
+
+### 右臂拖拽 / 锁定
+
+```bash
+./run.sh right-arm-mode
+# free = 卸力拖拽, lock = 锁定, status = 查看关节角度
+```
+
+### 灵巧手控制（容器内）
+
+```bash
+# 伸出中指
+python3 /workspaces/unitree_dex3_cpp/example/control_dex3_right_setpoint.py enP8p1s0 0 -1.05 -1.7 1.7 1.8 0 0
+
+# 合上
+python3 /workspaces/unitree_dex3_cpp/example/control_dex3_right_setpoint.py enP8p1s0 0 -1.05 -1.7 1.7 1.8 1.7 1.8
+```
+
+### 其他快捷命令
+
+```bash
+# 手动触发相机拍照
+ros2 topic pub /apriltag/capture_trigger std_msgs/msg/Empty '{}' --once
+
+# 手动右臂回 standing
+ros2 topic pub /executor/return_to_standing std_msgs/msg/Empty '{}' --once
+
+# 读取右臂 TCP 位姿（先确保 robot.launch 在运行）
+ros2 run unitree_g1_dex3_stack tcp_torso_pose.py
+```
+
+---
+
+## 7. 其他常用操作
 
 ### 手动发布目标位姿
 
