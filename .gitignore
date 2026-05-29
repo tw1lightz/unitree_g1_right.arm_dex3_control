@@ -20,10 +20,10 @@ __pycache__/
 
 # Runtime/debug artifacts
 debug.log
-detect_img/
 yolo_last_detection.jpg
 *.jpg
 *.png
+!unitree_dex3/detect_img/*.jpg
 !unitree_dex3_cpp/asset/*.png
 
 # Planning/temp
