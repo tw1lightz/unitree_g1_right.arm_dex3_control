@@ -1,0 +1,133 @@
+[INFO] [1779268452.460759930] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1081, -0.2529, -0.1919] m, rpy=[-0.5215, 1.0285, -0.3531] rad
+[INFO] [1779268452.561046420] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1081, -0.2529, -0.1919] m, rpy=[-0.5216, 1.0285, -0.3531] rad
+[INFO] [1779268452.659577888] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1081, -0.2529, -0.1919] m, rpy=[-0.5215, 1.0285, -0.3531] rad
+[INFO] [1779268452.766816719] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1081, -0.2529, -0.1919] m, rpy=[-0.5215, 1.0285, -0.3531] rad
+[INFO] [1779268452.874050943] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1081, -0.2529, -0.1919] m, rpy=[-0.5216, 1.0285, -0.3531] rad
+[INFO] [1779268452.965688567] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1081, -0.2529, -0.1919] m, rpy=[-0.5216, 1.0285, -0.3531] rad
+[INFO] [1779268453.065020280] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1081, -0.2529, -0.1919] m, rpy=[-0.5216, 1.0285, -0.3532] rad
+[INFO] [1779268453.160241646] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1081, -0.2529, -0.1919] m, rpy=[-0.5215, 1.0285, -0.3531] rad
+[INFO] [1779268453.259202725] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1064, -0.2527, -0.1928] m, rpy=[-0.5280, 1.0348, -0.3572] rad
+[INFO] [1779268453.361638359] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1202, -0.2474, -0.1906] m, rpy=[-0.5620, 1.0265, -0.3168] rad
+[INFO] [1779268453.459157801] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1490, -0.2414, -0.1821] m, rpy=[-0.5987, 0.9842, -0.2489] rad
+[INFO] [1779268453.559308160] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1901, -0.2332, -0.1650] m, rpy=[-0.6365, 0.8996, -0.1729] rad
+[INFO] [1779268453.659517912] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2232, -0.2266, -0.1475] m, rpy=[-0.7020, 0.8284, -0.1323] rad
+[INFO] [1779268453.758917434] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2488, -0.2198, -0.1316] m, rpy=[-0.7727, 0.7742, -0.1042] rad
+[INFO] [1779268453.859979049] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2718, -0.2139, -0.1145] m, rpy=[-0.8537, 0.7219, -0.0819] rad
+[INFO] [1779268453.960694574] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2968, -0.2064, -0.0934] m, rpy=[-0.9487, 0.6604, -0.0672] rad
+[INFO] [1779268454.059312604] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3209, -0.1999, -0.0688] m, rpy=[-1.0435, 0.5882, -0.0575] rad
+[INFO] [1779268454.159272206] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3439, -0.1916, -0.0407] m, rpy=[-1.1326, 0.5074, -0.0446] rad
+[INFO] [1779268454.259968178] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3626, -0.1819, -0.0137] m, rpy=[-1.2174, 0.4312, -0.0327] rad
+[INFO] [1779268454.359206545] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3793, -0.1731, 0.0163] m, rpy=[-1.2970, 0.3456, -0.0235] rad
+[INFO] [1779268454.459343399] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3932, -0.1646, 0.0479] m, rpy=[-1.3751, 0.2565, -0.0166] rad
+[INFO] [1779268454.559358458] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4039, -0.1555, 0.0802] m, rpy=[-1.4504, 0.1644, -0.0077] rad
+[INFO] [1779268454.659512657] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4146, -0.1415, 0.1300] m, rpy=[-1.5354, 0.0218, 0.0111] rad
+[INFO] [1779268454.760729411] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4174, -0.1323, 0.1630] m, rpy=[-1.5904, -0.0780, 0.0219] rad
+[INFO] [1779268454.859194061] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4180, -0.1310, 0.1672] m, rpy=[-1.5915, -0.0886, 0.0251] rad
+[INFO] [1779268454.959261762] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4175, -0.1312, 0.1647] m, rpy=[-1.5923, -0.0815, 0.0244] rad
+[INFO] [1779268455.060881918] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4175, -0.1314, 0.1647] m, rpy=[-1.5926, -0.0816, 0.0238] rad
+[INFO] [1779268455.159475084] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4175, -0.1317, 0.1648] m, rpy=[-1.5930, -0.0818, 0.0232] rad
+[INFO] [1779268455.259311451] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4175, -0.1316, 0.1648] m, rpy=[-1.5930, -0.0818, 0.0232] rad
+[INFO] [1779268455.365790134] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4175, -0.1316, 0.1648] m, rpy=[-1.5930, -0.0818, 0.0232] rad
+[INFO] [1779268455.458951510] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4175, -0.1316, 0.1648] m, rpy=[-1.5930, -0.0818, 0.0232] rad
+[INFO] [1779268455.560432975] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4175, -0.1316, 0.1648] m, rpy=[-1.5930, -0.0818, 0.0232] rad
+[INFO] [1779268455.659408423] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4175, -0.1316, 0.1648] m, rpy=[-1.5930, -0.0818, 0.0232] rad
+[INFO] [1779268455.759006895] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4175, -0.1316, 0.1648] m, rpy=[-1.5930, -0.0818, 0.0232] rad
+[INFO] [1779268455.859149701] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4175, -0.1317, 0.1645] m, rpy=[-1.5929, -0.0810, 0.0236] rad
+[INFO] [1779268455.959343645] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4166, -0.1373, 0.1481] m, rpy=[-1.5717, -0.0331, 0.0178] rad
+[INFO] [1779268456.060097603] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4112, -0.1458, 0.1110] m, rpy=[-1.5153, 0.0787, 0.0085] rad
+[INFO] [1779268456.159798414] [tcp_torso_pose]: TCP in torso_link: xyz=[0.4036, -0.1558, 0.0800] m, rpy=[-1.4575, 0.1697, -0.0069] rad
+[INFO] [1779268456.260305902] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3967, -0.1653, 0.0579] m, rpy=[-1.4055, 0.2321, -0.0201] rad
+[INFO] [1779268456.359627214] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3872, -0.1732, 0.0337] m, rpy=[-1.3504, 0.3023, -0.0290] rad
+[INFO] [1779268456.459032529] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3757, -0.1772, 0.0101] m, rpy=[-1.2881, 0.3701, -0.0277] rad
+[INFO] [1779268456.560074207] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3643, -0.1829, -0.0100] m, rpy=[-1.2307, 0.4247, -0.0331] rad
+[INFO] [1779268456.659550084] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3528, -0.1910, -0.0277] m, rpy=[-1.1843, 0.4750, -0.0475] rad
+[INFO] [1779268456.759387506] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3395, -0.1958, -0.0460] m, rpy=[-1.1316, 0.5274, -0.0523] rad
+[INFO] [1779268456.859196384] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3256, -0.2006, -0.0626] m, rpy=[-1.0723, 0.5772, -0.0584] rad
+[INFO] [1779268456.959383447] [tcp_torso_pose]: TCP in torso_link: xyz=[0.3125, -0.2042, -0.0771] m, rpy=[-1.0133, 0.6186, -0.0617] rad
+[INFO] [1779268457.060296834] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2999, -0.2088, -0.0896] m, rpy=[-0.9702, 0.6542, -0.0729] rad
+[INFO] [1779268457.160443960] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2869, -0.2136, -0.1012] m, rpy=[-0.9269, 0.6890, -0.0840] rad
+[INFO] [1779268457.259445936] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2732, -0.2166, -0.1130] m, rpy=[-0.8795, 0.7270, -0.0906] rad
+[INFO] [1779268457.363835862] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2594, -0.2193, -0.1234] m, rpy=[-0.8318, 0.7601, -0.0985] rad
+[INFO] [1779268457.460537522] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2470, -0.2241, -0.1319] m, rpy=[-0.7985, 0.7876, -0.1162] rad
+[INFO] [1779268457.559543467] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2354, -0.2272, -0.1392] m, rpy=[-0.7630, 0.8118, -0.1249] rad
+[INFO] [1779268457.659475323] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2232, -0.2305, -0.1465] m, rpy=[-0.7332, 0.8368, -0.1413] rad
+[INFO] [1779268457.759574864] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2118, -0.2332, -0.1528] m, rpy=[-0.6995, 0.8589, -0.1591] rad
+[INFO] [1779268457.859260251] [tcp_torso_pose]: TCP in torso_link: xyz=[0.2018, -0.2353, -0.1579] m, rpy=[-0.6739, 0.8767, -0.1695] rad
+[INFO] [1779268457.959385969] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1910, -0.2370, -0.1634] m, rpy=[-0.6488, 0.8998, -0.1813] rad
+[INFO] [1779268458.059175646] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1813, -0.2375, -0.1679] m, rpy=[-0.6126, 0.9177, -0.1868] rad
+[INFO] [1779268458.169927497] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1715, -0.2405, -0.1718] m, rpy=[-0.6017, 0.9350, -0.2092] rad
+[INFO] [1779268458.259156162] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1636, -0.2436, -0.1748] m, rpy=[-0.5860, 0.9475, -0.2267] rad
+[INFO] [1779268458.360257233] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1572, -0.2454, -0.1769] m, rpy=[-0.5809, 0.9560, -0.2442] rad
+[INFO] [1779268458.459056165] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1504, -0.2465, -0.1794] m, rpy=[-0.5676, 0.9690, -0.2561] rad
+[INFO] [1779268458.560271031] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1457, -0.2468, -0.1813] m, rpy=[-0.5600, 0.9760, -0.2634] rad
+[INFO] [1779268458.666773747] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1419, -0.2459, -0.1828] m, rpy=[-0.5457, 0.9833, -0.2644] rad
+[INFO] [1779268458.759150559] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1374, -0.2467, -0.1845] m, rpy=[-0.5372, 0.9915, -0.2739] rad
+[INFO] [1779268458.859228595] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1322, -0.2484, -0.1860] m, rpy=[-0.5337, 0.9993, -0.2903] rad
+[INFO] [1779268458.960512775] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1282, -0.2492, -0.1869] m, rpy=[-0.5346, 1.0032, -0.3003] rad
+[INFO] [1779268459.062537743] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1236, -0.2495, -0.1882] m, rpy=[-0.5164, 1.0091, -0.3072] rad
+[INFO] [1779268459.159379343] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1222, -0.2499, -0.1886] m, rpy=[-0.5053, 1.0104, -0.3127] rad
+[INFO] [1779268459.261474840] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1204, -0.2507, -0.1892] m, rpy=[-0.5041, 1.0141, -0.3204] rad
+[INFO] [1779268459.372076991] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1193, -0.2513, -0.1894] m, rpy=[-0.5061, 1.0156, -0.3262] rad
+[INFO] [1779268459.459107199] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1190, -0.2520, -0.1893] m, rpy=[-0.5104, 1.0138, -0.3338] rad
+[INFO] [1779268459.558980526] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1161, -0.2530, -0.1899] m, rpy=[-0.5186, 1.0175, -0.3453] rad
+[INFO] [1779268459.665136065] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1125, -0.2534, -0.1907] m, rpy=[-0.5229, 1.0237, -0.3517] rad
+[INFO] [1779268459.759551202] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1091, -0.2538, -0.1918] m, rpy=[-0.5294, 1.0319, -0.3598] rad
+[INFO] [1779268459.859380592] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1072, -0.2540, -0.1924] m, rpy=[-0.5329, 1.0362, -0.3641] rad
+[INFO] [1779268459.959024698] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1072, -0.2540, -0.1923] m, rpy=[-0.5329, 1.0361, -0.3640] rad
+[INFO] [1779268460.059134575] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1073, -0.2540, -0.1923] m, rpy=[-0.5326, 1.0358, -0.3637] rad
+[INFO] [1779268460.159267973] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1073, -0.2540, -0.1923] m, rpy=[-0.5325, 1.0356, -0.3636] rad
+[INFO] [1779268460.264719014] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1074, -0.2539, -0.1923] m, rpy=[-0.5322, 1.0354, -0.3633] rad
+[INFO] [1779268460.360654734] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1075, -0.2539, -0.1923] m, rpy=[-0.5321, 1.0353, -0.3632] rad
+[INFO] [1779268460.459066967] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1074, -0.2539, -0.1923] m, rpy=[-0.5321, 1.0353, -0.3632] rad
+[INFO] [1779268460.559233550] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1074, -0.2540, -0.1923] m, rpy=[-0.5320, 1.0353, -0.3632] rad
+[INFO] [1779268460.659601994] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1074, -0.2539, -0.1923] m, rpy=[-0.5318, 1.0352, -0.3631] rad
+[INFO] [1779268460.761170886] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1075, -0.2539, -0.1923] m, rpy=[-0.5317, 1.0351, -0.3629] rad
+[INFO] [1779268460.859604463] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1075, -0.2539, -0.1923] m, rpy=[-0.5317, 1.0351, -0.3630] rad
+[INFO] [1779268460.959412061] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1074, -0.2539, -0.1923] m, rpy=[-0.5317, 1.0351, -0.3630] rad
+[INFO] [1779268461.059960126] [tcp_torso_pose]: TCP in torso_link: xyz=[0.1074, -0.2539, -0.1923] m, rpy=[-0.5316, 1.0351, -0.3629] rad
+
+
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.118675921] [ik_fcl_ompl_planner]: === FK DIAGNOSTIC ===
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.118706642] [ik_fcl_ompl_planner]:   Target frame xyz:  [0.4176, -0.1288, 0.1844]
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.118744755] [ik_fcl_ompl_planner]:   Start FK xyz:      [0.1081, -0.2529, -0.1919] (ret=0)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.118769043] [ik_fcl_ompl_planner]:   Goal FK xyz:       [0.4176, -0.1288, 0.1844] (ret=0)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.118793972] [ik_fcl_ompl_planner]:   Goal FK error:     [0.0000, 0.0000, 0.0000]  norm=0.0000 m
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.118820693] [ik_fcl_ompl_planner]:   Start→Goal joint delta norm: 1.6906 rad
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.118903063] [ik_fcl_ompl_planner]:   Start joints (rad): [0.2592, -0.2792, 0.0936, 0.7955, -0.0118, 0.0073, -0.0004]
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.118931575] [ik_fcl_ompl_planner]:   Goal  joints (rad): [-0.6606, -0.3984, 0.4497, 0.1549, -1.1088, 0.4855, 0.1688]
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.118954904] [ik_fcl_ompl_planner]: === END FK DIAGNOSTIC ===
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.119180158] [ik_fcl_ompl_planner]: OMPL bounds set for 7 right-arm joints: [right_shoulder_pitch_joint=-3.0892,2.6704] [right_shoulder_roll_joint=-2.2515,1.5882] [right_shoulder_yaw_joint=-2.618,2.618] [right_elbow_joint=-1.0472,2.0944] [right_wrist_roll_joint=-1.97222,1.97222] [right_wrist_pitch_joint=-1.61443,1.61443] [right_wrist_yaw_joint=-1.61443,1.61443]
+[ik_fcl_ompl_planner-1] Debug:   RRTConnect: Planner range detected to be 2.205551
+[ik_fcl_ompl_planner-1] Info:    RRTConnect: Starting planning with 1 states already in datastructure
+[ik_fcl_ompl_planner-1] Info:    RRTConnect: Created 4 states (2 start + 2 goal)
+[ik_fcl_ompl_planner-1] Info:    Solution found in 0.002995 seconds
+[ik_fcl_ompl_planner-1] Info:    SimpleSetup: Path simplification took 0.001066 seconds and changed from 3 to 2 states
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.123893881] [ik_fcl_ompl_planner]: Simplified: 3 → 2 waypoints (-33%)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.123988731] [ik_fcl_ompl_planner]: After interpolate(): 2 → 17 states (+15)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124174240] [ik_fcl_ompl_planner]: Trajectory: 17 waypoints, 1.502 seconds total duration (velocity_scale=0.020, min_time_step=0.020)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124237506] [ik_fcl_ompl_planner]: Velocity limits for 7 right-arm joints: [right_shoulder_pitch_joint=37.00] [right_shoulder_roll_joint=37.00] [right_shoulder_yaw_joint=37.00] [right_elbow_joint=37.00] [right_wrist_roll_joint=37.00] [right_wrist_pitch_joint=22.00] [right_wrist_yaw_joint=22.00]
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124267395] [ik_fcl_ompl_planner]: Per-segment dt (max across joints):
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124290019] [ik_fcl_ompl_planner]:   seg[1]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124315524] [ik_fcl_ompl_planner]:   seg[2]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124337573] [ik_fcl_ompl_planner]:   seg[3]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124359077] [ik_fcl_ompl_planner]:   seg[4]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124380902] [ik_fcl_ompl_planner]:   seg[5]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124401606] [ik_fcl_ompl_planner]:   seg[6]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124423111] [ik_fcl_ompl_planner]:   seg[7]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124548714] [ik_fcl_ompl_planner]:   seg[8]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124582699] [ik_fcl_ompl_planner]:   seg[9]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124605644] [ik_fcl_ompl_planner]:   seg[10]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124627372] [ik_fcl_ompl_planner]:   seg[11]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124648525] [ik_fcl_ompl_planner]:   seg[12]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124669997] [ik_fcl_ompl_planner]:   seg[13]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124691598] [ik_fcl_ompl_planner]:   seg[14]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124712750] [ik_fcl_ompl_planner]:   seg[15]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124734223] [ik_fcl_ompl_planner]:   seg[16]: dt=0.0927s  max_dq=0.0686rad (right_wrist_roll_joint)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124901811] [ik_fcl_ompl_planner]: Trajectory validation passed
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124968309] [ik_fcl_ompl_planner]: === TRAJECTORY FK DIAGNOSTIC ===
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.124996054] [ik_fcl_ompl_planner]:   First waypoint FK xyz: [0.1081, -0.2529, -0.1919] (ret=0)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.125022358] [ik_fcl_ompl_planner]:   Last  waypoint FK xyz: [0.4176, -0.1288, 0.1844] (ret=0)
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.125044471] [ik_fcl_ompl_planner]:   Target frame xyz:     [0.4176, -0.1288, 0.1844]
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.125067800] [ik_fcl_ompl_planner]:   Last waypoint FK error: [0.0000, 0.0000, 0.0000]  norm=0.0000 m
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.125090552] [ik_fcl_ompl_planner]: === END TRAJECTORY FK DIAGNOSTIC ===
+[ik_fcl_ompl_planner-1] [INFO] [1779268453.125402976] [ik_fcl_ompl_planner]: Plan published: 17 waypoints over 7 right-arm joints
