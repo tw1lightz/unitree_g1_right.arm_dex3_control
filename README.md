@@ -287,10 +287,23 @@ ros2 topic pub /executor/return_to_standing std_msgs/msg/Empty '{}' --once
 
 ### 右臂拖拽模式（卸力 / 锁定）
 
+通过卸力和锁定实现右臂的拖拽和固定：
+
 ```bash
-/home/unitree/Desktop/unitree_container/run.sh right-arm-mode
-# 交互命令：free = 卸力拖拽, lock = 锁定, status = 查看关节角
+# 宿主机启动
+cd /home/unitree/Desktop/unitree_container
+./run.sh right-arm-mode
 ```
+
+启动后进入交互模式，支持以下命令：
+
+| 命令 | 功能 |
+|------|------|
+| `free` | 卸力，可自由拖动右臂 |
+| `lock` | 锁定，右臂保持当前姿态不动 |
+| `status` | 查看当前 7 个关节角度 |
+
+> **注意**：`right-arm-mode` 依赖 `xr_teleoperate`（已包含在部署包中），Docker 内挂载路径为 `/workspaces/xr_teleoperate/teleop`。
 
 ### 灵巧手控制（容器内）
 
