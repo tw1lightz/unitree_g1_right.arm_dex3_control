@@ -1,18 +1,18 @@
 import os
 
-from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
     package_share = get_package_share_directory('unitree_g1_dex3_stack')
     launch_dir = os.path.join(package_share, 'launch')
-    config_file = os.path.join(package_share, 'config', 'apriltag_button_press.yaml')
+    config_file = os.path.join(package_share, 'config', 'apriltag_button_up.yaml')
     tf_remappings = [
         ('/tf', LaunchConfiguration('tf_topic')),
         ('/tf_static', LaunchConfiguration('tf_static_topic')),
@@ -21,7 +21,7 @@ def generate_launch_description():
     camera_only_arg = DeclareLaunchArgument(
         'camera_only',
         default_value='false',
-        description='Only launch robot description, camera TF, and button detector',
+        description='Only launch robot description, camera TF, and V4L2 AprilTag trigger',
     )
     dry_run_arg = DeclareLaunchArgument(
         'dry_run',
@@ -36,47 +36,7 @@ def generate_launch_description():
     v4l2_config_file_arg = DeclareLaunchArgument(
         'v4l2_config_file',
         default_value=config_file,
-        description='Button-press parameter YAML file',
-    )
-    input_backend_arg = DeclareLaunchArgument(
-        'input_backend',
-        default_value='v4l2',
-        description='button_detector_node input backend: v4l2 or ros',
-    )
-    image_topic_arg = DeclareLaunchArgument(
-        'image_topic',
-        default_value='/camera/realsense2_camera/color/image_raw',
-        description='RGB image topic for button_detector_node',
-    )
-    info_topic_arg = DeclareLaunchArgument(
-        'info_topic',
-        default_value='/camera/realsense2_camera/color/camera_info',
-        description='CameraInfo topic for button_detector_node',
-    )
-    depth_topic_arg = DeclareLaunchArgument(
-        'depth_topic',
-        default_value='/camera/realsense2_camera/depth/image_rect_raw',
-        description='Depth image topic for button_detector_node',
-    )
-    frozen_model_dir_arg = DeclareLaunchArgument(
-        'frozen_model_dir',
-        default_value='/workspaces/yolonas_ocr/frozen_model',
-        description='Frozen model directory for button_detector_node',
-    )
-    target_floor_arg = DeclareLaunchArgument(
-        'target_floor',
-        default_value='0',
-        description='Target floor for button_detector_node',
-    )
-    det_threshold_arg = DeclareLaunchArgument(
-        'det_threshold',
-        default_value='0.5',
-        description='Detection threshold for button_detector_node',
-    )
-    output_frame_arg = DeclareLaunchArgument(
-        'output_frame',
-        default_value='torso_link',
-        description='Output frame for button_detector_node',
+        description='Button-press V4L2 AprilTag parameter YAML file',
     )
     v4l2_video_device_arg = DeclareLaunchArgument(
         'v4l2_video_device',
@@ -128,30 +88,8 @@ def generate_launch_description():
         arguments=[
             '0', '0', '0',
             '-0.5', '0.5', '-0.5', '0.5',
-            'camera_color_frame', 'camera_color_optical_frame',
+            'camera_color_frame', 'camera_color_optical_frame'
         ],
-        remappings=tf_remappings,
-    )
-
-    button_detector_node = Node(
-        package='unitree_g1_dex3_stack',
-        executable='button_detector_node.py',
-        name='button_detector_node',
-        output='screen',
-        emulate_tty=True,
-        parameters=[{
-            'image_topic': LaunchConfiguration('image_topic'),
-            'info_topic': LaunchConfiguration('info_topic'),
-            'depth_topic': LaunchConfiguration('depth_topic'),
-            'frozen_model_dir': LaunchConfiguration('frozen_model_dir'),
-            'target_floor': LaunchConfiguration('target_floor'),
-            'det_threshold': LaunchConfiguration('det_threshold'),
-            'output_frame': LaunchConfiguration('output_frame'),
-            'input_backend': LaunchConfiguration('input_backend'),
-            'video_device': LaunchConfiguration('v4l2_video_device'),
-            'debug_image_dir': LaunchConfiguration('debug_image_dir'),
-            'fps': 3.0,
-        }],
         remappings=tf_remappings,
     )
 
@@ -175,7 +113,7 @@ def generate_launch_description():
         remappings=tf_remappings,
     )
 
-    button_press_node = Node(
+    button_node = Node(
         package='unitree_g1_dex3_stack',
         executable='apriltag_button_press_node.py',
         name='apriltag_button_press_node',
@@ -209,12 +147,12 @@ def generate_launch_description():
 
     camera_only_actions = TimerAction(
         period=3.0,
-        actions=[button_detector_node],
+        actions=[v4l2_trigger_node],
         condition=IfCondition(LaunchConfiguration('camera_only')),
     )
     full_actions = TimerAction(
         period=3.0,
-        actions=[v4l2_trigger_node, planner_launch, control_launch, button_press_node],
+        actions=[v4l2_trigger_node, planner_launch, control_launch, button_node],
         condition=UnlessCondition(LaunchConfiguration('camera_only')),
     )
 
@@ -223,14 +161,6 @@ def generate_launch_description():
         dry_run_arg,
         planning_timeout_arg,
         v4l2_config_file_arg,
-        input_backend_arg,
-        image_topic_arg,
-        info_topic_arg,
-        depth_topic_arg,
-        frozen_model_dir_arg,
-        target_floor_arg,
-        det_threshold_arg,
-        output_frame_arg,
         v4l2_video_device_arg,
         debug_image_dir_arg,
         tf_topic_arg,

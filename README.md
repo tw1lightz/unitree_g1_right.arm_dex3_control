@@ -280,6 +280,33 @@ cd /home/unitree/Desktop/unitree_container
 
 ---
 
+### 4.5 多位置依次按压（切换 yaml）
+
+每个按钮位置对应一个 yaml 文件，只有 `offset_xyz` 不同，通过 `v4l2_config_file` 参数切换，无需多个 launch 文件。
+
+```bash
+cd /home/unitree/Desktop/unitree_container
+
+# 第1步：按 up 位置
+./run.sh ros2 launch unitree_g1_dex3_stack apriltag_button_press.launch.py \
+  v4l2_config_file:=/workspaces/unitree_dex3/src/unitree_g1_dex3_stack-main/config/apriltag_button_up.yaml
+# 按 G 触发 → 等手臂回到站立 → Ctrl+C 退出
+
+# 第2步：按 press 位置
+./run.sh ros2 launch unitree_g1_dex3_stack apriltag_button_press.launch.py \
+  v4l2_config_file:=/workspaces/unitree_dex3/src/unitree_g1_dex3_stack-main/config/apriltag_button_press.yaml
+# 按 G → 等完成 → Ctrl+C
+
+# 第3步：按 open 位置
+./run.sh ros2 launch unitree_g1_dex3_stack apriltag_button_press.launch.py \
+  v4l2_config_file:=/workspaces/unitree_dex3/src/unitree_g1_dex3_stack-main/config/apriltag_button_open.yaml
+# 按 G → 等完成 → Ctrl+C
+```
+
+新增按钮位置只需复制任意现有 yaml，修改 `offset_xyz` 一行，无需改 launch 文件。
+
+---
+
 ## 5. AprilTag Reach（到达）
 
 ```bash

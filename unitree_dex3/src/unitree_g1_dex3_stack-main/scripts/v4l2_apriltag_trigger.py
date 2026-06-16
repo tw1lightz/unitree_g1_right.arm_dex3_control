@@ -16,9 +16,11 @@ import numpy as np
 import rclpy
 from rclpy.duration import Duration
 from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
 from rclpy.time import Time
 
 from geometry_msgs.msg import PoseStamped
+from sensor_msgs.msg import CameraInfo
 from std_msgs.msg import Empty
 from trajectory_msgs.msg import JointTrajectory
 
@@ -70,9 +72,19 @@ class V4L2AprilTagTrigger(Node):
             0.0, 0.0, 1.0,
         ])
         self.declare_parameter('dist_coeffs', [0.0, 0.0, 0.0, 0.0, 0.0])
+        self.declare_parameter(
+            'camera_info_topic', '/camera/realsense2_camera/color/camera_info')
+        self.declare_parameter('use_live_camera_info', True)
         self.declare_parameter('camera_frame', 'camera_color_optical_frame')
         self.declare_parameter('output_frame', 'torso_link')
         self.declare_parameter('tf_lookup_timeout_s', 0.2)
+        self.declare_parameter('tf_stable_required', True)
+        self.declare_parameter('tf_stable_wait_s', 3.0)
+        self.declare_parameter('tf_stable_sample_count', 5)
+        self.declare_parameter('tf_stable_sample_interval_s', 0.15)
+        self.declare_parameter('tf_stable_translation_tol_m', 0.003)
+        self.declare_parameter('tf_stable_rotation_tol_deg', 0.5)
+        self.declare_parameter('tf_stable_source_frame', 'camera_color_optical_frame')
 
         self.declare_parameter('goal_pose_topic', '/goal_pose')
         self.declare_parameter('tag_pose_topic', '/apriltag/tag_pose')
@@ -119,19 +131,38 @@ class V4L2AprilTagTrigger(Node):
         self.detect_scale = float(self.get_parameter('detect_scale').value)
 
         camera_matrix = list(self.get_parameter('camera_matrix').value)
-        self.camera_matrix = np.asarray(camera_matrix, dtype=np.float64).reshape(3, 3)
-        self.camera_params = (
-            float(self.camera_matrix[0, 0]),
-            float(self.camera_matrix[1, 1]),
-            float(self.camera_matrix[0, 2]),
-            float(self.camera_matrix[1, 2]),
+        self.camera_matrix_fallback = np.asarray(
+            camera_matrix, dtype=np.float64).reshape(3, 3)
+        self.camera_params_fallback = (
+            float(self.camera_matrix_fallback[0, 0]),
+            float(self.camera_matrix_fallback[1, 1]),
+            float(self.camera_matrix_fallback[0, 2]),
+            float(self.camera_matrix_fallback[1, 2]),
         )
-        self.dist_coeffs = np.asarray(
+        self.dist_coeffs_fallback = np.asarray(
             list(self.get_parameter('dist_coeffs').value), dtype=np.float64)
+        self.camera_info_topic = str(
+            self.get_parameter('camera_info_topic').value)
+        self.use_live_camera_info = _as_bool(
+            self.get_parameter('use_live_camera_info').value)
         self.camera_frame = str(self.get_parameter('camera_frame').value)
         self.output_frame = str(self.get_parameter('output_frame').value)
         self.tf_lookup_timeout_s = float(
             self.get_parameter('tf_lookup_timeout_s').value)
+        self.tf_stable_required = _as_bool(
+            self.get_parameter('tf_stable_required').value)
+        self.tf_stable_wait_s = float(
+            self.get_parameter('tf_stable_wait_s').value)
+        self.tf_stable_sample_count = max(
+            2, int(self.get_parameter('tf_stable_sample_count').value))
+        self.tf_stable_sample_interval_s = max(
+            0.01, float(self.get_parameter('tf_stable_sample_interval_s').value))
+        self.tf_stable_translation_tol_m = max(
+            0.0, float(self.get_parameter('tf_stable_translation_tol_m').value))
+        self.tf_stable_rotation_tol_deg = max(
+            0.0, float(self.get_parameter('tf_stable_rotation_tol_deg').value))
+        self.tf_stable_source_frame = str(
+            self.get_parameter('tf_stable_source_frame').value)
 
         self.goal_pose_topic = str(self.get_parameter('goal_pose_topic').value)
         self.tag_pose_topic = str(self.get_parameter('tag_pose_topic').value)
@@ -161,16 +192,26 @@ class V4L2AprilTagTrigger(Node):
         self._shoulder_origin = None
         self._shoulder_retry_count = 0
         self._last_warn_time = 0.0
+        self._trigger_lock = threading.Lock()
+        self._trigger_thread = None
+        self._trigger_busy = False
         self._capture = None
         self._capture_thread = None
         self._capture_stop = threading.Event()
         self._capture_lock = threading.Lock()
         self._latest_frame = None
         self._latest_frame_time = 0.0
+        self._latest_frame_stamp = None
         self._latest_frame_seq = 0
         self._stream_start_time = 0.0
         self._stream_read_count = 0
         self._stream_ready = False
+        self.camera_matrix_live = None
+        self.camera_params_live = None
+        self.dist_coeffs_live = None
+        self._camera_info_logged = False
+        self._camera_info_event = threading.Event()
+        self._camera_info_fallback_warned = False
 
         self.detector = Detector(
             families=self.tag_family,
@@ -185,6 +226,12 @@ class V4L2AprilTagTrigger(Node):
         self.goal_pub = self.create_publisher(PoseStamped, self.goal_pose_topic, 10)
         self.tag_pose_pub = self.create_publisher(PoseStamped, self.tag_pose_topic, 10)
         self.target_pose_pub = self.create_publisher(PoseStamped, self.target_pose_topic, 10)
+        if self.camera_info_topic:
+            self.create_subscription(
+                CameraInfo,
+                self.camera_info_topic,
+                self._camera_info_cb,
+                qos_profile_sensor_data)
         self.create_subscription(
             JointTrajectory, self.joint_trajectory_topic, self._traj_cb, 10)
         if self.trigger_topic:
@@ -206,7 +253,8 @@ class V4L2AprilTagTrigger(Node):
             self.create_timer(0.1, self._tick)
         self.create_timer(0.5, self._retry_shoulder_lookup)
 
-        fx, fy, cx, cy = self.camera_params
+        _, _, camera_params, camera_model_source = self._current_camera_model()
+        fx, fy, cx, cy = camera_params
         self.get_logger().info(
             f'[v4l2_apriltag_trigger] Ready — trigger_key={self.trigger_char or "disabled"} '
             f'trigger_topic={self.trigger_topic or "disabled"} '
@@ -218,7 +266,48 @@ class V4L2AprilTagTrigger(Node):
             f'detect_only={self.detect_only} '
             f'publish_intermediate_poses={self.publish_intermediate_poses} '
             f'offset_xyz=[{self.offset_xyz[0]:.3f}, {self.offset_xyz[1]:.3f}, {self.offset_xyz[2]:.3f}] '
-            f'fx={fx:.3f} fy={fy:.3f} cx={cx:.3f} cy={cy:.3f}')
+            f'fx={fx:.3f} fy={fy:.3f} cx={cx:.3f} cy={cy:.3f} '
+            f'camera_model={camera_model_source} '
+            f'tf_stable_required={self.tf_stable_required}')
+
+    def _camera_info_cb(self, msg):
+        camera_matrix = np.asarray(msg.k, dtype=np.float64).reshape(3, 3)
+        self.camera_matrix_live = camera_matrix
+        self.camera_params_live = (
+            float(camera_matrix[0, 0]),
+            float(camera_matrix[1, 1]),
+            float(camera_matrix[0, 2]),
+            float(camera_matrix[1, 2]),
+        )
+        dist_coeffs = np.asarray(msg.d, dtype=np.float64) if msg.d else np.zeros(5)
+        if dist_coeffs.size == 0:
+            dist_coeffs = np.zeros(5, dtype=np.float64)
+        self.dist_coeffs_live = dist_coeffs
+        self._camera_info_event.set()
+        if not self._camera_info_logged:
+            fx, fy, cx, cy = self.camera_params_live
+            self.get_logger().info(
+                f'[v4l2_apriltag_trigger] CameraInfo ready from {self.camera_info_topic}: '
+                f'fx={fx:.3f} fy={fy:.3f} cx={cx:.3f} cy={cy:.3f}')
+            self._camera_info_logged = True
+
+    def _current_camera_model(self):
+        if (self.use_live_camera_info
+                and self.camera_matrix_live is not None
+                and self.camera_params_live is not None
+                and self.dist_coeffs_live is not None):
+            return (
+                self.camera_matrix_live,
+                self.dist_coeffs_live,
+                self.camera_params_live,
+                'live',
+            )
+        return (
+            self.camera_matrix_fallback,
+            self.dist_coeffs_fallback,
+            self.camera_params_fallback,
+            'fallback',
+        )
 
     def _validate_video_device(self):
         selected = self._select_video_device()
@@ -439,6 +528,24 @@ class V4L2AprilTagTrigger(Node):
                     f'({self._shoulder_retry_count}): {ex}')
 
     def _on_trigger(self):
+        with self._trigger_lock:
+            if self._trigger_busy:
+                self.get_logger().warn(
+                    '[v4l2_apriltag_trigger] trigger already running, ignoring')
+                return
+            self._trigger_busy = True
+        self._trigger_thread = threading.Thread(
+            target=self._run_trigger, daemon=True)
+        self._trigger_thread.start()
+
+    def _run_trigger(self):
+        try:
+            self._run_trigger_once()
+        finally:
+            with self._trigger_lock:
+                self._trigger_busy = False
+
+    def _run_trigger_once(self):
         if not self.detect_only and self._waiting_for_completion:
             self.get_logger().warn(
                 '[v4l2_apriltag_trigger] previous goal still in flight, ignoring trigger')
@@ -449,6 +556,10 @@ class V4L2AprilTagTrigger(Node):
                 self.get_logger().warn(
                     '[v4l2_apriltag_trigger] shoulder origin not yet available')
                 return
+        if self.tf_stable_required and not self._wait_for_stable_tf():
+            self.get_logger().warn(
+                '[v4l2_apriltag_trigger] TF did not stabilize before capture')
+            return
 
         self.get_logger().info(
             f'[v4l2_apriltag_trigger] {self.trigger_char.upper()} pressed — capturing')
@@ -459,8 +570,9 @@ class V4L2AprilTagTrigger(Node):
 
         self._prepare_debug_dir()
         accepted = []
-        for index, frame in enumerate(frames):
-            result = self._process_frame(frame, index)
+        for index, frame_entry in enumerate(frames):
+            frame, capture_stamp = frame_entry
+            result = self._process_frame(frame, index, capture_stamp)
             if result is not None:
                 accepted.append(result)
 
@@ -549,6 +661,61 @@ class V4L2AprilTagTrigger(Node):
             f'delta=({avg_x - tag_avg_x:.3f}, {avg_y - tag_avg_y:.3f}, {avg_z - tag_avg_z:.3f}) '
             f'@ {self.output_frame}, |target-shoulder|={dist:.3f} m, publishing {self.goal_pose_topic}')
 
+    def _lookup_stable_transform_sample(self):
+        transform = self.tf_buffer.lookup_transform(
+            self.output_frame,
+            self.tf_stable_source_frame,
+            Time(),
+            timeout=Duration(seconds=self.tf_lookup_timeout_s))
+        translation = np.array([
+            transform.transform.translation.x,
+            transform.transform.translation.y,
+            transform.transform.translation.z,
+        ], dtype=np.float64)
+        quaternion = np.array([
+            transform.transform.rotation.x,
+            transform.transform.rotation.y,
+            transform.transform.rotation.z,
+            transform.transform.rotation.w,
+        ], dtype=np.float64)
+        norm = np.linalg.norm(quaternion)
+        if norm > 1e-9:
+            quaternion = quaternion / norm
+        return translation, quaternion
+
+    def _wait_for_stable_tf(self):
+        deadline = time.monotonic() + max(0.0, self.tf_stable_wait_s)
+        samples = []
+        while time.monotonic() < deadline:
+            try:
+                sample = self._lookup_stable_transform_sample()
+            except Exception as ex:
+                self._warn_throttled(
+                    f'[v4l2_apriltag_trigger] TF stability lookup failed: {ex}')
+                time.sleep(self.tf_stable_sample_interval_s)
+                continue
+            samples.append(sample)
+            if len(samples) > self.tf_stable_sample_count:
+                samples.pop(0)
+            if len(samples) >= self.tf_stable_sample_count:
+                if self._samples_are_stable(samples):
+                    return True
+            time.sleep(self.tf_stable_sample_interval_s)
+        return False
+
+    def _samples_are_stable(self, samples):
+        translations = np.asarray([sample[0] for sample in samples], dtype=np.float64)
+        translation_span = np.max(
+            np.linalg.norm(translations - translations[0], axis=1))
+        max_angle_deg = 0.0
+        base_quaternion = samples[0][1]
+        for _, quaternion in samples[1:]:
+            dot = float(np.clip(np.abs(np.dot(base_quaternion, quaternion)), 0.0, 1.0))
+            angle_rad = 2.0 * math.acos(dot)
+            max_angle_deg = max(max_angle_deg, math.degrees(angle_rad))
+        return (translation_span <= self.tf_stable_translation_tol_m
+                and max_angle_deg <= self.tf_stable_rotation_tol_deg)
+
     def _capture_frames(self):
         if not self.continuous_capture:
             return self._capture_frames_on_demand()
@@ -567,6 +734,7 @@ class V4L2AprilTagTrigger(Node):
             with self._capture_lock:
                 frame = self._latest_frame
                 frame_time = self._latest_frame_time
+                frame_stamp = self._latest_frame_stamp
                 seq = self._latest_frame_seq
                 ready = self._stream_ready
 
@@ -582,7 +750,8 @@ class V4L2AprilTagTrigger(Node):
                     '[v4l2_apriltag_trigger] latest camera frame is stale')
                 return []
 
-            frames.append(frame.copy())
+            capture_stamp = frame_stamp if frame_stamp is not None else self.get_clock().now().to_msg()
+            frames.append((frame.copy(), capture_stamp))
             last_seq = seq
             if self.sample_interval_s > 0.0:
                 time.sleep(self.sample_interval_s)
@@ -627,7 +796,7 @@ class V4L2AprilTagTrigger(Node):
                 for _ in range(max(1, self.sample_count)):
                     ret, frame = cap.read()
                     if ret and frame is not None:
-                        frames.append(frame.copy())
+                        frames.append((frame.copy(), self.get_clock().now().to_msg()))
                     else:
                         self.get_logger().warn(
                             '[v4l2_apriltag_trigger] failed to read one frame')
@@ -707,6 +876,7 @@ class V4L2AprilTagTrigger(Node):
                         continue
 
                     now = time.monotonic()
+                    stamp = self.get_clock().now().to_msg()
                     self._stream_read_count += 1
                     ready = (
                         self._stream_read_count >= max(0, self.warmup_frames)
@@ -715,6 +885,7 @@ class V4L2AprilTagTrigger(Node):
                     with self._capture_lock:
                         self._latest_frame = frame.copy()
                         self._latest_frame_time = now
+                        self._latest_frame_stamp = stamp
                         self._latest_frame_seq += 1
                         if ready and not self._stream_ready:
                             self.get_logger().info(
@@ -726,7 +897,7 @@ class V4L2AprilTagTrigger(Node):
                 cap.release()
                 self._capture = None
 
-    def _process_frame(self, frame, index):
+    def _process_frame(self, frame, index, capture_stamp):
         if frame.ndim == 2:
             gray = frame
             bgr = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
@@ -743,7 +914,14 @@ class V4L2AprilTagTrigger(Node):
         else:
             gray_detect = gray
 
-        fx, fy, cx, cy = self.camera_params
+        camera_matrix, dist_coeffs, camera_params, camera_model_source = self._current_camera_model()
+        if (self.use_live_camera_info and camera_model_source == 'fallback'
+                and not self._camera_info_fallback_warned):
+            self.get_logger().warn(
+                f'[v4l2_apriltag_trigger] no CameraInfo on {self.camera_info_topic}; '
+                f'using fallback camera_matrix from parameters')
+            self._camera_info_fallback_warned = True
+        fx, fy, cx, cy = camera_params
         cam_params = (fx * scale, fy * scale, cx * scale, cy * scale)
         detections = self.detector.detect(
             gray_detect,
@@ -767,11 +945,11 @@ class V4L2AprilTagTrigger(Node):
                 and detection.hamming == 0
                 and detection.decision_margin >= self.decision_margin_min
             )
-            self._draw_detection(display, detection, accepted)
+            self._draw_detection(display, detection, accepted, camera_matrix, dist_coeffs)
             if not accepted:
                 continue
 
-            result = self._make_poses(detection)
+            result = self._make_poses(detection, capture_stamp)
             if result is None:
                 continue
             if best_result is None or detection.decision_margin > best_result['decision_margin']:
@@ -790,12 +968,12 @@ class V4L2AprilTagTrigger(Node):
         self._save_debug_image(index, display, raw)
         return best_result
 
-    def _make_poses(self, detection):
+    def _make_poses(self, detection, capture_stamp):
         tvec = np.asarray(detection.pose_t, dtype=np.float64).reshape(3)
         quat = R.from_matrix(detection.pose_R).as_quat()
 
         pose_cam = PoseStamped()
-        pose_cam.header.stamp = Time().to_msg()
+        pose_cam.header.stamp = capture_stamp
         pose_cam.header.frame_id = self.camera_frame
         pose_cam.pose.position.x = float(tvec[0])
         pose_cam.pose.position.y = float(tvec[1])
@@ -814,7 +992,7 @@ class V4L2AprilTagTrigger(Node):
         target_quat = R.from_matrix(t_cam_target[:3, :3]).as_quat()
 
         target_pose_cam = PoseStamped()
-        target_pose_cam.header.stamp = Time().to_msg()
+        target_pose_cam.header.stamp = capture_stamp
         target_pose_cam.header.frame_id = self.camera_frame
         target_pose_cam.pose.position.x = float(t_cam_target[0, 3])
         target_pose_cam.pose.position.y = float(t_cam_target[1, 3])
@@ -845,7 +1023,7 @@ class V4L2AprilTagTrigger(Node):
             'decision_margin': float(detection.decision_margin),
         }
 
-    def _draw_detection(self, image, detection, accepted):
+    def _draw_detection(self, image, detection, accepted, camera_matrix, dist_coeffs):
         color = (0, 255, 0) if accepted else (0, 0, 255)
         corners = detection.corners.astype(int)
         cv2.polylines(image, [corners], isClosed=True, color=color, thickness=2)
@@ -870,7 +1048,7 @@ class V4L2AprilTagTrigger(Node):
         rvec = cv2.Rodrigues(detection.pose_R)[0]
         tvec = np.asarray(detection.pose_t, dtype=np.float64).reshape(3, 1)
         img_pts, _ = cv2.projectPoints(
-            obj_pts, rvec, tvec, self.camera_matrix, self.dist_coeffs)
+            obj_pts, rvec, tvec, camera_matrix, dist_coeffs)
         img_pts = img_pts.reshape(-1, 2).astype(int)
         o, x, y, z = img_pts
         cv2.line(image, tuple(o), tuple(x), (0, 0, 255), 2)
